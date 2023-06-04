@@ -6,15 +6,16 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MyApplication: Application() {
 
-    var networkService: NetworkService
+    var weatherService: WeatherService
 
     val retrofit: Retrofit
-        get() = Retrofit.Builder().baseUrl("http://localhost:8083/")
+        get() = Retrofit.Builder()
+            .baseUrl("https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
     init {
-        networkService = retrofit.create(NetworkService::class.java)
+        weatherService = retrofit.create(WeatherService::class.java)
     }
 
 }
