@@ -5,7 +5,7 @@ import retrofit2.http.GET
 
 interface NetworkService {
 
-    @GET("board/")
-    fun getBoard(): Call<BoardModel>
+//    @GET("board/")
+//    fun getBoard(): Call<BoardModel>
 
 }
