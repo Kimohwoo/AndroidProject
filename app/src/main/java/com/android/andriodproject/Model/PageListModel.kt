@@ -16,7 +16,9 @@ data class Body(
 
 data class Items(
     @SerializedName("item")
-    var item: List<WeatherModel>
+    var item: List<ItemModel>,
+//    @SerializedName("item")
+//    var item: List<AirPollutionModel>,
 )
 
 

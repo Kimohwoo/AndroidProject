@@ -7,15 +7,21 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MyApplication: Application() {
 
     var weatherService: WeatherService
-
-    val retrofit: Retrofit
+    var airPollutionService: AirPollutionService
+    val weatherRetrofit: Retrofit
         get() = Retrofit.Builder()
             .baseUrl("https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+    val airRetrofit: Retrofit
+        get() = Retrofit.Builder()
+            .baseUrl("https://apis.data.go.kr/B552584/ArpltnInforInqireSvc/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
 
     init {
-        weatherService = retrofit.create(WeatherService::class.java)
+        weatherService = weatherRetrofit.create(WeatherService::class.java)
+        airPollutionService = airRetrofit.create(AirPollutionService::class.java)
     }
 
 }
