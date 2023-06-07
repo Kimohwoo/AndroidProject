@@ -19,44 +19,41 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-<<<<<<< HEAD
-=======
 
         binding.btn.setOnClickListener {
             id = binding.id.text.toString()
             password = binding.password.text.toString()
-            val user = User()
-            user.id = id
-            user.password = password
-
-            Log.d("lsy", "id: ${user.id} pw: ${user.password}")
-            Login(user)
+//            val user = User()
+//            user.id = id
+//            user.password = password
+//
+//            Log.d("lsy", "id: ${user.id} pw: ${user.password}")
+//            Login(user)
         }
 
     }
 
-    fun Login(user: User){
-        val networkService = (applicationContext as MyApplication).networkService
-        val call = networkService.getLoginResponse(user)
-        call.enqueue(object: Callback<String> {
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                TODO("Not yet implemented")
-                if(response.isSuccessful){
-                    Log.d("lsy", response.body().toString())
-                } else{
-                    Log.d("lsy", "FAILURE")
-                }
-            }
+//    fun Login(user: User){
+//        val networkService = (applicationContext as MyApplication).networkService
+//        val call = networkService.getLoginResponse(user)
+//        call.enqueue(object: Callback<String> {
+//            override fun onResponse(call: Call<String>, response: Response<String>) {
+//                TODO("Not yet implemented")
+//                if(response.isSuccessful){
+//                    Log.d("lsy", response.body().toString())
+//                } else{
+//                    Log.d("lsy", "FAILURE")
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<String>, t: Throwable) {
+//                TODO("Not yet implemented")
+//                Log.d("lsy", "Connection failure : ${t.localizedMessage}")
+//            }
 
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                TODO("Not yet implemented")
-                Log.d("lsy", "Connection failure : ${t.localizedMessage}")
-            }
-
-        })
+//        })
 
 
->>>>>>> 22737852f449fa36e264a9b7202e9eee52d47fb5
-    }
+//    }
 
 }
