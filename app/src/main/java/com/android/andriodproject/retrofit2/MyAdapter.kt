@@ -1,11 +1,14 @@
 package com.android.andriodproject.retrofit2
 
+
+import WeatherModel
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.android.andriodproject.Model.AirPollutionModel
-import com.android.andriodproject.Model.WeatherModel
+
+import com.android.andriodproject.AirListModel.AirPollutionModel
+
 import com.android.andriodproject.databinding.ItemRetrofitBinding
 import com.android.andriodproject.getTime
 

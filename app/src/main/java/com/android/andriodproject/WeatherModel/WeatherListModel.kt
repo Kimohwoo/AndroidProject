@@ -1,8 +1,10 @@
-package com.android.andriodproject.Model
+package com.android.andriodproject.WeatherModel
 
+import WeatherModel
 import com.google.gson.annotations.SerializedName
 
-data class PageListModel (
+//weather
+data class WeatherListModel (
     var response: Response
 )
 
@@ -11,14 +13,12 @@ data class Response(
 )
 
 data class Body(
-    var items: Items
+   var items: Items
 )
 
 data class Items(
     @SerializedName("item")
-    var item: List<ItemModel>,
-//    @SerializedName("item")
-//    var item: List<AirPollutionModel>,
+    var item: List<WeatherModel>
 )
 
 

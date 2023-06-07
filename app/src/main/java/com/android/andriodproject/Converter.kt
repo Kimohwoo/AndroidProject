@@ -17,7 +17,7 @@ object Converter {
         val OLON = 126.0 // 기준점 경도(degree)
         val OLAT = 38.0 // 기준점 위도(degree)
         val XO = 43.0 // 기준점 X좌표(GRID)
-        val YO = 136.0 // 기1준점 Y좌표(GRID)
+        val YO = 136.0 // 기준점 Y좌표(GRID)
 
         //
         // LCC DFS 좌표변환 ( code : "TO_GRID"(위경도->좌표, lat_X:위도,  lng_Y:경도), "TO_GPS"(좌표->위경도,  lat_X:x, lng_Y:y) )

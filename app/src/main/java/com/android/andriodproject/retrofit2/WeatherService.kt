@@ -1,6 +1,7 @@
 package com.android.andriodproject.retrofit2
 
-import com.android.andriodproject.Model.PageListModel
+import com.android.andriodproject.WeatherModel.WeatherListModel
+
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -15,7 +16,7 @@ interface WeatherService {
         @Query("base_time") baseTime: String,
         @Query("nx") nx: Int,
         @Query("ny") ny: Int
-    ): retrofit2.Call<PageListModel>
+    ): retrofit2.Call<WeatherListModel>
 
     @GET("getVilageFcst")
     fun getVilageFcstInfo(
@@ -27,6 +28,6 @@ interface WeatherService {
         @Query("base_time") baseTime: String,
         @Query("nx") nx: Int,
         @Query("ny") ny: Int
-    ): retrofit2.Call<PageListModel>
+    ): retrofit2.Call<WeatherListModel>
 
 }

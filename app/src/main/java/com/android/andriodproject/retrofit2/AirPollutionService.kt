@@ -1,6 +1,7 @@
 package com.android.andriodproject.retrofit2
 
-import com.android.andriodproject.Model.PageListModel
+
+import com.android.andriodproject.AirListModel.AirListModel
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -14,6 +15,6 @@ interface AirPollutionService {
         @Query("sidoName") sidoName: String,
         @Query("returnType") returnType: String,
         @Query("ver") ver: Double
-    ): retrofit2.Call<PageListModel>
+    ): retrofit2.Call<AirListModel>
 
 }
