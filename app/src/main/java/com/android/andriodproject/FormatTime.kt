@@ -1,7 +1,6 @@
 package com.android.andriodproject
 
 import android.icu.text.SimpleDateFormat
-import java.time.LocalDateTime
 import java.util.Date
 
 fun getTime(formating: String): String {

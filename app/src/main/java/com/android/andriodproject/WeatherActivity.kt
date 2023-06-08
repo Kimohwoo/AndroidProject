@@ -31,9 +31,8 @@ class WeatherActivity : AppCompatActivity() {
 
         //GPS 위치, 경도 받아오기
 
-
         //위도 경도 -> x, y
-        val toXY = Converter.convertGRID_GPS(TO_GRID, 37.579871128849334, 126.98935225645432)
+        val toXY = Converter.convertGRID_GPS(TO_GRID, 37.55189, 126.9917933)
         Log.d("lsy", "x = " + toXY.x + ",y = " + toXY.y)
 
         //공공데이터 가져오기
@@ -60,19 +59,19 @@ class WeatherActivity : AppCompatActivity() {
                     Log.d("lsy", "Grade값 찍히는지 : ${data.khaiGrade}")
                     if (data.khaiGrade == "1") {
                         airResult = 50
-                        return@forEach
+                        return
                     } else if (data.khaiGrade == "2") {
                         airResult = 40
-                        return@forEach
+                        return
                     } else if (data.khaiGrade == "3") {
                         airResult = 0
-                        return@forEach
+                        return
                     } else if (data.khaiGrade == "4") {
                         airResult = -10
-                        return@forEach
+                        return
                     } else {
                         airResult = 0
-                        return@forEach
+                        return
                     }
                 }
                 Log.d("lsy", "Air result 값 확인 : ${airResult}")
@@ -105,8 +104,10 @@ class WeatherActivity : AppCompatActivity() {
                 binding.recyclerView.adapter =
                     MyAdapter(this@WeatherActivity, item as List<WeatherModel>)
                 item?.forEach { data ->
+                    Log.d("lsy", "category값 : ${data.category}")
                     if (data.category == "POP") {
                         rainProbability = data.fcstValue
+                        Log.d("lsy", "rainProbability값 : ${rainProbability}")
                         if (rainProbability <= "10") {
                             fcstResult = 20
                             return
@@ -155,8 +156,9 @@ class WeatherActivity : AppCompatActivity() {
                     } else if (data.category === "POP"){
                         rainProbability = data.fcstValue
                     }
-                    binding.score.text = "Today: ${airResult + fcstResult + weatherResult}"
                 }
+                Log.d("lsy", "air: ${airResult}, FCST: ${fcstResult}, weather: ${weatherResult}")
+                binding.score.text = "Today: ${airResult + fcstResult + weatherResult}"
             }
             override fun onFailure(call: Call<WeatherListModel>, t: Throwable) {
                 call.cancel()
