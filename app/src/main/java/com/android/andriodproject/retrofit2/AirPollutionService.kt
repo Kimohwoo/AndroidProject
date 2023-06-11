@@ -1,7 +1,7 @@
 package com.android.andriodproject.retrofit2
 
 
-import com.android.andriodproject.AirListModel.AirListModel
+import com.android.andriodproject.Model.AirListModel.AirListModel
 import retrofit2.http.GET
 import retrofit2.http.Query
 

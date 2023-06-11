@@ -9,6 +9,18 @@ object Converter {
     val TO_GRID = 0
     val TO_GPS = 1
 
+    fun xyToSido(nx: Int, ny: Int): String{
+        if((nx in 93..101) && (ny in 73..79)){
+            return "부산"
+        } else if((nx in 57..63) && (ny in 124..129)){
+            return "서울"
+        } else if((nx in 53..73) && (ny in 113..140)){
+            return "경기도"
+        } else {
+            return "부산"
+        }
+    }
+
     fun convertGRID_GPS(mode: Int, lat_X: Double, lng_Y: Double): LatXLngY {
         val RE = 6371.00877 // 지구 반경(km)
         val GRID = 5.0 // 격자 간격(km)

@@ -1,4 +1,4 @@
-package com.android.andriodproject.WeatherModel
+package com.android.andriodproject.Model.WeatherModel
 
 import WeatherModel
 import com.google.gson.annotations.SerializedName

@@ -7,9 +7,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-import com.android.andriodproject.AirListModel.AirPollutionModel
-
+import com.android.andriodproject.Model.AirListModel.AirPollutionModel
 import com.android.andriodproject.databinding.ItemRetrofitBinding
+
 import com.android.andriodproject.getTime
 
 class MyViewHolder(val binding: ItemRetrofitBinding): RecyclerView.ViewHolder(binding.root)
@@ -26,9 +26,8 @@ class MyAdapter(val context: Context, val datas: List<WeatherModel>?): RecyclerV
         val binding = (holder as MyViewHolder).binding
         val weather = datas?.get(position)
         val time = getTime("hh00")
-//        if(weather?. == "sky" && weather?.fcstTime == time) {
-//            binding.sky.text = weather?.fcstValue
-//        }
+
+        binding.sky.text = weather?.fcstValue
 
     }
 
@@ -45,8 +44,11 @@ class AirAdapter(val context: Context, val datas: List<AirPollutionModel>): Recy
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val binding = (holder as MyViewHolder).binding
-        val weather = datas?.get(position)
+        val airPollution = datas?.get(position)
         val time = getTime("hh00")
+
+        binding.rainfall.text = airPollution?.sidoName
+        binding.temperature.text = airPollution?.khaiGrade
 
     }
 

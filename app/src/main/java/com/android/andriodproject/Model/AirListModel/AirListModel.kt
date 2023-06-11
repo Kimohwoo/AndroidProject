@@ -1,4 +1,4 @@
-package com.android.andriodproject.AirListModel
+package com.android.andriodproject.Model.AirListModel
 
 
 import com.google.gson.annotations.SerializedName

@@ -2,7 +2,7 @@
 import com.google.gson.annotations.SerializedName
 
 data class WeatherModel(
-    //WeatherModel
+
     @SerializedName("baseDate")
     var baseDate: String,
     @SerializedName("baseTime")
@@ -15,8 +15,5 @@ data class WeatherModel(
     var fcstTime: String,
     @SerializedName("fcstValue")
     var fcstValue: String,
-    @SerializedName("nx")
-    var nx: Int,
-    @SerializedName("ny")
-    var ny: Int,
+
 )
