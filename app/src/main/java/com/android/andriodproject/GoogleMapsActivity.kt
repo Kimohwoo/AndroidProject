@@ -46,7 +46,12 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
     private var polyline: Polyline? = null
     // 마지막으로 업데이트된 위치 좌표
     private var lastLocation: Location? = null
+    //지도에 마지막으로 이동한 마커를 표시하기 위해 넣음
     private var marker: Marker? = null
+    //이동경로 구하기 위해 넣음
+    private var totalDistance: Double = 0.0
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,6 +96,8 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
         polyline = mMap.addPolyline(PolylineOptions().color(Color.YELLOW))
 
 
+        // 초기화된 totalDistance 변수
+        totalDistance = 0.0
     }
 
     @SuppressLint("MissingPermission")
@@ -170,24 +177,42 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
         val currentLatitude = location.latitude
         val currentLongitude = location.longitude
 
-        // 좌표를 랜덤하게 조금씩 이동시키는 코드
-        val newLatitude = currentLatitude + (Math.random() - 0.5) * 0.001
-        val newLongitude = currentLongitude + (Math.random() - 0.5) * 0.001
+        val currentLatLng = LatLng(currentLatitude, currentLongitude)
 
-        val currentLatLng = LatLng(newLatitude, newLongitude)
+
+        // 좌표를 랜덤하게 조금씩 이동시키는 코드
+        // 새로운 위치를 생성할 때 랜덤한 값을 사용하여 현재 위치를 조금씩 이동시킨다는 점입니다. 이렇게 되면 이동 거리가 계속 0으로 나오는 문제가 발생.
+//        val newLatitude = currentLatitude + (Math.random() - 0.5) * 0.01
+//        val newLongitude = currentLongitude + (Math.random() - 0.5) * 0.01
+//
+//        val currentLatLng = LatLng(newLatitude, newLongitude)
+
         // 이전 마커 제거
         marker?.remove()
-
         // 새로운 위치에 마커 표시
         marker = mMap.addMarker(MarkerOptions().position(currentLatLng).title("현재위치"))
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f))
+
+
+        val previousLocation = lastLocation?.let { Location(it) }
+        lastLocation = location
+
+        if (previousLocation != null) {
+            val distance = previousLocation.distanceTo(location).toDouble()
+            totalDistance += distance
+            Log.d("KSJ", "이동 거리: $distance 미터")
+            Log.d("KSJ", "누적 이동 거리: $totalDistance 미터")
+        }
 
         // 추가된 부분: Polyline에 좌표 추가
         val points = polyline?.points?.toMutableList() ?: mutableListOf()
         points.add(currentLatLng)
         polyline?.points = points
 
-        Log.d("KSJ", "위도: $newLatitude, 경도: $newLongitude")
+
+//        Log.d("KSJ", "위도: $newLatitude, 경도: $newLongitude")
+        Log.d("KSJ", "위도: $currentLatitude, 경도: $currentLongitude")
+
 
     }
 
