@@ -2,11 +2,14 @@ package com.android.andriodproject
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
@@ -22,31 +25,50 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.android.andriodproject.PermissionUtils.PermissionDeniedDialog.Companion.newInstance
 import com.android.andriodproject.PermissionUtils.isPermissionGranted
 import com.android.andriodproject.databinding.ActivityGoogleMapsBinding
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.Polyline
+import com.google.android.gms.maps.model.PolylineOptions
 
 class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPermissionsResultCallback {
 
+    //권한이 거부되었는지 여부 추적
     private var permissionDenied = false
+    //구글 맵을 mMap객체로 저장
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityGoogleMapsBinding
+    //위치 업데이트 서비스를 제공하는 클라이언트
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    //위치 업데이트를 위한 요청
     private lateinit var locationRequest: LocationRequest
+    //위치 업데이트 결과를 처리하는 콜백
     private lateinit var locationCallback: LocationCallback
+    //지도에 실선 표기를 위한 객체
+    private var polyline: Polyline? = null
+    // 마지막으로 업데이트된 위치 좌표
+    private var lastLocation: Location? = null
+    private var marker: Marker? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)  // 화면 꺼지지 않게.
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT    // 세로 모드 고정.
+
         binding = ActivityGoogleMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // (자동 생성된 코드) SupportMapFragment를 호출(비동기적)하여 지도가 준비되면 알림을 받습니다.
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         locationRequest = LocationRequest.create().apply {
             interval = 5000 // 5초마다 위치 업데이트
-            fastestInterval = 5000 // 최소 5초 간격으로 업데이트
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            fastestInterval = 5000 // 최소 5초 간격으로 업데이트(고정)
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY //(GPS우선으로)
         }
+
+        //위치 업데이트 결과를 처리하는 loacionCallback정의
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 locationResult.lastLocation?.let { onLocationUpdated(it) }
@@ -54,19 +76,33 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
         }
     }
 
+    /** (자동 생성된 코드)
+     * 사용가능한 맵을 조작함. (맵이 준비되면 이 콜백이 실행됨)
+     * 이것으로 마커나 선, 리스터를 추가하거나 표시되는 지역을 변경할 수 있음 (디폴트로 호주 시드니를 표시됨)
+     * Google Play 서비스가 설치되어 있지 않으면 SupportMapFragment 안에 서비스를 설치하라는 안내가 표시됨
+     * 이 메서드는 Google Play 서비스를 설치하고 이 앱으로 돌아왔을 때만 실행됨
+     */
+    //맵이 준비되면 호출되는 콜백
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        //현재위치 표시 활성화
         enableMyLocation()
+        //폴리라인 객체 초기화(노란색으로 움직인 거리를 표기할거란걸 알 수 있음)
+        polyline = mMap.addPolyline(PolylineOptions().color(Color.YELLOW))
+
+
     }
 
     @SuppressLint("MissingPermission")
+    //현재위치 표시를 활성화
     private fun enableMyLocation() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            mMap.isMyLocationEnabled = true
-            startLocationUpdates()
+            mMap.isMyLocationEnabled = true //현재위치 권한이 있는경우
+            startLocationUpdates() //<-위치업데이트를 시작하는 메서드 호출
             return
         }
 
+        //현재위치 표시권한X인경우, 이유 다이얼로그 표시
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
             PermissionUtils.RationaleDialog.newInstance(LOCATION_PERMISSION_REQUEST_CODE, true).show(supportFragmentManager, "dialog")
             return
@@ -75,6 +111,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
     }
 
+    //위치 업데이트를 시작하는 역할
     private fun startLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -91,9 +128,18 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
             // 자세한 내용은 ActivityCompat#requestPermissions의 문서를 참조하세요.
             return
         }
+
+        //권한이 있는경우 fusedLocationProviderClient를 사용해서 위치업데이트 요청
         fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null)
+        // 혹시 안드로이드 스튜디오에서 비정상적으로 권한 요청 오류를 표시할 경우, 'Alt+Enter'로 표시되는 제안 중,
+        // Suppress: Add @SuppressLint("MissingPermission") annotation
+        // 을 클릭할 것
+        // (에디터가 원래 권한 요청이 필요한 코드 주변에서만 권한 요청 코딩을 허용했었기 때문임.
+        //  현재 우리 코딩처럼 이렇게 별도의 메소드에 권한 요청 코드를 작성하지 못하게 했었음)
     }
 
+
+    //권한 요청결과를 처리하는 역할
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         if (requestCode != LOCATION_PERMISSION_REQUEST_CODE) {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -101,11 +147,12 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
         }
 
         if (isPermissionGranted(permissions, grantResults, Manifest.permission.ACCESS_FINE_LOCATION) || isPermissionGranted(permissions, grantResults, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-            enableMyLocation()
+            enableMyLocation() //<-요청코드가 LOCATION_PERMISSION_REQUEST_CODE와 일치하면 위치표시 활성화
         } else {
-            permissionDenied = true
+            permissionDenied = true //권한이 거부된 경우
         }
     }
+
 
     override fun onResumeFragments() {
         super.onResumeFragments()
@@ -120,28 +167,25 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
     }
 
     private fun onLocationUpdated(location: Location) {
-        //(현재위치 5초마다 업데이트)
-//        val currentLatLng = LatLng(location.latitude, location.longitude)
-//        mMap.clear() // 기존 마커 제거
-//        mMap.addMarker(MarkerOptions().position(currentLatLng).title("Current Location"))
-//        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f))
-//
-//        // 콘솔에 위치 좌표 출력
-//        val latitude = location.latitude
-//        val longitude = location.longitude
-//        Log.d("KSJ", "위도: $latitude, 경도: $longitude")
-
         val currentLatitude = location.latitude
         val currentLongitude = location.longitude
 
         // 좌표를 랜덤하게 조금씩 이동시키는 코드
-        val newLatitude = currentLatitude + (Math.random() - 0.5) * 0.01
-        val newLongitude = currentLongitude + (Math.random() - 0.5) * 0.01
+        val newLatitude = currentLatitude + (Math.random() - 0.5) * 0.001
+        val newLongitude = currentLongitude + (Math.random() - 0.5) * 0.001
 
         val currentLatLng = LatLng(newLatitude, newLongitude)
-        mMap.clear()
-        mMap.addMarker(MarkerOptions().position(currentLatLng).title("현재위치"))
+        // 이전 마커 제거
+        marker?.remove()
+
+        // 새로운 위치에 마커 표시
+        marker = mMap.addMarker(MarkerOptions().position(currentLatLng).title("현재위치"))
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f))
+
+        // 추가된 부분: Polyline에 좌표 추가
+        val points = polyline?.points?.toMutableList() ?: mutableListOf()
+        points.add(currentLatLng)
+        polyline?.points = points
 
         Log.d("KSJ", "위도: $newLatitude, 경도: $newLongitude")
 
