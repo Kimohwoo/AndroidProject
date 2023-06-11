@@ -181,7 +181,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
 
 
         // 좌표를 랜덤하게 조금씩 이동시키는 코드
-        // 새로운 위치를 생성할 때 랜덤한 값을 사용하여 현재 위치를 조금씩 이동시킨다는 점입니다. 이렇게 되면 이동 거리가 계속 0으로 나오는 문제가 발생.
+        // ☆(중요)새로운 위치를 생성할 때 랜덤한 값을 사용하여 현재 위치를 조금씩 이동시킨다는 점입니다. 이렇게 되면 이동 거리가 계속 0으로 나오는 문제가 발생.
 //        val newLatitude = currentLatitude + (Math.random() - 0.5) * 0.01
 //        val newLongitude = currentLongitude + (Math.random() - 0.5) * 0.01
 //
