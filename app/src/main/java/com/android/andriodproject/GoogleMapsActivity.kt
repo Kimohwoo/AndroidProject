@@ -90,13 +90,13 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
     //맵이 준비되면 호출되는 콜백
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-        //현재위치 표시 활성화
+        //시작할때 현재위치 표시 활성화
         enableMyLocation()
-        //폴리라인 객체 초기화(노란색으로 움직인 거리를 표기할거란걸 알 수 있음)
+        //시작할때 폴리라인 객체 초기화(노란색으로 움직인 거리를 표기할거란걸 알 수 있음)
         polyline = mMap.addPolyline(PolylineOptions().color(Color.YELLOW))
 
 
-        // 초기화된 totalDistance 변수
+        // 시작할때 totalDistance 변수 초기화
         totalDistance = 0.0
     }
 
