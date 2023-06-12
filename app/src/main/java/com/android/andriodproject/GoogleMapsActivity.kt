@@ -222,9 +222,10 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
     }
     private fun writeToFile(text:String){
         val filename = "location_history.txt" // 저장할 파일명
-        val file = File(filesDir, filename) // 파일객체 (파일경로, 파일명객체)
+        val file = File(filesDir, filename) // 파일객체 만들기(임포트) - (파일경로, 파일명객체)
 
         try {
+            //파일내용 쓰는것(임포트 FileWriter)
             FileWriter(file, true).use { writer ->
                 writer.append(text) // 파일에 내용 추가
             }
