@@ -17,8 +17,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-
 //        binding.btn.setOnClickListener {
 //            id = binding.id.text.toString()
 //            password = binding.password.text.toString()

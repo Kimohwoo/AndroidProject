@@ -1,4 +1,8 @@
 
+import android.location.LocationManager
+import android.util.Log
+import com.android.andriodproject.R
+import com.bumptech.glide.Glide
 import com.google.gson.annotations.SerializedName
 
 data class WeatherModel(

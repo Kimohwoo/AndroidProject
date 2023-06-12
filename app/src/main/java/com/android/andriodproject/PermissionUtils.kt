@@ -14,37 +14,6 @@ import androidx.fragment.app.DialogFragment
 
 object PermissionUtils {
 
-    fun requestLocationPermissions(
-        activity: AppCompatActivity,
-        requestId: Int,
-        finishActivity: Boolean
-    ) {
-        if (
-            ActivityCompat.shouldShowRequestPermissionRationale(
-                activity,
-                permission.ACCESS_FINE_LOCATION
-            ) ||
-            ActivityCompat.shouldShowRequestPermissionRationale(
-                activity,
-                permission.ACCESS_COARSE_LOCATION
-            )
-        ) {
-            // Display a dialog with rationale.
-            RationaleDialog.newInstance(requestId, finishActivity)
-                .show(activity.supportFragmentManager, "dialog")
-        } else {
-            // Location permission has not been granted yet, request it.
-            ActivityCompat.requestPermissions(
-                activity,
-                arrayOf(
-                    permission.ACCESS_FINE_LOCATION,
-                    permission.ACCESS_COARSE_LOCATION
-                ),
-                requestId
-            )
-        }
-    }
-
     @JvmStatic
     fun isPermissionGranted(
         grantPermissions: Array<String>, grantResults: IntArray,
