@@ -7,7 +7,7 @@ class LatXLngY {
 
 object Converter {
     val TO_GRID = 0
-    val TO_GPS = 1
+//    val TO_GPS = 1
 
     fun xyToSido(nx: Int, ny: Int): String{
         if((nx in 93..101) && (ny in 73..79)){

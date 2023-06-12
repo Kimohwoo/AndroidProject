@@ -1,26 +1,48 @@
 package com.android.andriodproject
 
+import android.Manifest
 import Converter.TO_GRID
 import Converter.xyToSido
 import WeatherModel
+import android.content.Context
+import android.content.pm.ActivityInfo
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.android.andriodproject.Model.AirListModel.AirListModel
 import com.android.andriodproject.Model.AirListModel.AirPollutionModel
 import com.android.andriodproject.Model.WeatherModel.WeatherListModel
+import com.android.andriodproject.PermissionUtils.PermissionDeniedDialog.Companion.newInstance
+import com.android.andriodproject.PermissionUtils.isPermissionGranted
 import com.android.andriodproject.databinding.ActivityWeatherBinding
 import com.android.andriodproject.retrofit2.AirAdapter
 import com.android.andriodproject.retrofit2.MyAdapter
 import com.android.andriodproject.retrofit2.MyApplication
 import com.bumptech.glide.Glide
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class WeatherActivity : AppCompatActivity() {
     lateinit var binding: ActivityWeatherBinding
-    lateinit var gifImage: String
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private val PERMISSION_REQUEST_CODE = 1
+    private lateinit var locationManager: LocationManager
+    private var latitude: Double = 0.0
+    private var longitude: Double = 0.0
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         val serviceKey = "cXgLGxZlC+V/06+8LDomc9m8TAR6VHymyLNbeFGuwGCIJcUfxAkVDHaPa3HQx5HeT0kWSkyFnh0JdmOV8rTiRg=="
         val resultType = "JSON"
@@ -28,10 +50,16 @@ class WeatherActivity : AppCompatActivity() {
         binding = ActivityWeatherBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //화면 고정
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+
         //GPS 위치, 경도 받아오기
+        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        requestLocationPermissions()
 
         //위도 경도 -> x, y
-        val toXY = Converter.convertGRID_GPS(TO_GRID, 37.55189, 126.9917933)
+//        val toXY = Converter.convertGRID_GPS(TO_GRID, 37.55189, 126.9917933)
+        val toXY = Converter.convertGRID_GPS(TO_GRID, latitude, longitude)
         Log.d("lsy", "x = " + toXY.x + ",y = " + toXY.y)
 
         //공공데이터 가져오기
@@ -198,4 +226,76 @@ class WeatherActivity : AppCompatActivity() {
         binding.timeView.text = getTime
 
     }
+
+    private fun requestLocationPermissions() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
+                PERMISSION_REQUEST_CODE
+            )
+        } else {
+            startLocationUpdates()
+        }
+    }
+
+    private fun startLocationUpdates() {
+        try {
+            locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                5000, // Minimum time interval between location updates (in milliseconds)
+                10f, // Minimum distance between location updates (in meters)
+                locationListener
+            )
+        } catch (e: SecurityException) {
+            e.printStackTrace()
+        }
+    }
+
+    private val locationListener: LocationListener = object : LocationListener {
+        override fun onLocationChanged(location: Location) {
+            latitude = location.latitude
+            longitude = location.longitude
+            Log.d("lsy", "latitude: ${latitude}, longitude: ${longitude}")
+            // 위경도 값을 사용할 수 있습니다. 원하는 작업을 수행하세요.
+        }
+
+        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+
+        override fun onProviderEnabled(provider: String) {}
+
+        override fun onProviderDisabled(provider: String) {}
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startLocationUpdates()
+            } else {
+                Toast.makeText(
+                    this,
+                    "Location permission denied.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+
 }
