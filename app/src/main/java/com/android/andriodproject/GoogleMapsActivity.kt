@@ -28,6 +28,8 @@ import com.android.andriodproject.databinding.ActivityGoogleMapsBinding
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
+import java.io.File
+import java.io.FileWriter
 
 class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPermissionsResultCallback {
 
@@ -191,7 +193,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
         marker?.remove()
         // 새로운 위치에 마커 표시
         marker = mMap.addMarker(MarkerOptions().position(currentLatLng).title("현재위치"))
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f))
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 18f))
 
 
         val previousLocation = lastLocation?.let { Location(it) }
@@ -204,7 +206,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
             Log.d("KSJ", "누적 이동 거리: $totalDistance 미터")
         }
 
-        // 추가된 부분: Polyline에 좌표 추가
+        //Polyline에 좌표 추가
         val points = polyline?.points?.toMutableList() ?: mutableListOf()
         points.add(currentLatLng)
         polyline?.points = points
@@ -213,7 +215,24 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
 //        Log.d("KSJ", "위도: $newLatitude, 경도: $newLongitude")
         Log.d("KSJ", "위도: $currentLatitude, 경도: $currentLongitude")
 
+        val fileContents = "Latitude: ${location.latitude}, Longitude: ${location.longitude}\n" // 저장할 내용
+        writeToFile(fileContents)
 
+
+    }
+    private fun writeToFile(text:String){
+        val filename = "location_history.txt" // 저장할 파일명
+        val file = File(filesDir, filename) // 파일객체 (파일경로, 파일명객체)
+
+        try {
+            FileWriter(file, true).use { writer ->
+                writer.append(text) // 파일에 내용 추가
+            }
+            val filePath = file.absolutePath // 파일의 절대 경로 가져오기
+            Log.d("KSJ", "File path: $filePath") // 파일 경로 출력
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     companion object {
