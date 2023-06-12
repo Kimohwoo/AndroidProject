@@ -30,6 +30,8 @@ import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
 import java.io.File
 import java.io.FileWriter
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPermissionsResultCallback {
 
@@ -52,6 +54,9 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
     private var marker: Marker? = null
     //이동경로 구하기 위해 넣음
     private var totalDistance: Double = 0.0
+    // 파일 이름을 저장할 변수
+    private lateinit var fileName: String
+
 
 
 
@@ -67,6 +72,9 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
         // (자동 생성된 코드) SupportMapFragment를 호출(비동기적)하여 지도가 준비되면 알림을 받습니다.
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        // 파일 이름 생성
+        generateFileName()
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         locationRequest = LocationRequest.create().apply {
@@ -100,6 +108,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
 
         // 시작할때 totalDistance 변수 초기화
         totalDistance = 0.0
+
     }
 
     @SuppressLint("MissingPermission")
@@ -175,6 +184,34 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
         newInstance(true).show(supportFragmentManager, "dialog")
     }
 
+    // 파일 이름 생성 함수
+    private fun generateFileName() {
+        val now = Date(System.currentTimeMillis())
+        val formatTime = SimpleDateFormat("yyMMddhhmm")
+        fileName = "${formatTime.format(now)}.txt"
+    }
+
+    private fun writeToFile(latitude: Double, longitude: Double) {
+        val file = File(filesDir, fileName)
+
+        try {
+            if (!file.exists()) {
+                file.createNewFile()
+            }
+
+            val now = Date(System.currentTimeMillis())
+            val fileContents = "Latitude: $latitude, Longitude: $longitude\n" // 추가할 내용
+            FileWriter(file, true).use { writer ->
+                writer.append(fileContents)
+            }
+
+            val filePath = file.absolutePath
+            Log.d("KSJ", "File path: $filePath")
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     private fun onLocationUpdated(location: Location) {
         val currentLatitude = location.latitude
         val currentLongitude = location.longitude
@@ -215,26 +252,11 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
 //        Log.d("KSJ", "위도: $newLatitude, 경도: $newLongitude")
         Log.d("KSJ", "위도: $currentLatitude, 경도: $currentLongitude")
 
-        val fileContents = "Latitude: ${location.latitude}, Longitude: ${location.longitude}\n" // 저장할 내용
-        writeToFile(fileContents)
+        writeToFile(location.latitude, location.longitude)
 
 
     }
-    private fun writeToFile(text:String){
-        val filename = "location_history.txt" // 저장할 파일명
-        val file = File(filesDir, filename) // 파일객체 만들기(임포트) - (파일경로, 파일명객체)
 
-        try {
-            //파일내용 쓰는것(임포트 FileWriter)
-            FileWriter(file, true).use { writer ->
-                writer.append(text) // 파일에 내용 추가
-            }
-            val filePath = file.absolutePath // 파일의 절대 경로 가져오기
-            Log.d("KSJ", "File path: $filePath") // 파일 경로 출력
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1

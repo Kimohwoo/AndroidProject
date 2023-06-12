@@ -36,7 +36,7 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun displayPathFromTextFile() {
-        val filename = "location_history.txt"
+        val filename = "2306120643.txt"
         val file = File(filesDir, filename)
 
         if (file.exists()) {
