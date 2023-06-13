@@ -3,6 +3,7 @@ package com.android.andriodproject
 import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils.split
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.android.andriodproject.R
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -20,9 +21,13 @@ import java.io.File
 class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
+    private val recommendDistance = 3500f
+
 
     companion object{
         const val FILE_NAME = "filename"
+        const val TOTAL_DISTANCE = "totalDistance"
+        const val EXERCISE_TIME = "exerciseTime"
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +50,10 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
         val defaultFileName = "2306120643.txt"
         val intent = intent
         val fileName = intent.getStringExtra(FILE_NAME)
+        val totalDistance = intent.getStringExtra(TOTAL_DISTANCE)
+
+        Log.d("ksj12", "총거리 : $totalDistance")
+
         val file = if (!fileName.isNullOrEmpty()) {
             File(filesDir, fileName)
         } else {

@@ -9,9 +9,12 @@ import android.graphics.Color
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
+import android.view.Gravity
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
@@ -34,6 +37,7 @@ import java.io.File
 import java.io.FileWriter
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.concurrent.TimeUnit
 
 class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPermissionsResultCallback {
 
@@ -57,16 +61,23 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
     //이동경로 구하기 위해 넣음
     private var totalDistance: Double = 0.0
     // 파일 이름을 저장할 변수
-    private lateinit var fileName: String
+    private var fileName: String = ""
     //(시작/일시정지/정지)버튼
     private lateinit var startButton: Button
     private lateinit var pauseButton: Button
     private lateinit var stopButton: Button
-    // 이동 추적 상태
+    // 이동 추적 상태(디폴트값) - 해당부분이 실행되었을때 자동으로 시작되지 않게 하기위해
     private var isTracking = false
-
-
-
+    // 운동 시작 시간을 저장할 변수
+    private var startTime: Long = 0
+    // 운동 시간을 저장할 변수
+    private var exerciseTime: Long = 0
+    // 운동 타이머 작동 여부를 저장할 변수
+    private var isTimerRunning = false
+    // 운동 시간 표시 TextView
+    private lateinit var exerciseTimeTextView: TextView
+    // 운동 시간 업데이트를 위한 Handler
+    private val exerciseHandler = Handler()
 
 
 
@@ -83,8 +94,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        // 파일 이름 생성
-        generateFileName()
+
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         locationRequest = LocationRequest.create().apply {
@@ -105,8 +115,15 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
         pauseButton = findViewById(R.id.pauseButton)
         stopButton = findViewById(R.id.stopButton)
 
+        // 운동 시간 표시 TextView 초기화
+        exerciseTimeTextView = findViewById(R.id.exerciseTimeTextView)
+
+
         startButton.setOnClickListener {
             startTracking()
+            // 파일 이름 생성
+            generateFileName()
+
         }
 
         pauseButton.setOnClickListener {
@@ -130,6 +147,12 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
 
             // 위치 업데이트 시작
             startLocationUpdates()
+
+            // 운동 시작 시간 기록
+            startTime = System.currentTimeMillis()
+
+            // 운동 타이머 시작
+            startExerciseTimer()
         }
     }
 
@@ -143,6 +166,9 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
 
             // 위치 업데이트 중지
             stopLocationUpdates()
+
+            // 운동 타이머 정지
+            stopExerciseTimer()
         }
     }
 
@@ -156,13 +182,59 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
         // 위치 업데이트 중지
         stopLocationUpdates()
 
+        // 운동 타이머 정지
+        stopExerciseTimer()
+
+        // 운동 시간 계산
+        exerciseTime = System.currentTimeMillis() - startTime
+
         // 기타 필요한 정지 작업 수행
         // 예: 데이터 저장, 리셋 등
 
         val intent = Intent(this, ResultActivity::class.java)
-        intent.putExtra(ResultActivity.FILE_NAME, "${fileName}") // 파일 이름을 전달
-//            intent.putExtra(ResultActivity.TOTAL_DISTANCE, 10.5f) // 누적 이동 거리를 전달
+        intent.putExtra(ResultActivity.FILE_NAME, "$fileName") // 파일 이름을 전달
+        intent.putExtra(ResultActivity.TOTAL_DISTANCE, "$totalDistance") // 누적 이동 거리를 전달
+        intent.putExtra(ResultActivity.EXERCISE_TIME, "$exerciseTime") // 운동 시간을 전달
         startActivity(intent)
+    }
+
+    // 운동 타이머 시작
+    private fun startExerciseTimer() {
+        if (!isTimerRunning) {
+            isTimerRunning = true
+            val exerciseHandler = Handler()
+            exerciseHandler.postDelayed(object : Runnable {
+                override fun run() {
+                    if (isTimerRunning) {
+                        val currentTime = System.currentTimeMillis()
+                        val elapsedTime = currentTime - startTime
+                        // 운동 시간 업데이트
+                        exerciseTime = elapsedTime
+
+                        // 운동 시간을 TextView에 표시
+                        val formattedTime = formatExerciseTime(elapsedTime)
+                        exerciseTimeTextView.text = "$formattedTime"
+                        exerciseTimeTextView.gravity = Gravity.CENTER
+
+                        // 1초마다 타이머 업데이트
+                        exerciseHandler.postDelayed(this, 1000)
+                    }
+                }
+            }, 1000) // 1초마다 실행하도록 설정
+        }
+    }
+
+    private fun formatExerciseTime(timeInMillis: Long): String {
+        val hours = TimeUnit.MILLISECONDS.toHours(timeInMillis)
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(timeInMillis) % 60
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(timeInMillis) % 60
+
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds)
+    }
+
+    // 운동 타이머 정지
+    private fun stopExerciseTimer() {
+        isTimerRunning = false
     }
 
     private fun stopLocationUpdates() {
@@ -270,6 +342,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
         fileName = "${formatTime.format(now)}.txt"
     }
 
+    //파일 내용 갱신 함수
     private fun writeToFile(latitude: Double, longitude: Double) {
         val file = File(filesDir, fileName)
 
@@ -331,7 +404,12 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
 //        Log.d("KSJ", "위도: $newLatitude, 경도: $newLongitude")
         Log.d("KSJ", "위도: $currentLatitude, 경도: $currentLongitude")
 
-        writeToFile(location.latitude, location.longitude)
+        if(writeToFile(location.latitude, location.longitude)===null){
+            Log.d("KSJ", "시작버튼을 누르지 않았습니다.")
+        }else{
+            writeToFile(location.latitude, location.longitude)
+
+        }
 
 
     }

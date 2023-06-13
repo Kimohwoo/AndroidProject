@@ -9,6 +9,12 @@
         android:id="@+id/map2"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="552dp" />
+
+<!--    <com.github.mikephil.charting.charts.PieChart-->
+<!--        android:id="@+id/chart"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent" />-->
+
 
 </RelativeLayout>
