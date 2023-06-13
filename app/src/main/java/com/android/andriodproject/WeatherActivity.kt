@@ -23,7 +23,6 @@ import com.android.andriodproject.retrofit2.AirAdapter
 import com.android.andriodproject.retrofit2.MyAdapter
 import com.android.andriodproject.retrofit2.MyApplication
 import com.bumptech.glide.Glide
-import com.google.android.gms.location.FusedLocationProviderClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -57,33 +56,46 @@ class WeatherActivity : AppCompatActivity() {
         //GPS 위치, 경도 받아오기
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         requestLocationPermissions()
+        startLocationUpdates()
+        Log.d("lsy", "latitude: ${latitude}, longitude: ${longitude}")
 
-        //위도 경도 -> x, y
-        val toXY = Converter.convertGRID_GPS(TO_GRID, 37.55189, 126.9917933)
-//        val toXY = Converter.convertGRID_GPS(TO_GRID, latitude, longitude)
-        Log.d("lsy", "x = " + toXY.x + ",y = " + toXY.y)
 
-        //공공데이터 가져오기
-        val time = getTime("HH00")
-        val apiDay = getTime("yyyyMMdd")
-        val nx = toXY.x.toInt()
-        val ny = toXY.y.toInt()
+        thread {
+            Thread.sleep(4500)
+            //위도 경도 -> x, y
+            val toXY = Converter.convertGRID_GPS(TO_GRID, latitude, longitude)
+//            val toXY = Converter.convertGRID_GPS(TO_GRID, 37.55189, 126.9917933)
+            Log.d("lsy", "x = " + toXY.x + ",y = " + toXY.y)
+            //공공데이터 가져오기
+            val time = getTime("HH00")
+            val apiDay = getTime("yyyyMMdd")
+            val nx = toXY.x.toInt()
+            val ny = toXY.y.toInt()
 
-        when(time.toInt()){
-            in 501..759 -> apiTime = "0500"
-            in 800..1059 -> apiTime = "0800"
-            in 1100..1350 -> apiTime = "1100"
-            in 1400..1659 -> apiTime = "1400"
-            else -> apiTime = "0500"
-        }
-        val weatherService = (applicationContext as MyApplication).weatherService
-        val weatherListCall = weatherService.getWeather(serviceKey, 1,100, resultType, apiDay, apiTime, nx, ny)
+            when (time.toInt()) {
+                in 501..759 -> apiTime = "0500"
+                in 800..1059 -> apiTime = "0800"
+                in 1100..1350 -> apiTime = "1100"
+                in 1400..1659 -> apiTime = "1400"
+                else -> apiTime = "0500"
+            }
 
-        val airPollutionService = (applicationContext as MyApplication).airPollutionService
-        val airListCall = airPollutionService.getAirPollution(serviceKey, 1, 100, xyToSido(nx, ny), resultType, 1.0)
+            //AirPollutionService
+            val weatherService = (applicationContext as MyApplication).weatherService
+            val weatherListCall =
+                weatherService.getWeather(serviceKey, 1, 100, resultType, apiDay, apiTime, nx, ny)
 
-        //AirPollutionService
-        Log.d("lsy", "Air Url: " + airListCall.request().url().toString())
+            val airPollutionService = (applicationContext as MyApplication).airPollutionService
+            val airListCall = airPollutionService.getAirPollution(
+                serviceKey,
+                1,
+                100,
+                xyToSido(nx, ny),
+                resultType,
+                1.0
+            )
+            Log.d("lsy", "xyToSido: ${xyToSido(nx, ny)}")
+            Log.d("lsy", "Air Url: " + airListCall.request().url().toString())
             airListCall.enqueue(object : Callback<AirListModel> {
                 override fun onResponse(
                     call: Call<AirListModel>,
@@ -130,16 +142,18 @@ class WeatherActivity : AppCompatActivity() {
                             weatherForeach(item, apiTime, timePick)
 
                         }
+
                         override fun onFailure(call: Call<WeatherListModel>, t: Throwable) {
                             call.cancel()
                         }
                     })
                 }
+
                 override fun onFailure(call: Call<AirListModel>, t: Throwable) {
                     call.cancel()
                 }
             })
-
+        }
         //시간, 날짜
         val getDay = getTime("yyyy년MM월dd일")
         val getTime = getTime("hh시MM분ss초")
@@ -147,7 +161,6 @@ class WeatherActivity : AppCompatActivity() {
         Log.d("lsy", "가져온 Day: ${getDay} 가져온 시간: ${getTime}")
         binding.dateView.text = getDay
         binding.timeView.text = getTime
-
     }
 
     fun weatherForeach(item:  List<WeatherModel>, apiTime: String, timePick: String){
@@ -244,139 +257,54 @@ class WeatherActivity : AppCompatActivity() {
                 PERMISSION_REQUEST_CODE
             )
         } else {
-//            startLocationUpdates()
+            startLocationUpdates()
         }
     }
 
-//    private fun startLocationUpdates() {
-//        try {
-//            locationManager.requestLocationUpdates(
-//                LocationManager.GPS_PROVIDER,
-//                5000, // Minimum time interval between location updates (in milliseconds)
-//                10f, // Minimum distance between location updates (in meters)
-//                locationListener
-//            )
-//        } catch (e: SecurityException) {
-//            e.printStackTrace()
-//        }
-//    }
-//
-//    private val locationListener: LocationListener = object : LocationListener {
-//        override fun onLocationChanged(location: Location) {
-//            latitude = location.latitude
-//            longitude = location.longitude
-//            Log.d("lsy", "latitude: ${latitude}, longitude: ${longitude}")
-//        }
-//
+    private fun startLocationUpdates() {
+        try {
+            locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                5000, // Minimum time interval between location updates (in milliseconds)
+                10f, // Minimum distance between location updates (in meters)
+                locationListener
+            )
+        } catch (e: SecurityException) {
+            e.printStackTrace()
+        }
+    }
+
+    private val locationListener: LocationListener = object : LocationListener {
+        override fun onLocationChanged(location: Location) {
+            latitude = location.latitude
+            longitude = location.longitude
+            Log.d("lsy", "locationListener : ${latitude}, ${longitude}")
+        }
+
 //        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
 //
 //        override fun onProviderEnabled(provider: String) {}
 //
 //        override fun onProviderDisabled(provider: String) {}
-//    }
-//
-//    override fun onRequestPermissionsResult(
-//        requestCode: Int,
-//        permissions: Array<out String>,
-//        grantResults: IntArray
-//    ) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        if (requestCode == PERMISSION_REQUEST_CODE) {
-//            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                startLocationUpdates()
-//            } else {
-//                Toast.makeText(
-//                    this,
-//                    "Location permission denied.",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//            }
-//        }
-//    }
-}
+    }
 
-//class WeatherActivity : AppCompatActivity(), SubThreadCallback {
-//        thread {
-//            val toXY = Converter.convertGRID_GPS(TO_GRID, latitude, longitude)
-//            Log.d("lsy", "x = " + toXY.x + ",y = " + toXY.y)
-//            val nx = toXY.x.toInt()
-//            val ny = toXY.y.toInt()
-//            runOnUiThread {
-//                onSubThreadFinished(nx, ny)
-//            }
-//        }.start()
-//
-//
-//    }
-//    override fun onSubThreadFinished(nx: Int, ny: Int) {
-//        val serviceKey = "cXgLGxZlC+V/06+8LDomc9m8TAR6VHymyLNbeFGuwGCIJcUfxAkVDHaPa3HQx5HeT0kWSkyFnh0JdmOV8rTiRg=="
-//        val resultType = "JSON"
-//        val apiDay = getTime("yyyyMMdd")
-//
-//        val weatherService = (applicationContext as MyApplication).weatherService
-//        val weatherListCall = weatherService.getWeather(serviceKey, 1, 100, resultType, apiDay, apiTime, nx, ny)
-//
-//        val airPollutionService = (applicationContext as MyApplication).airPollutionService
-//        val airListCall = airPollutionService.getAirPollution(serviceKey, 1, 100, xyToSido(nx, ny), resultType, 1.0)
-//
-//        //AirPollutionService
-//        Log.d("lsy", "Air Url: " + airListCall.request().url().toString())
-//        airListCall.enqueue(object : Callback<AirListModel> {
-//            override fun onResponse(
-//                call: Call<AirListModel>,
-//                response: Response<AirListModel>
-//            ) {
-//                val airList = response.body()
-//                val item = airList?.response?.body?.items
-//                val time = getTime("yyyy-MM-dd hh:00")
-//                val timePick = getTime("hhMM")
-//
-//                Log.d("lsy", "airList data item값: ${item?.size}")
-//
-//                binding.recyclerView.adapter =
-//                    AirAdapter(this@WeatherActivity, item as List<AirPollutionModel>)
-//
-//                item?.forEach { data ->
-//                    if (data.khaiGrade != null) {
-//                        when (data.khaiGrade) {
-//                            "1" -> airResult = 50
-//                            "2" -> airResult = 40
-//                            "3" -> airResult = 20
-//                            "4" -> -10
-//                            else -> 0
-//                        }
-//                        return@forEach
-//                    }
-//                }
-//                Log.d("lsy", "Air result 값 확인 : ${airResult}")
-//
-//                //weatherService
-//                Log.d("lsy", "Weather url: " + weatherListCall.request().url().toString())
-//                weatherListCall.enqueue(object : Callback<WeatherListModel> {
-//                    override fun onResponse(
-//                        call: Call<WeatherListModel>,
-//                        response: Response<WeatherListModel>
-//                    ) {
-//                        val weatherList = response.body()
-//                        val item = weatherList?.response?.body?.items?.item
-//                        Log.d("lsy", "weatherList data값: ${item}")
-//                        binding.recyclerView.adapter =
-//                            MyAdapter(this@WeatherActivity, item as List<WeatherModel>)
-//
-//                        //날씨 점수
-//                        weatherForeach(item, apiTime, timePick)
-//
-//                    }
-//
-//                    override fun onFailure(call: Call<WeatherListModel>, t: Throwable) {
-//                        call.cancel()
-//                    }
-//                })
-//            }
-//
-//            override fun onFailure(call: Call<AirListModel>, t: Throwable) {
-//                call.cancel()
-//            }
-//        })
-//    }
-//}
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startLocationUpdates()
+            } else {
+                Toast.makeText(
+                    this,
+                    "Location permission denied.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+}
