@@ -4,15 +4,23 @@ package com.android.andriodproject.retrofit2
 import WeatherModel
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-
 import com.android.andriodproject.Model.AirListModel.AirPollutionModel
 import com.android.andriodproject.databinding.ItemRetrofitBinding
-
 import com.android.andriodproject.getTime
 
-class MyViewHolder(val binding: ItemRetrofitBinding): RecyclerView.ViewHolder(binding.root)
+
+class MyViewHolder(val binding: ItemRetrofitBinding): RecyclerView.ViewHolder(binding.root){
+//    fun ViewHolder(v: View) {
+//        super(v)
+//        view = v
+//        view.setOnClickListener(View.OnClickListener {
+//            // item clicked
+//        })
+//    }
+}
 class MyAdapter(val context: Context, val datas: List<WeatherModel>?): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemCount(): Int {

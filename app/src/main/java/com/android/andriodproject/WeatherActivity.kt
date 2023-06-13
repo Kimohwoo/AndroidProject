@@ -15,6 +15,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.GridLayoutManager
 import com.android.andriodproject.Model.AirListModel.AirListModel
 import com.android.andriodproject.Model.AirListModel.AirPollutionModel
 import com.android.andriodproject.Model.WeatherModel.WeatherListModel
@@ -50,6 +52,13 @@ class WeatherActivity : AppCompatActivity() {
         binding = ActivityWeatherBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //뷰 작업
+//        binding.recyclerView.layoutManager = CardView
+        binding.recyclerView.layoutManager = GridLayoutManager(this, 2)
+        binding.recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+
+
+
         //화면 고정
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
@@ -61,7 +70,7 @@ class WeatherActivity : AppCompatActivity() {
 
 
         thread {
-            Thread.sleep(4500)
+            Thread.sleep(5000)
             //위도 경도 -> x, y
             val toXY = Converter.convertGRID_GPS(TO_GRID, latitude, longitude)
 //            val toXY = Converter.convertGRID_GPS(TO_GRID, 37.55189, 126.9917933)
