@@ -2,6 +2,7 @@ package com.android.andriodproject
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
+import android.widget.Button
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
@@ -56,6 +58,14 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
     private var totalDistance: Double = 0.0
     // 파일 이름을 저장할 변수
     private lateinit var fileName: String
+    //(시작/일시정지/정지)버튼
+    private lateinit var startButton: Button
+    private lateinit var pauseButton: Button
+    private lateinit var stopButton: Button
+    // 이동 추적 상태
+    private var isTracking = false
+
+
 
 
 
@@ -89,7 +99,76 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
                 locationResult.lastLocation?.let { onLocationUpdated(it) }
             }
         }
+
+        // 버튼 초기화
+        startButton = findViewById(R.id.startButton)
+        pauseButton = findViewById(R.id.pauseButton)
+        stopButton = findViewById(R.id.stopButton)
+
+        startButton.setOnClickListener {
+            startTracking()
+        }
+
+        pauseButton.setOnClickListener {
+            pauseTracking()
+        }
+
+        stopButton.setOnClickListener {
+            stopTracking()
+
+        }
+
     }
+
+    private fun startTracking() {
+        if (!isTracking) {
+            // 이동 추적 시작
+            isTracking = true
+            startButton.isEnabled = false
+            pauseButton.isEnabled = true
+            stopButton.isEnabled = true
+
+            // 위치 업데이트 시작
+            startLocationUpdates()
+        }
+    }
+
+    private fun pauseTracking() {
+        if (isTracking) {
+            // 이동 추적 일시정지
+            isTracking = false
+            startButton.isEnabled = true
+            pauseButton.isEnabled = false
+            stopButton.isEnabled = true
+
+            // 위치 업데이트 중지
+            stopLocationUpdates()
+        }
+    }
+
+    private fun stopTracking() {
+        // 이동 추적 정지
+        isTracking = false
+        startButton.isEnabled = true
+        pauseButton.isEnabled = false
+        stopButton.isEnabled = false
+
+        // 위치 업데이트 중지
+        stopLocationUpdates()
+
+        // 기타 필요한 정지 작업 수행
+        // 예: 데이터 저장, 리셋 등
+
+        val intent = Intent(this, ResultActivity::class.java)
+        intent.putExtra(ResultActivity.FILE_NAME, "${fileName}") // 파일 이름을 전달
+//            intent.putExtra(ResultActivity.TOTAL_DISTANCE, 10.5f) // 누적 이동 거리를 전달
+        startActivity(intent)
+    }
+
+    private fun stopLocationUpdates() {
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+    }
+
 
     /** (자동 생성된 코드)
      * 사용가능한 맵을 조작함. (맵이 준비되면 이 콜백이 실행됨)

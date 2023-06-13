@@ -23,5 +23,35 @@
         android:id="@+id/map"
         class="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="635dp" />
+
+    <Button
+        android:id="@+id/startButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1800px"
+        android:layout_marginLeft="100px"
+        android:text="시 작"
+        />
+
+    <Button
+        android:id="@+id/pauseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="일시정지"
+        android:layout_marginTop="1800px"
+        android:layout_marginLeft="420px"
+        android:enabled="false"
+        />
+
+    <Button
+        android:id="@+id/stopButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1800px"
+        android:layout_marginLeft="750px"
+        android:text="정 지"
+        android:enabled="false"
+        />
+
 </FrameLayout>

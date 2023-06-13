@@ -21,6 +21,9 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
 
+    companion object{
+        const val FILE_NAME = "filename"
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_result)
@@ -36,8 +39,17 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun displayPathFromTextFile() {
-        val filename = "2306120643.txt"
-        val file = File(filesDir, filename)
+//        val filename = "2306120643.txt"
+//        val file = File(filesDir, filename)
+
+        val defaultFileName = "2306120643.txt"
+        val intent = intent
+        val fileName = intent.getStringExtra(FILE_NAME)
+        val file = if (!fileName.isNullOrEmpty()) {
+            File(filesDir, fileName)
+        } else {
+            File(filesDir, defaultFileName)
+        }
 
         if (file.exists()) {
             val lines = file.readLines()
