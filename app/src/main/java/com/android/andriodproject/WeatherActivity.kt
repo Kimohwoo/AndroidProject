@@ -112,42 +112,26 @@ class WeatherActivity : AppCompatActivity() {
                     val time = getTime("yyyy-MM-dd hh:00")
                     val timePick = getTime("hhMM")
 
-                    var item2 = mutableListOf<AirPollutionModel>()
-
-                    //item > 필터, map 자바스크립트 사용했던 , 새로운 배열 생성하는 함수가 있으면,
-                    // for 문에 continue 이용해서, 새로운 item2 만들어야함. 새 객체.
+                    var item2 = arrayListOf<AirPollutionModel>()
 
                     if (item != null) {
-                        item.mapIndexed{ index, airPollutionModel ->
-                            if(airPollutionModel.khaiGrade =="1") {
-                                airResult = 50
-                            }
-                        }
+                        item2 = item.filter {
+                            it.khaiGrade != null
+                        } as ArrayList<AirPollutionModel>
                     }
-
-
-
-
-                    //
-                    //arrayList.mapTo(arrayList2) { it * 2 }
-//
-//                    item?.forEach { data ->
-//                        if (data.khaiGrade != null) {
-//                            when (data.khaiGrade) {
-//                                "1" -> airResult = 50
-//                                "2" -> airResult = 40
-//                                "3" -> airResult = 20
-//                                "4" -> -10
-//                                else -> 0
-//                            }
-//                            return@forEach
-//                        }
-//                    }
-
-                    Log.d("lsy", "airList data item값: ${item?.size}")
+                    Log.d("lsy", "item의 사이즈 ${item?.size}")
+                    Log.d("lsy", "item2의 사이즈 ${item2.size}")
 
                     binding.recyclerView.adapter =
-                        AirAdapter(this@WeatherActivity, item as List<AirPollutionModel>)
+                        AirAdapter(this@WeatherActivity, item2)
+
+                    when (item2.get(0).khaiGrade) {
+                        "1" -> airResult = 50
+                        "2" -> airResult = 40
+                        "3" -> airResult = 20
+                        "4" -> -10
+                        else -> 0
+                    }
 
                     Log.d("lsy", "Air result 값 확인 : ${airResult}")
 
@@ -160,12 +144,31 @@ class WeatherActivity : AppCompatActivity() {
                         ) {
                             val weatherList = response.body()
                             val item = weatherList?.response?.body?.items?.item
-                            Log.d("lsy", "weatherList data값: ${item}")
+                            var item2 = arrayListOf<WeatherModel>()
+
+                            if(item != null){
+                                item2 = item.filter {
+                                    data ->
+                                    var category = data.category
+                                    (category == "SKY" ||
+                                    category == "POP" ||
+                                    category == "TMP" ||
+                                    category == "PTY" ||
+                                    category == "PCP")&&
+                                    ((data.fcstTime.toInt() in (apiTime.toInt() - 200)..(apiTime.toInt() + 200)))
+                                }.distinctBy {
+                                    it.category
+                                } as ArrayList<WeatherModel>
+
+                            }
+
+                            Log.d("lsy", "사이즈 : ${item?.size}, weatherList data값: ${item}")
+                            Log.d("lsy", "사이즈 : ${item2.size},weatherList data2값: ${item2}")
                             binding.recyclerView.adapter =
-                                MyAdapter(this@WeatherActivity, item as List<WeatherModel>)
+                                MyAdapter(this@WeatherActivity, item2)
 
                             //날씨 점수
-                            weatherForeach(item, apiTime, timePick)
+                            weatherForeach(item2, apiTime, timePick)
 
                         }
 
@@ -291,7 +294,7 @@ class WeatherActivity : AppCompatActivity() {
         try {
             locationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
-                5000, // Minimum time interval between location updates (in milliseconds)
+                10000000000, // Minimum time interval between location updates (in milliseconds)
                 10f, // Minimum distance between location updates (in meters)
                 locationListener
             )
