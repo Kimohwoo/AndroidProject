@@ -32,30 +32,5 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-//    fun Login(user: User){
-//        val networkService = (applicationContext as MyApplication).networkService
-//        val call = networkService.getLoginResponse(user)
-//        call.enqueue(object: Callback<String> {
-//            override fun onResponse(call: Call<String>, response: Response<String>) {
-//                TODO("Not yet implemented")
-//                if(response.isSuccessful){
-//                    Log.d("lsy", response.body().toString())
-//                } else{
-//                    Log.d("lsy", "FAILURE")
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<String>, t: Throwable) {
-//                TODO("Not yet implemented")
-//                Log.d("lsy", "Connection failure : ${t.localizedMessage}")
-//            }
-//
-//        })
-//
-//
-//    }
-
-123123
-    123123
 
 }
