@@ -3,6 +3,7 @@ package com.android.andriodproject
 import android.location.LocationManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+
 import com.android.andriodproject.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -11,6 +12,7 @@ class MainActivity : AppCompatActivity() {
     private val REQUEST_CODE_LOCATION = 2
 
     //    var id: String = ""
+//    var password: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,5 +54,7 @@ class MainActivity : AppCompatActivity() {
 //
 //
 //    }
+
+
 
 }
