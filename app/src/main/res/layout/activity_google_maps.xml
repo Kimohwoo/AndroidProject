@@ -28,7 +28,7 @@
         android:id="@+id/exerciseTimeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
+        android:text="00:00:00"
         android:layout_marginTop="1500px"
         android:layout_marginLeft="400px"
         android:gravity="center"
@@ -38,29 +38,30 @@
     <Button
         android:id="@+id/startButton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="1800px"
+        android:layout_height="82dp"
         android:layout_marginLeft="100px"
-        android:text="시 작"
-        />
+        android:layout_marginTop="1800px"
+        android:background="@drawable/walk_ic_free_icon_font_play"
+        android:text="START" />
 
     <Button
         android:id="@+id/pauseButton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="일시정지"
-        android:layout_marginTop="1800px"
+        android:layout_height="82dp"
         android:layout_marginLeft="420px"
+        android:layout_marginTop="1800px"
+        android:background="@drawable/walk_ic_free_icon_font_pause"
         android:enabled="false"
-        />
+        android:text="PAUSE" />
 
     <Button
         android:id="@+id/stopButton"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="82dp"
         android:layout_marginTop="1800px"
         android:layout_marginLeft="750px"
-        android:text="정 지"
+        android:text="STOP"
+        android:background="@drawable/walk_ic_free_icon_font_stop"
         android:enabled="false"
         />
 
