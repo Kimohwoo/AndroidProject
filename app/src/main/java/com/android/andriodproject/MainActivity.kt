@@ -55,7 +55,6 @@ class MainActivity : AppCompatActivity() {
 //
 //    }
 
-12j1254j12904j2104
-    dsalkjflasd
+123123
 
 }
