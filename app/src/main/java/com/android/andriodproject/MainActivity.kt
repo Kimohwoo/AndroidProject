@@ -56,5 +56,8 @@ class MainActivity : AppCompatActivity() {
 //    }
 
 123123
+    할레루야
+
+    ㅣ만어리ㅏㅁ넝랴ㅓ
 
 }
