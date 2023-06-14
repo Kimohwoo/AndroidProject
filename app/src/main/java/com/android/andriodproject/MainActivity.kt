@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 //            Log.d("lsy", "id: ${user.id} pw: ${user.password}")
 //            Login(user)
         }
-
+1
     }
 
 //    fun Login(user: User){
