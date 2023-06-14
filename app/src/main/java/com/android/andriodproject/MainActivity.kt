@@ -1,22 +1,66 @@
 package com.android.andriodproject
 
-import android.location.LocationManager
-import android.os.Bundle
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.view.View
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
-import com.android.andriodproject.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-    lateinit var binding: ActivityMainBinding
+    private val bottomNavigationView: BottomNavigationView by lazy {
+        findViewById(R.id.bottomNavigationView)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_main)
 
+
+        navigateToTrackingFragmentIfNeed(intent)
+
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+
+        val navigator = KeepStateNavigator(this, navHostFragment.childFragmentManager, R.id.nav_host_fragment)
+        navController.navigatorProvider.addNavigator(navigator)
+
+        navController.setGraph(R.navigation.nav_graph)
+
+        bottomNavigationView.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.walkFragment -> bottomNavigationView.visibility = View.GONE
+                else -> bottomNavigationView.visibility = View.VISIBLE
+            }
+        }
+
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+//                R.id.home -> navController.navigate(R.id.homeFragment)
+//                R.id.story -> navController.navigate(R.id.postFragment)
+                R.id.walk -> navController.navigate(R.id.walkFragment)
+//                R.id.map -> navController.navigate(R.id.mapFragment)
+            }
+            true
+        }
     }
-    //어떻게 하면 push 가 될까요?
-    // 1. 코멘트를 추가했습니다.
-    // 2. 오우 씨가 현재 파일에 변경 사항을 push 했습니다.
-    // 3. 성호가 현재 파일을 git push를 했는데 2번 변경사항 때문에 reject되었습니다.
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+//        navigateToTrackingFragmentIfNeed(intent)
+    }
+
+    private fun navigateToTrackingFragmentIfNeed(intent: Intent?) {
+        if(intent?.action == "ACTION_SHOW_TRACKING_FRAGMENT") {
+            val navHostFragment =
+                supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            val navController = navHostFragment.navController
+            navController.navigate(R.id.walkFragment)
+        }
+    }
 
 }
