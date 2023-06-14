@@ -4,6 +4,15 @@
     package="com.android.andriodproject">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyBjfqsqEKIv19AiDOK3d7fX7gP8bAZ3ITE" />
 
     <application
         android:usesCleartextTraffic="true"
@@ -15,6 +24,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Project"
+        android:name=".retrofit2.MyApplication"
         tools:targetApi="31">
         <activity
             android:name=".WeatherActivity"
