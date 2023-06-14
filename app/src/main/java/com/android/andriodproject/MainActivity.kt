@@ -13,8 +13,6 @@ class MainActivity : AppCompatActivity() {
 
     //    var id: String = ""
 //    var password: String = ""
-    val test = "123123"
-    val test12313 = "1lk23jlk1j23lkjl"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +55,6 @@ class MainActivity : AppCompatActivity() {
 //
 //    }
 
-lkdjfalksdjf
-    asldkfjlksdjf
+김수장
 
 }
