@@ -27,12 +27,13 @@
         app:cardBackgroundColor="#80FFFFFF"
         tools:ignore="MissingConstraints">
       <com.google.android.material.appbar.CollapsingToolbarLayout
+          android:id="@+id/score"
           android:layout_width="match_parent"
           android:layout_height="240dp"
           app:expandedTitleMarginBottom="50dp"
           app:expandedTitleMarginStart="50dp"
           app:layout_scrollFlags="scroll|exitUntilCollapsed"
-          app:title="산책가자"
+          app:title=""
         >
         <com.google.android.material.tabs.TabLayout
             android:layout_width="match_parent"
@@ -42,32 +43,23 @@
             app:tabMode="scrollable"
             app:tabTextColor="#FFFFFF"
           />
-
-      <TextView
-          android:id="@+id/dateView"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:gravity="center"
-          android:textSize="24sp"
-          android:textStyle="bold" />
-
-      <TextView
-          android:id="@+id/timeView"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:gravity="center"
-          android:textSize="24sp"
-          android:textStyle="bold"/>
-
-      <TextView
-          android:id="@+id/score"
-          android:layout_width="162dp"
-          android:layout_height="133dp"
-          />
       </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="500dp"
+        android:orientation="vertical">
+      <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/recyclerView"
+          android:layout_width="match_parent"
+          android:layout_height="400dp"
+          app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
+    </LinearLayout>
+
   </androidx.coordinatorlayout.widget.CoordinatorLayout>
-  <androidx.recyclerview.widget.RecyclerView
+  <!--<androidx.recyclerview.widget.RecyclerView
       android:id="@+id/recyclerView"
       android:layout_width="match_parent"
       android:layout_height="400dp"
@@ -78,6 +70,6 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="@+id/weatherView"
       app:layout_constraintVertical_bias="1.0"
-      app:layout_flexBasisPercent="50%" />
+      app:layout_flexBasisPercent="50%" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

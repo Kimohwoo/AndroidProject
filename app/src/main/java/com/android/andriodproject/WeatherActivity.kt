@@ -15,11 +15,11 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import com.android.andriodproject.Model.AirListModel.AirListModel
 import com.android.andriodproject.Model.AirListModel.AirPollutionModel
 import com.android.andriodproject.Model.WeatherModel.WeatherListModel
+import com.android.andriodproject.PermissionUtils.requestLocationPermissions
 import com.android.andriodproject.databinding.ActivityWeatherBinding
 import com.android.andriodproject.retrofit2.AirAdapter
 import com.android.andriodproject.retrofit2.MyAdapter
@@ -55,9 +55,7 @@ class WeatherActivity : AppCompatActivity() {
         //뷰 작업
 //        binding.recyclerView.layoutManager = CardView
         binding.recyclerView.layoutManager = GridLayoutManager(this, 2)
-        binding.recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-
-
+//        binding.recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 
         //화면 고정
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -68,9 +66,8 @@ class WeatherActivity : AppCompatActivity() {
         startLocationUpdates()
         Log.d("lsy", "latitude: ${latitude}, longitude: ${longitude}")
 
-
         thread {
-            Thread.sleep(5000)
+            Thread.sleep(4500)
             //위도 경도 -> x, y
             val toXY = Converter.convertGRID_GPS(TO_GRID, latitude, longitude)
 //            val toXY = Converter.convertGRID_GPS(TO_GRID, 37.55189, 126.9917933)
@@ -115,23 +112,43 @@ class WeatherActivity : AppCompatActivity() {
                     val time = getTime("yyyy-MM-dd hh:00")
                     val timePick = getTime("hhMM")
 
+                    var item2 = mutableListOf<AirPollutionModel>()
+
+                    //item > 필터, map 자바스크립트 사용했던 , 새로운 배열 생성하는 함수가 있으면,
+                    // for 문에 continue 이용해서, 새로운 item2 만들어야함. 새 객체.
+
+                    if (item != null) {
+                        item.mapIndexed{ index, airPollutionModel ->
+                            if(airPollutionModel.khaiGrade =="1") {
+                                airResult = 50
+                            }
+                        }
+                    }
+
+
+
+
+                    //
+                    //arrayList.mapTo(arrayList2) { it * 2 }
+//
+//                    item?.forEach { data ->
+//                        if (data.khaiGrade != null) {
+//                            when (data.khaiGrade) {
+//                                "1" -> airResult = 50
+//                                "2" -> airResult = 40
+//                                "3" -> airResult = 20
+//                                "4" -> -10
+//                                else -> 0
+//                            }
+//                            return@forEach
+//                        }
+//                    }
+
                     Log.d("lsy", "airList data item값: ${item?.size}")
 
                     binding.recyclerView.adapter =
                         AirAdapter(this@WeatherActivity, item as List<AirPollutionModel>)
 
-                    item?.forEach { data ->
-                        if (data.khaiGrade != null) {
-                            when (data.khaiGrade) {
-                                "1" -> airResult = 50
-                                "2" -> airResult = 40
-                                "3" -> airResult = 20
-                                "4" -> -10
-                                else -> 0
-                            }
-                            return@forEach
-                        }
-                    }
                     Log.d("lsy", "Air result 값 확인 : ${airResult}")
 
                     //weatherService
@@ -164,12 +181,12 @@ class WeatherActivity : AppCompatActivity() {
             })
         }
         //시간, 날짜
-        val getDay = getTime("yyyy년MM월dd일")
-        val getTime = getTime("hh시MM분ss초")
-
-        Log.d("lsy", "가져온 Day: ${getDay} 가져온 시간: ${getTime}")
-        binding.dateView.text = getDay
-        binding.timeView.text = getTime
+//        val getDay = getTime("yyyy년MM월dd일")
+//        val getTime = getTime("hh시MM분ss초")
+//
+//        Log.d("lsy", "가져온 Day: ${getDay} 가져온 시간: ${getTime}")
+//        binding.dateView.text = getDay
+//        binding.timeView.text = getTime
     }
 
     fun weatherForeach(item:  List<WeatherModel>, apiTime: String, timePick: String){
@@ -217,7 +234,7 @@ class WeatherActivity : AppCompatActivity() {
             }
         }
         Log.d("lsy", "air: ${airResult}, weather: ${skyResult + popResult}")
-        binding.score.text = "Today: ${airResult + skyResult + popResult}"
+        binding.score.title = "Today: ${airResult + skyResult + popResult}"
 
         //gif이미지
         val weatherImage = if(pty == 1){

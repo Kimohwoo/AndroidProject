@@ -55,8 +55,8 @@ class AirAdapter(val context: Context, val datas: List<AirPollutionModel>): Recy
         val airPollution = datas?.get(position)
         val time = getTime("hh00")
 
-        binding.rainfall.text = airPollution?.sidoName
-        binding.temperature.text = airPollution?.khaiGrade
+//        binding.rainfall.text = airPollution?.sidoName
+//        binding.temperature.text = airPollution?.khaiGrade
 
     }
 
