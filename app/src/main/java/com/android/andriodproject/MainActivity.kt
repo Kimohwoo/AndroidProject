@@ -55,6 +55,4 @@ class MainActivity : AppCompatActivity() {
 //
 //    }
 
-김수장33333
-
 }
