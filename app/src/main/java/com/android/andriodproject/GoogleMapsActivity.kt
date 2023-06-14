@@ -378,37 +378,42 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
 //
 //        val currentLatLng = LatLng(newLatitude, newLongitude)
 
-        // 이전 마커 제거
-        marker?.remove()
-        // 새로운 위치에 마커 표시
-        marker = mMap.addMarker(MarkerOptions().position(currentLatLng).title("현재위치"))
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 18f))
+            // 이전 마커 제거
+            marker?.remove()
+            // 새로운 위치에 마커 표시
+            marker = mMap.addMarker(MarkerOptions().position(currentLatLng).title("현재위치"))
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 18f))
 
 
-        val previousLocation = lastLocation?.let { Location(it) }
-        lastLocation = location
+            val previousLocation = lastLocation?.let { Location(it) }
+            lastLocation = location
 
-        if (previousLocation != null) {
-            val distance = previousLocation.distanceTo(location).toDouble()
-            totalDistance += distance
-            Log.d("KSJ", "이동 거리: $distance 미터")
-            Log.d("KSJ", "누적 이동 거리: $totalDistance 미터")
+            if (previousLocation != null) {
+                val distance = previousLocation.distanceTo(location).toDouble()
+                totalDistance += distance
+                Log.d("KSJ", "이동 거리: $distance 미터")
+                Log.d("KSJ", "누적 이동 거리: $totalDistance 미터")
+            }
+
+        if(startButton.isEnabled === true){
+            Log.d("KSJ", "아직 스타트 버튼을 안눌름")
         }
-
-        //Polyline에 좌표 추가
-        val points = polyline?.points?.toMutableList() ?: mutableListOf()
-        points.add(currentLatLng)
-        polyline?.points = points
+        if(startButton.isEnabled === false) {
+            //Polyline에 좌표 추가
+            val points = polyline?.points?.toMutableList() ?: mutableListOf()
+            points.add(currentLatLng)
+            polyline?.points = points
 
 
 //        Log.d("KSJ", "위도: $newLatitude, 경도: $newLongitude")
-        Log.d("KSJ", "위도: $currentLatitude, 경도: $currentLongitude")
+            Log.d("KSJ", "위도: $currentLatitude, 경도: $currentLongitude")
 
-        if(writeToFile(location.latitude, location.longitude)===null){
-            Log.d("KSJ", "시작버튼을 누르지 않았습니다.")
-        }else{
-            writeToFile(location.latitude, location.longitude)
+            if (writeToFile(location.latitude, location.longitude) === null) {
+                Log.d("KSJ", "시작버튼을 누르지 않았습니다.")
+            } else {
+                writeToFile(location.latitude, location.longitude)
 
+            }
         }
 
 

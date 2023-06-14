@@ -1,26 +1,23 @@
 package com.android.andriodproject
 
-import androidx.appcompat.app.AppCompatActivity
+import android.location.LocationManager
 import android.os.Bundle
-import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+
 import com.android.andriodproject.databinding.ActivityMainBinding
-import com.android.andriodproject.retrofit2.MyApplication
-import com.android.andriodproject.retrofit2.NetworkService
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
+    private val locationManager: LocationManager? = null
+    private val REQUEST_CODE_LOCATION = 2
 
-    var id: String = ""
-    var password: String = ""
+    //    var id: String = ""
+//    var password: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//<<<<<<< HEAD
-//=======
 
 //        binding.btn.setOnClickListener {
 //            id = binding.id.text.toString()
@@ -32,9 +29,9 @@ class MainActivity : AppCompatActivity() {
 //            Log.d("lsy", "id: ${user.id} pw: ${user.password}")
 //            Login(user)
 //        }
-//
-//    }
-//
+
+    }
+
 //    fun Login(user: User){
 //        val networkService = (applicationContext as MyApplication).networkService
 //        val call = networkService.getLoginResponse(user)
@@ -56,7 +53,9 @@ class MainActivity : AppCompatActivity() {
 //        })
 //
 //
-//>>>>>>> 22737852f449fa36e264a9b7202e9eee52d47fb5
-    }
-//
+//    }
+
+123123
+    123123
+
 }
