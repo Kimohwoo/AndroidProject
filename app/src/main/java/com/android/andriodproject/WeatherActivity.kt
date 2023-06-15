@@ -13,9 +13,13 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.andriodproject.Model.AirListModel.AirListModel
 import com.android.andriodproject.Model.AirListModel.AirPollutionModel
 import com.android.andriodproject.Model.WeatherModel.WeatherListModel
@@ -25,6 +29,7 @@ import com.android.andriodproject.retrofit2.AirAdapter
 import com.android.andriodproject.retrofit2.MyAdapter
 import com.android.andriodproject.retrofit2.MyApplication
 import com.bumptech.glide.Glide
+import com.google.android.material.tabs.TabLayoutMediator
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -44,6 +49,7 @@ class WeatherActivity : AppCompatActivity() {
     private var pty = 0
     private var pcp = 0f
     private var apiTime = ""
+    private var name = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val serviceKey = "cXgLGxZlC+V/06+8LDomc9m8TAR6VHymyLNbeFGuwGCIJcUfxAkVDHaPa3HQx5HeT0kWSkyFnh0JdmOV8rTiRg=="
@@ -53,9 +59,11 @@ class WeatherActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         //뷰 작업
-//        binding.recyclerView.layoutManager = CardView
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.recyclerView.layoutManager = GridLayoutManager(this, 2)
 //        binding.recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+
+
 
         //화면 고정
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -77,7 +85,7 @@ class WeatherActivity : AppCompatActivity() {
             val apiDay = getTime("yyyyMMdd")
             val nx = toXY.x.toInt()
             val ny = toXY.y.toInt()
-
+            name = xyToSido(nx, ny)
             when (time.toInt()) {
                 in 501..759 -> apiTime = "0500"
                 in 800..1059 -> apiTime = "0800"
@@ -96,7 +104,7 @@ class WeatherActivity : AppCompatActivity() {
                 serviceKey,
                 1,
                 100,
-                xyToSido(nx, ny),
+                name,
                 resultType,
                 1.0
             )
@@ -183,13 +191,6 @@ class WeatherActivity : AppCompatActivity() {
                 }
             })
         }
-        //시간, 날짜
-//        val getDay = getTime("yyyy년MM월dd일")
-//        val getTime = getTime("hh시MM분ss초")
-//
-//        Log.d("lsy", "가져온 Day: ${getDay} 가져온 시간: ${getTime}")
-//        binding.dateView.text = getDay
-//        binding.timeView.text = getTime
     }
 
     fun weatherForeach(item:  List<WeatherModel>, apiTime: String, timePick: String){
@@ -216,8 +217,8 @@ class WeatherActivity : AppCompatActivity() {
                         else -> popResult = 0
                     }
                     return@forEach
-                } else if(data.category == "TMN"){
-                    data.fcstValue
+                } else if(data.category == "TMP"){
+                    binding.temperature.text = "${name}  ${data.fcstValue}℃"
                 } else if(data.category == "PTY"){
                     pty = data.fcstValue.toInt()
                 } else if(data.category == "PCP"){
@@ -237,7 +238,7 @@ class WeatherActivity : AppCompatActivity() {
             }
         }
         Log.d("lsy", "air: ${airResult}, weather: ${skyResult + popResult}")
-        binding.score.title = "Today: ${airResult + skyResult + popResult}"
+        binding.score.text = "산책점수 : ${airResult + skyResult + popResult}"
 
         //gif이미지
         val weatherImage = if(pty == 1){

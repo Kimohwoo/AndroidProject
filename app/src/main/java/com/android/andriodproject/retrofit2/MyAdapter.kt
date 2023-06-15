@@ -4,7 +4,6 @@ package com.android.andriodproject.retrofit2
 import WeatherModel
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.android.andriodproject.Model.AirListModel.AirPollutionModel
@@ -13,13 +12,7 @@ import com.android.andriodproject.getTime
 
 
 class MyViewHolder(val binding: ItemRetrofitBinding): RecyclerView.ViewHolder(binding.root){
-//    fun ViewHolder(v: View) {
-//        super(v)
-//        view = v
-//        view.setOnClickListener(View.OnClickListener {
-//            // item clicked
-//        })
-//    }
+
 }
 class MyAdapter(val context: Context, val datas: List<WeatherModel>?): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -35,8 +28,13 @@ class MyAdapter(val context: Context, val datas: List<WeatherModel>?): RecyclerV
         val weather = datas?.get(position)
         val time = getTime("hh00")
 
-        binding.sky.text = weather?.fcstValue
-
+        when(weather?.category) {
+            "SKY" -> binding.sky.text = "SKY: " + weather?.fcstValue
+            "POP" -> binding.rainfall.text = "강수: " + weather?.fcstValue
+            "TMP" -> binding.tmp2.text = "온도: " + weather?.fcstValue
+            "PCP" -> binding.rainfall.text = "PCP: " + weather?.fcstValue
+            "PTY" -> binding.rainfall.text = "PTY: " + weather?.fcstValue
+        }
     }
 
 }
@@ -55,8 +53,6 @@ class AirAdapter(val context: Context, val datas: List<AirPollutionModel>): Recy
         val airPollution = datas?.get(position)
         val time = getTime("hh00")
 
-//        binding.rainfall.text = airPollution?.sidoName
-//        binding.temperature.text = airPollution?.khaiGrade
 
     }
 
