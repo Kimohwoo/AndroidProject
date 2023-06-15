@@ -1,66 +1,42 @@
 package com.android.andriodproject
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import android.util.Log
+import android.view.Menu
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.android.andriodproject.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
-    private val bottomNavigationView: BottomNavigationView by lazy {
-        findViewById(R.id.bottomNavigationView)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
+        val binding= ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        navigateToTrackingFragmentIfNeed(intent)
-
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
-
-        val navigator = KeepStateNavigator(this, navHostFragment.childFragmentManager, R.id.nav_host_fragment)
-        navController.navigatorProvider.addNavigator(navigator)
-
-        navController.setGraph(R.navigation.nav_graph)
-
-        bottomNavigationView.setupWithNavController(navController)
-
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                R.id.walkFragment -> bottomNavigationView.visibility = View.GONE
-                else -> bottomNavigationView.visibility = View.VISIBLE
-            }
+        val datas = mutableListOf<String>()
+        for(i in 1..3){
+            datas.add("Item $i")
         }
-
-        bottomNavigationView.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-//                R.id.home -> navController.navigate(R.id.homeFragment)
-//                R.id.story -> navController.navigate(R.id.postFragment)
-                R.id.walk -> navController.navigate(R.id.walkFragment)
-//                R.id.map -> navController.navigate(R.id.mapFragment)
-            }
-            true
-        }
+        // 뷰 페이저 2 설정 방식 중에서, 프래그먼트 방식의 어댑터 설정 및 적용 부분.
+        val adapter= MyFragmentPagerAdapter(this)
+        binding.viewpager.adapter = adapter
     }
 
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-//        navigateToTrackingFragmentIfNeed(intent)
-    }
-
-    private fun navigateToTrackingFragmentIfNeed(intent: Intent?) {
-        if(intent?.action == "ACTION_SHOW_TRACKING_FRAGMENT") {
-            val navHostFragment =
-                supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-            val navController = navHostFragment.navController
-            navController.navigate(R.id.walkFragment)
+    class MyFragmentPagerAdapter(activity: FragmentActivity): FragmentStateAdapter(activity){
+        val fragments: List<Fragment>
+        init {
+            // MyFragmentPagerAdapter 생성자 호출시 마다, 항상 실행되는 코드 부분.
+            fragments= listOf(WalkFragment(), TestFragment())
+            Log.d("nsh" ,"fragments size : ${fragments.size}")
         }
-    }
+        override fun getItemCount(): Int = fragments.size
 
+        override fun createFragment(position: Int): Fragment = fragments[position]
+    }
 }

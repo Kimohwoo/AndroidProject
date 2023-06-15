@@ -39,6 +39,8 @@ class WalkFragment : Fragment() { // 시작
         super.onAttach(context)
         mainActivity = context as MainActivity
     }
+
+
 }
 
 
