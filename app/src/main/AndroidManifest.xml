@@ -32,6 +32,10 @@
         android:theme="@style/Theme.Project"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".BoardActivity"
+            android:exported="false" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBjfqsqEKIv19AiDOK3d7fX7gP8bAZ3ITE" />

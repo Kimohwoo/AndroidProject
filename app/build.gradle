@@ -58,6 +58,9 @@ dependencies {
     implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
     implementation 'androidx.recyclerview:recyclerview:1.2.0'
     implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.7'
+    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.7'
     //----------------------------------------------------------------
 
     //추가부분 수장
