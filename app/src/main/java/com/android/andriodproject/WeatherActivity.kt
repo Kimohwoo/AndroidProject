@@ -13,26 +13,21 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.andriodproject.Model.AirListModel.AirListModel
 import com.android.andriodproject.Model.AirListModel.AirPollutionModel
 import com.android.andriodproject.Model.WeatherModel.WeatherListModel
-import com.android.andriodproject.PermissionUtils.requestLocationPermissions
 import com.android.andriodproject.databinding.ActivityWeatherBinding
 import com.android.andriodproject.retrofit2.AirAdapter
 import com.android.andriodproject.retrofit2.MyAdapter
 import com.android.andriodproject.retrofit2.MyApplication
 import com.bumptech.glide.Glide
-import com.google.android.material.tabs.TabLayoutMediator
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import okhttp3.HttpUrl
 import kotlin.concurrent.thread
 
 class WeatherActivity : AppCompatActivity() {
@@ -78,7 +73,6 @@ class WeatherActivity : AppCompatActivity() {
             Thread.sleep(4500)
             //위도 경도 -> x, y
             val toXY = Converter.convertGRID_GPS(TO_GRID, latitude, longitude)
-//            val toXY = Converter.convertGRID_GPS(TO_GRID, 37.55189, 126.9917933)
             Log.d("lsy", "x = " + toXY.x + ",y = " + toXY.y)
             //공공데이터 가져오기
             val time = getTime("HH00")
