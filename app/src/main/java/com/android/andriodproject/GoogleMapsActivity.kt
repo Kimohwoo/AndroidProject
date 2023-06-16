@@ -78,6 +78,8 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
     private lateinit var exerciseTimeTextView: TextView
     // 운동 시간 업데이트를 위한 Handler
     private val exerciseHandler = Handler()
+    // 파일 경로
+    private var filePath : String? = null
 
 
 
@@ -150,6 +152,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
 
             // 운동 시작 시간 기록
             startTime = System.currentTimeMillis()
+            Log.d("KSJ123", "운동시작 시간 : $startTime")
 
             // 운동 타이머 시작
             startExerciseTimer()
@@ -165,7 +168,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
             stopButton.isEnabled = true
 
             // 위치 업데이트 중지
-            stopLocationUpdates()
+            pauseLocationUpdates()
 
             // 운동 타이머 정지
             stopExerciseTimer()
@@ -179,23 +182,28 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
         pauseButton.isEnabled = false
         stopButton.isEnabled = false
 
-        // 위치 업데이트 중지
-        stopLocationUpdates()
-
-        // 운동 타이머 정지
         stopExerciseTimer()
 
         // 운동 시간 계산
         exerciseTime = System.currentTimeMillis() - startTime
+        Log.d("KSJ123", "운동시간 : $exerciseTime")
 
-        // 기타 필요한 정지 작업 수행
-        // 예: 데이터 저장, 리셋 등
+        // 위치 업데이트 중지
+        stopLocationUpdates {
+            // 위치 업데이트 중지가 완료된 후 실행될 콜백 함수
+            // 운동 타이머 정지
 
-        val intent = Intent(this, ResultActivity::class.java)
-        intent.putExtra(ResultActivity.FILE_NAME, "$fileName") // 파일 이름을 전달
-        intent.putExtra(ResultActivity.TOTAL_DISTANCE, "$totalDistance") // 누적 이동 거리를 전달
-        intent.putExtra(ResultActivity.EXERCISE_TIME, "$exerciseTime") // 운동 시간을 전달
-        startActivity(intent)
+
+            // 기타 필요한 정지 작업 수행
+            // 예: 데이터 저장, 리셋 등
+
+            val intent = Intent(this, ResultActivity::class.java)
+            intent.putExtra(ResultActivity.FILE_NAME, "$fileName") // 파일 이름을 전달
+            intent.putExtra(ResultActivity.TOTAL_DISTANCE, "$totalDistance") // 누적 이동 거리를 전달
+            intent.putExtra(ResultActivity.EXERCISE_TIME, exerciseTime) // 운동 시간을 전달
+            intent.putExtra(ResultActivity.FILE_PATH, "$filePath") // 파일경로
+            startActivity(intent)
+        }
     }
 
     // 운동 타이머 시작
@@ -237,8 +245,15 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
         isTimerRunning = false
     }
 
-    private fun stopLocationUpdates() {
+    private fun pauseLocationUpdates() {
         fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+    }
+
+    private fun stopLocationUpdates(callback: () -> Unit) {
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+            .addOnCompleteListener {
+                callback.invoke()
+            }
     }
 
 
@@ -357,7 +372,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
                 writer.append(fileContents)
             }
 
-            val filePath = file.absolutePath
+            filePath = file.absolutePath
             Log.d("KSJ", "File path: $filePath")
         } catch (e: Exception) {
             e.printStackTrace()

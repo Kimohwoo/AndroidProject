@@ -2,32 +2,42 @@ package com.android.andriodproject
 
 import android.graphics.Color
 import android.os.Bundle
-import android.text.TextUtils.split
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.android.andriodproject.R
+import com.android.andriodproject.Model.MapData.MapDataRequest
+import com.android.andriodproject.retrofit2.MapData
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.Dash
-import com.google.android.gms.maps.model.Gap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
+import java.text.SimpleDateFormat
 
 
 class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private val recommendDistance = 3500f
+    private val email = "omega3060@naver.com"
+    private val calorie = "30"
+    private val daynum = SimpleDateFormat("yyMMdd").toString()
+
 
 
     companion object{
         const val FILE_NAME = "filename"
         const val TOTAL_DISTANCE = "totalDistance"
         const val EXERCISE_TIME = "exerciseTime"
+        const val FILE_PATH = "filePath"
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,17 +57,29 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
 //        val filename = "2306120643.txt"
 //        val file = File(filesDir, filename)
 
-        val defaultFileName = "2306120643.txt"
+
         val intent = intent
         val fileName = intent.getStringExtra(FILE_NAME)
-        val totalDistance = intent.getStringExtra(TOTAL_DISTANCE)
+        val totalDistance = intent.getStringExtra(TOTAL_DISTANCE)?.toDoubleOrNull()?.toInt()
+        val filePath = intent.getStringExtra(FILE_PATH)
+        //운동시간 mills->분초로 변환해서 보내기
+        val exerciseTime = intent.getLongExtra(EXERCISE_TIME,0) // exerciseTime을 Long 타입으로 받습니다.
+        Log.d("KSJ", "운동시간 : $exerciseTime")
+        val exerciseTimeSeconds = exerciseTime / 1000 // 밀리초를 초로 변환합니다.
+        val minutes = exerciseTimeSeconds / 60 // 초를 분으로 변환합니다.
+        val seconds = exerciseTimeSeconds % 60 // 남은 초를 계산합니다.
 
-        Log.d("ksj12", "총거리 : $totalDistance")
+        val formattedExerciseTime = String.format("%02d:%02d", minutes, seconds)
+        intent.putExtra(EXERCISE_TIME, formattedExerciseTime)
+        setIntent(intent) // 수정된 intent를 현재 Intent에 설정합니다.
+
+        Log.d("ksj12", "총거리 : $totalDistance m, 파일이름 : $fileName, 파일경로 : $filePath, 운동시간 : $formattedExerciseTime")
 
         val file = if (!fileName.isNullOrEmpty()) {
             File(filesDir, fileName)
         } else {
-            File(filesDir, defaultFileName)
+            Toast.makeText(this, "정상적으로 실행되지 않아 파일이 생성되지 않았습니다.", Toast.LENGTH_SHORT).show()
+            return
         }
 
         if (file.exists()) {
@@ -98,6 +120,48 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
             // 폴리라인을 그립니다.
             polylineOptions.addAll(latLngList)
             mMap.addPolyline(polylineOptions)
+
+            val retrofit = Retrofit.Builder()
+                .baseUrl("http://localhost:8088/AndroidServer/") // 스프링 서버의 URL로 변경해야 합니다.
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+            val apiService = retrofit.create(MapData::class.java)
+
+            val request = MapDataRequest(
+                email = email,
+                fileName = fileName,
+                filePath = filePath,
+                exerciseTime = formattedExerciseTime,
+                totalDistance = totalDistance.toString(),
+                calorie = calorie,
+                daynum = daynum
+            )
+
+            val call = apiService.postDataToServer(request)
+            call.enqueue(object : Callback<MapDataRequest> {
+                override fun onResponse(call: Call<MapDataRequest>, response: Response<MapDataRequest>) {
+                    if (response.isSuccessful) {
+                        // 서버 응답이 성공적으로 수신되었을 때의 처리
+                        val responseData = response.body() // 응답 데이터
+                        // ...
+                    } else {
+                        // 서버 응답이 실패했을 때의 처리
+                        val errorCode = response.code() // 에러 코드
+                        // ...
+                    }
+                }
+
+                override fun onFailure(call: Call<MapDataRequest>, t: Throwable) {
+                    // 네트워크 요청이 실패했을 때의 처리
+                    // ...
+                }
+            })
+
         }
     }
+
+
+
+    //
 }
