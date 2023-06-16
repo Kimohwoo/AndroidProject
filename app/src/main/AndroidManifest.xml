@@ -7,9 +7,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
-    <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyBjfqsqEKIv19AiDOK3d7fX7gP8bAZ3ITE" />
 
     <!--안드로이드는 디폴트로 http로 접근을 허용하지 않아서, http에 접근하기 위해 사용-->
     <uses-permission android:name="android.permission.INTERNET" />

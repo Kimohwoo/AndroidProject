@@ -2,9 +2,9 @@ package com.android.andriodproject.Model.MapData
 
 import com.google.gson.annotations.SerializedName
 
-data class MapDataRequest (
-    @SerializedName("email") //<-스프링으로 넘겨주는 키값?
-    var email : String,
+data class ExerciseDTO (
+    @SerializedName("email") //<-스프링에서 받아올 때 키값?
+    var email : String, //<- 스프링으로 보낼 때 정의
     @SerializedName("fileName")
     var fileName : String,
     @SerializedName("filePath")

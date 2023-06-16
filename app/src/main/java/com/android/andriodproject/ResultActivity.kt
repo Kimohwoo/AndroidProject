@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.android.andriodproject.Model.MapData.MapDataRequest
-import com.android.andriodproject.retrofit2.MapData
+import com.android.andriodproject.Model.MapData.ExerciseDTO
+import com.android.andriodproject.retrofit2.ExerciseData
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -121,14 +121,19 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
             polylineOptions.addAll(latLngList)
             mMap.addPolyline(polylineOptions)
 
+
+            //레트로핏 라이브러리를 사용하여 retrofit객체 생성
             val retrofit = Retrofit.Builder()
-                .baseUrl("http://localhost:8088/AndroidServer/") // 스프링 서버의 URL로 변경해야 합니다.
+                    //.baseUrl() 메서드 인자로 스프링 서버 URL설정
+                .baseUrl("http://10.100.105.185:8091/walkingdog/uid/")
+                    //.addConverterFactory(GsonConverterFactory.create()) = 메서드 사용으로 gson변환기를 추가해 Json데이터를 자바객체로 변환
                 .addConverterFactory(GsonConverterFactory.create())
+                    //.build() 메서드를 호출하여 Retrofit객체 생성
                 .build()
 
-            val apiService = retrofit.create(MapData::class.java)
+            val apiService = retrofit.create(ExerciseData::class.java)
 
-            val request = MapDataRequest(
+            val request = ExerciseDTO(
                 email = email,
                 fileName = fileName,
                 filePath = filePath,
@@ -139,22 +144,23 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
             )
 
             val call = apiService.postDataToServer(request)
-            call.enqueue(object : Callback<MapDataRequest> {
-                override fun onResponse(call: Call<MapDataRequest>, response: Response<MapDataRequest>) {
+            Log.d("ksj", call.toString())
+            call.enqueue(object : Callback<ExerciseDTO> {
+                override fun onResponse(call: Call<ExerciseDTO>, response: Response<ExerciseDTO>) {
                     if (response.isSuccessful) {
                         // 서버 응답이 성공적으로 수신되었을 때의 처리
                         val responseData = response.body() // 응답 데이터
-                        // ...
+                        Log.d("KSJ1","서버 응답 성공 $responseData")
                     } else {
                         // 서버 응답이 실패했을 때의 처리
                         val errorCode = response.code() // 에러 코드
-                        // ...
+                        Log.d("KSJ1"," 서버응답 실패")
                     }
                 }
 
-                override fun onFailure(call: Call<MapDataRequest>, t: Throwable) {
+                override fun onFailure(call: Call<ExerciseDTO>, t: Throwable) {
                     // 네트워크 요청이 실패했을 때의 처리
-                    // ...
+                    Log.d("KSJ1"," 네트워크 요청 실패")
                 }
             })
 
