@@ -21,15 +21,16 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 import java.text.SimpleDateFormat
+import java.util.Date
 
 
 class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private val recommendDistance = 3500f
-    private val email = "omega3060@naver.com"
+    private val uid = "abcdefg"
     private val calorie = "30"
-    private val daynum = SimpleDateFormat("yyMMdd").toString()
+
 
 
 
@@ -68,12 +69,18 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
         val exerciseTimeSeconds = exerciseTime / 1000 // 밀리초를 초로 변환합니다.
         val minutes = exerciseTimeSeconds / 60 // 초를 분으로 변환합니다.
         val seconds = exerciseTimeSeconds % 60 // 남은 초를 계산합니다.
+        val dateFormat = SimpleDateFormat("yyMMdd")
+        val currentDay = Date()
+        val dayNum = dateFormat.format(currentDay)
+
+
 
         val formattedExerciseTime = String.format("%02d:%02d", minutes, seconds)
         intent.putExtra(EXERCISE_TIME, formattedExerciseTime)
         setIntent(intent) // 수정된 intent를 현재 Intent에 설정합니다.
 
         Log.d("ksj12", "총거리 : $totalDistance m, 파일이름 : $fileName, 파일경로 : $filePath, 운동시간 : $formattedExerciseTime")
+        Log.d("ksj12", "$dayNum")
 
         val file = if (!fileName.isNullOrEmpty()) {
             File(filesDir, fileName)
@@ -125,7 +132,7 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
             //레트로핏 라이브러리를 사용하여 retrofit객체 생성
             val retrofit = Retrofit.Builder()
                     //.baseUrl() 메서드 인자로 스프링 서버 URL설정
-                .baseUrl("http://10.100.105.185:8091/walkingdog/uid/")
+                .baseUrl("http://172.30.5.202:8091/walkingdog/uid/")
                     //.addConverterFactory(GsonConverterFactory.create()) = 메서드 사용으로 gson변환기를 추가해 Json데이터를 자바객체로 변환
                 .addConverterFactory(GsonConverterFactory.create())
                     //.build() 메서드를 호출하여 Retrofit객체 생성
@@ -134,13 +141,13 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
             val apiService = retrofit.create(ExerciseData::class.java)
 
             val request = ExerciseDTO(
-                email = email,
+                uid = uid,
                 fileName = fileName,
                 filePath = filePath,
                 exerciseTime = formattedExerciseTime,
                 totalDistance = totalDistance.toString(),
                 calorie = calorie,
-                daynum = daynum
+                dayNum = dayNum
             )
 
             val call = apiService.postDataToServer(request)
