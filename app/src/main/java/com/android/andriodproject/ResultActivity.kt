@@ -3,9 +3,11 @@ package com.android.andriodproject
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.andriodproject.Model.MapData.ExerciseDTO
+import com.android.andriodproject.databinding.ActivityResultBinding
 import com.android.andriodproject.retrofit2.ExerciseData
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -24,12 +26,15 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 
+
 class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
 
+
+    lateinit var binding: ActivityResultBinding
     private lateinit var mMap: GoogleMap
-    private val recommendDistance = 3500f
     private val uid = "abcdefg"
     private val calorie = "30"
+
 
 
 
@@ -42,7 +47,8 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_result)
+        binding = ActivityResultBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map2) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -72,6 +78,21 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
         val dateFormat = SimpleDateFormat("yyMMdd")
         val currentDay = Date()
         val dayNum = dateFormat.format(currentDay)
+
+        if (totalDistance != null) {
+            binding.progressbar.progress = totalDistance
+            binding.totalDistance.text = ((totalDistance/1000).toLong()).toString()+"km"
+            binding.totalDistance.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f) // 글자 크기를 18sp로 설정
+            binding.achivement.text = "산책량 "+((totalDistance/3500).toString())+"%"
+            binding.achivement.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10f) // 글자 크기를 18sp로 설정
+
+        }
+
+        binding.dogCalorie.text = (0.3 * exerciseTimeSeconds).toString() + "kal"
+        binding.dogCalorie.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f) // 글자 크기를 18sp로 설정
+
+
+
 
 
 
@@ -170,6 +191,7 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
                     Log.d("KSJ1"," 네트워크 요청 실패")
                 }
             })
+
 
         }
     }

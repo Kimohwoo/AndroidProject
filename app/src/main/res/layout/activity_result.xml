@@ -11,10 +11,57 @@
         android:layout_width="match_parent"
         android:layout_height="552dp" />
 
-<!--    <com.github.mikephil.charting.charts.PieChart-->
-<!--        android:id="@+id/chart"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent" />-->
-
+    <ProgressBar
+        android:id="@+id/progressbar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="125dp"
+        android:layout_height="129dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="400dp"
+        android:layout_marginLeft="140dp"
+        android:indeterminate="false"
+        android:max="3500"
+        android:progressBackgroundTint="#FBE7C6"
+        android:progressDrawable="@drawable/circle_progressbar"
+        android:progressTint="#edbf41"
+        />
+    <TextView
+        android:id="@+id/achivement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="550dp"
+        android:layout_marginLeft="140dp"
+        android:text=""
+        android:textSize="10pt"/>
+    <TextView
+        android:id="@+id/dog_calorie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="620dp"
+        android:layout_marginLeft="45dp"
+        android:text=""
+        android:textSize="20pt"/>
+    <TextView
+        android:id="@+id/total_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="620dp"
+        android:layout_marginLeft="220dp"
+        android:text=""
+        android:textSize="20pt"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="680dp"
+        android:layout_marginLeft="70dp"
+        android:text="칼로리"
+        android:textSize="10pt"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="680dp"
+        android:layout_marginLeft="250dp"
+        android:text="산책거리"
+        android:textSize="10pt"/>
 
 </RelativeLayout>
