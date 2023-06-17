@@ -27,7 +27,6 @@ import com.bumptech.glide.Glide
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import okhttp3.HttpUrl
 import kotlin.concurrent.thread
 
 class WeatherActivity : AppCompatActivity() {

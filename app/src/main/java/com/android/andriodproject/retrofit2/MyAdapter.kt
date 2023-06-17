@@ -26,7 +26,6 @@ class MyAdapter(val context: Context, val datas: List<WeatherModel>?): RecyclerV
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val binding = (holder as MyViewHolder).binding
         val weather = datas?.get(position)
-        val time = getTime("hh00")
 
         when(weather?.category) {
             "SKY" -> binding.sky.text = "SKY: " + weather?.fcstValue
