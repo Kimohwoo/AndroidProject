@@ -80,14 +80,14 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
         if (totalDistance != null) {
             binding.progressbar.progress = totalDistance
             binding.totalDistance.text = ((totalDistance/1000).toLong()).toString()+"km"
-            binding.totalDistance.setTextSize(TypedValue.COMPLEX_UNIT_PT, 20f) // 글자 크기를 18sp로 설정
+            binding.totalDistance.setTextSize(TypedValue.COMPLEX_UNIT_PT, 120f) // 글자 크기를 18sp로 설정
             binding.achivement.text = "산책량 "+((totalDistance/3500).toString())+"%"
-            binding.achivement.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10f) // 글자 크기를 18sp로 설정
+            binding.achivement.setTextSize(TypedValue.COMPLEX_UNIT_PT, 60f) // 글자 크기를 18sp로 설정
 
         }
 
         binding.dogCalorie.text = (0.3 * exerciseTimeSeconds).toString() + "kal"
-        binding.dogCalorie.setTextSize(TypedValue.COMPLEX_UNIT_PT, 20f) // 글자 크기를 18sp로 설정
+        binding.dogCalorie.setTextSize(TypedValue.COMPLEX_UNIT_PT, 120f) // 글자 크기를 18sp로 설정
 
 
 
