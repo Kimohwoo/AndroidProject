@@ -19,6 +19,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
 import androidx.core.content.ContextCompat
+import com.android.andriodproject.GoogleMapsActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
 
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -80,7 +81,6 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
     private val exerciseHandler = Handler()
     // 파일 경로
     private var filePath : String? = null
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -204,6 +204,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
             intent.putExtra(ResultActivity.TOTAL_DISTANCE, "$totalDistance") // 누적 이동 거리를 전달
             intent.putExtra(ResultActivity.EXERCISE_TIME, exerciseTime) // 운동 시간을 전달
             intent.putExtra(ResultActivity.FILE_PATH, "$filePath") // 파일경로
+            intent.putExtra(ResultActivity.UID, "$uid")
             startActivity(intent)
         }
     }
@@ -436,5 +437,6 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
+        const val uid = "uid"
     }
 }

@@ -6,6 +6,7 @@ import android.util.Log
 import android.util.TypedValue
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.android.andriodproject.MainActivity.Companion.uid
 import com.android.andriodproject.Model.MapData.ExerciseDTO
 import com.android.andriodproject.databinding.ActivityResultBinding
 import com.android.andriodproject.retrofit2.ExerciseData
@@ -30,7 +31,7 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
 
     lateinit var binding: ActivityResultBinding
     private lateinit var mMap: GoogleMap
-    private val uid = "abcdefg"
+
 
 
     companion object {
