@@ -1,6 +1,7 @@
 package com.android.andriodproject.Model
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 import java.util.Date
 
 data class BoardModel(
@@ -18,4 +19,7 @@ data class BoardModel(
     var updateDay: Date,
     @SerializedName("imgId")
     var imgId:Int,
-    )
+    @SerializedName("uid")
+    var uid:String,
+//    )
+):Serializable

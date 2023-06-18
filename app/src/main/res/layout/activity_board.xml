@@ -14,12 +14,34 @@
 
     <Button
         android:id="@+id/reg_button"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
         android:background="#C62828"
         android:textColor="#FFFFFF"
         android:text="새 글 작성하기"
         />
+
+    <Button
+        android:id="@+id/allBoardBtn"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:background="#C62828"
+        android:text="전체 게시글"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:id="@+id/myBoardBtn"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:background="#C62828"
+        android:text="내 게시글"
+        android:visibility="gone"
+        android:textColor="#FFFFFF" />
 
 </RelativeLayout>

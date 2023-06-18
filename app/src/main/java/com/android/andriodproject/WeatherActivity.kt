@@ -101,6 +101,7 @@ class WeatherActivity : AppCompatActivity() {
                 resultType,
                 1.0
             )
+
             Log.d("lsy", "xyToSido: ${xyToSido(nx, ny)}")
             Log.d("lsy", "Air Url: " + airListCall.request().url().toString())
             airListCall.enqueue(object : Callback<AirListModel> {

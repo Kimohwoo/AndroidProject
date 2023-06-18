@@ -38,9 +38,7 @@ class BoardAdapter(val context: Context, val datas: List<BoardModel>?): Recycler
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context, DetailActivity::class.java)
-            intent.putExtra("title", board?.title)
-            intent.putExtra("imgId", board?.imgId)
-            intent.putExtra("content", board?.content)
+            intent.putExtra("board", board)
             Log.d("lsy", "intent: ${intent}")
             context.startActivity(intent)
         }

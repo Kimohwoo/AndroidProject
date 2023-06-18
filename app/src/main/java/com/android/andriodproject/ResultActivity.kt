@@ -23,7 +23,6 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private val recommendDistance = 3500f
 
-
     companion object{
         const val FILE_NAME = "filename"
         const val TOTAL_DISTANCE = "totalDistance"
