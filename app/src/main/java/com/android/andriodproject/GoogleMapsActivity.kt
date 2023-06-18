@@ -100,8 +100,8 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         locationRequest = LocationRequest.create().apply {
-            interval = 5000 // 5초마다 위치 업데이트
-            fastestInterval = 5000 // 최소 5초 간격으로 업데이트(고정)
+            interval = 500 // 5초마다 위치 업데이트
+            fastestInterval = 500 // 최소 5초 간격으로 업데이트(고정)
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY //(GPS우선으로)
         }
 
@@ -111,6 +111,8 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
                 locationResult.lastLocation?.let { onLocationUpdated(it) }
             }
         }
+
+
 
         // 버튼 초기화
         startButton = findViewById(R.id.startButton)

@@ -21,20 +21,20 @@
         android:layout_marginLeft="140dp"
         android:indeterminate="false"
         android:max="3500"
-        android:progressBackgroundTint="#FBE7C6"
+        android:progressBackgroundTint="#009688"
         android:progressDrawable="@drawable/circle_progressbar"
-        android:progressTint="#edbf41"
+        android:progressTint="#0F19E1"
         />
     <TextView
         android:id="@+id/achivement"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="550dp"
-        android:layout_marginLeft="140dp"
+        android:layout_marginLeft="155dp"
         android:text=""
         android:textSize="10pt"/>
     <TextView
-        android:id="@+id/dog_calorie"
+        android:id="@+id/calorie"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="620dp"
@@ -46,7 +46,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="620dp"
-        android:layout_marginLeft="220dp"
+        android:layout_marginLeft="240dp"
         android:text=""
         android:textSize="20pt"/>
     <TextView
@@ -55,13 +55,13 @@
         android:layout_marginTop="680dp"
         android:layout_marginLeft="70dp"
         android:text="칼로리"
-        android:textSize="10pt"/>
+        android:textSize="50pt"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="680dp"
         android:layout_marginLeft="250dp"
         android:text="산책거리"
-        android:textSize="10pt"/>
+        android:textSize="50pt"/>
 
 </RelativeLayout>
