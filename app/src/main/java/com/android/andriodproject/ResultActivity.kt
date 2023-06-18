@@ -3,9 +3,11 @@ package com.android.andriodproject
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.andriodproject.Model.MapData.ExerciseDTO
+import com.android.andriodproject.databinding.ActivityResultBinding
 import com.android.andriodproject.retrofit2.ExerciseData
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -26,6 +28,7 @@ import java.util.Date
 
 class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
 
+    lateinit var binding: ActivityResultBinding
     private lateinit var mMap: GoogleMap
     private val recommendDistance = 3500f
     private val uid = "abcdefg"
@@ -42,7 +45,8 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_result)
+        binding = ActivityResultBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map2) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -72,6 +76,22 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
         val dateFormat = SimpleDateFormat("yyMMdd")
         val currentDay = Date()
         val dayNum = dateFormat.format(currentDay)
+
+        if (totalDistance != null) {
+            binding.progressbar.progress = totalDistance
+            binding.totalDistance.text = ((totalDistance/1000).toLong()).toString()+"km"
+            binding.totalDistance.setTextSize(TypedValue.COMPLEX_UNIT_PT, 20f) // 글자 크기를 18sp로 설정
+            binding.achivement.text = "산책량 "+((totalDistance/3500).toString())+"%"
+            binding.achivement.setTextSize(TypedValue.COMPLEX_UNIT_PT, 10f) // 글자 크기를 18sp로 설정
+
+        }
+
+        binding.dogCalorie.text = (0.3 * exerciseTimeSeconds).toString() + "kal"
+        binding.dogCalorie.setTextSize(TypedValue.COMPLEX_UNIT_PT, 20f) // 글자 크기를 18sp로 설정
+
+
+
+
 
 
 
@@ -132,7 +152,7 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
             //레트로핏 라이브러리를 사용하여 retrofit객체 생성
             val retrofit = Retrofit.Builder()
                     //.baseUrl() 메서드 인자로 스프링 서버 URL설정
-                .baseUrl("http://172.30.5.202:8091/walkingdog/uid/")
+                .baseUrl("http://192.168.1.121:8091/walkingdog/uid/")
                     //.addConverterFactory(GsonConverterFactory.create()) = 메서드 사용으로 gson변환기를 추가해 Json데이터를 자바객체로 변환
                 .addConverterFactory(GsonConverterFactory.create())
                     //.build() 메서드를 호출하여 Retrofit객체 생성
