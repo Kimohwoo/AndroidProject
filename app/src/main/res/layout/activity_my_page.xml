@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MyPage">
+
+    <data>
+        <variable
+            name="user"
+            type="com.example.test2_login.LoginActivity" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="나의 정보"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:background="@color/colorYellow"
+        />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:src="@drawable/dog"
+        android:background="@null"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        >
+
+        <EditText
+            android:id="@+id/priv_name"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:hint="이름"
+            />
+
+        <EditText
+            android:id="@+id/priv_email"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:hint="이메일"
+            />
+
+        <EditText
+            android:id="@+id/priv_dogName"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:hint="애칭"
+            />
+
+        <EditText
+            android:id="@+id/priv_gender"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:hint="성별"
+            />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="10"
+        >
+
+        <Button
+            android:id="@+id/btn_priv_check"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="5"
+            android:background="@drawable/btn_yellow"
+            android:text="수정"
+            android:textColor="#ffffff" />
+
+        <Button
+            android:id="@+id/btn_priv_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:background="@drawable/btn_yellow"
+            android:text="돌아가기"
+            android:textColor="#ffffff"
+            android:layout_margin="10dp"
+            />
+
+
+    </LinearLayout>
+
+    </LinearLayout>
+
+</layout>
