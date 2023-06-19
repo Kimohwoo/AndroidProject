@@ -1,15 +1,16 @@
-package login;
+package com.android.andriodproject.login;
 
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.test2_login.databinding.ActivityMyPageBinding;
+import com.android.andriodproject.R;
+import com.android.andriodproject.databinding.ActivityMyPageBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class MyPage extends AppCompatActivity {
+public class zMyPage extends AppCompatActivity {
 
     private FirebaseUser user;
     private FirebaseAuth userAuth;

@@ -1,4 +1,4 @@
-package login;
+package com.android.andriodproject.login;
 public class UserAccount
 {
     private String idToken; //Firebase Uid(고유 정보)

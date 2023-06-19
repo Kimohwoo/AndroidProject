@@ -1,4 +1,4 @@
-package login;
+package com.android.andriodproject.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,7 +8,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.test2_login.databinding.ActivityLoginBinding;
+import com.android.andriodproject.R;
+import com.android.andriodproject.databinding.ActivityLoginBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;

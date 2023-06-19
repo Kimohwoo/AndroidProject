@@ -1,4 +1,4 @@
-package login;
+package com.android.andriodproject.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,7 +6,8 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.test2_login.databinding.ActivityMainBinding;
+import com.android.andriodproject.R;
+import com.android.andriodproject.databinding.ActivityMainBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
                     String uid = user.getUid();
 
                     Intent intent = new Intent(MainActivity.this, MyPage.class);
+                    intent.putExtra("uid", uid);
                     startActivity(intent);
 
                 } else {
