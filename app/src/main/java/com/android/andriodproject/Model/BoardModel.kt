@@ -7,6 +7,8 @@ import java.util.Date
 data class BoardModel(
     @SerializedName("no")
     var no: Long,
+    @SerializedName("uid")
+    var uid:String,
     @SerializedName("title")
     var title:String,
     @SerializedName("author")
@@ -19,7 +21,7 @@ data class BoardModel(
     var updateDay: Date,
     @SerializedName("imgId")
     var imgId:Int,
-    @SerializedName("uid")
-    var uid:String,
+//    @SerializedName("uid")
+//    var uid:String,
 //    )
 ):Serializable

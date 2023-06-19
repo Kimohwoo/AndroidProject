@@ -2,7 +2,9 @@ package com.android.andriodproject
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.andriodproject.Model.BoardListModel
 import com.android.andriodproject.Model.BoardModel
 import com.android.andriodproject.databinding.ActivityBoardBinding
+import com.android.andriodproject.databinding.ItemBoardBinding
 import com.android.andriodproject.retrofit2.BoardAdapter
 import com.android.andriodproject.retrofit2.BoardService
 import com.android.andriodproject.retrofit2.MyApplication
@@ -25,11 +28,12 @@ import retrofit2.Response
 class BoardActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBoardBinding
     private var pageNo = 1
-    private var numOfRows = 150
+    private var numOfRows = 10
     private lateinit var boardService: BoardService
-    private var item: List<BoardModel>? = null
+    private var item: MutableList<BoardModel>? = null
     private lateinit var myBoardBtn: Button
     private lateinit var allboardBtn: Button
+    private var isLoading = false
 
     val recycler: RecyclerView by lazy {
         binding.boardRecycler
@@ -47,13 +51,29 @@ class BoardActivity : AppCompatActivity() {
         allboardBtn = binding.allBoardBtn
         allboardBtn.visibility = View.INVISIBLE
 
+        val author = "nickname002"
+
         //내 글 보기
         binding.myBoardBtn.setOnClickListener {
-            val myItem = item?.filter {
-                it.author == "nickname002"
-            }
-            Log.d("lsy", "myItem 확인 : ${myItem}")
-            recycler.adapter = BoardAdapter(this@BoardActivity, myItem)
+            val boardListCall = boardService.getMyList(author)
+            Log.d("lsy", "boardList url: " + boardListCall.request().url().toString())
+            boardListCall.enqueue(object : Callback<BoardListModel> {
+                override fun onResponse(
+                    call: Call<BoardListModel>,
+                    response: Response<BoardListModel>
+                ) {
+                    val boardList = response.body()
+                    val myItem = boardList?.item
+                    Log.d("lsy", "myItem 값: ${myItem}")
+                    recycler.adapter =
+                        BoardAdapter(this@BoardActivity, myItem)
+                }
+
+                override fun onFailure(call: Call<BoardListModel>, t: Throwable) {
+                    Log.d("lsy", "Failure 호출")
+                    call.cancel()
+                }
+            })
             allboardBtn.visibility = View.VISIBLE
             allboardBtn.isEnabled = true
             myBoardBtn.visibility = View.INVISIBLE
@@ -75,10 +95,10 @@ class BoardActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        //전체글 -> 현재 스크롤링 전단계
+        //전체글
         val boardListCall = boardService.getBoardList(pageNo, numOfRows)
         Log.d("lsy", "boardList url: " + boardListCall.request().url().toString())
-        boardListCall.enqueue(object : Callback<BoardListModel> {
+        var call = boardListCall.enqueue(object : Callback<BoardListModel> {
             override fun onResponse(
                 call: Call<BoardListModel>,
                 response: Response<BoardListModel>
@@ -95,52 +115,65 @@ class BoardActivity : AppCompatActivity() {
             }
         })
 
-        recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
+        if(myBoardBtn.visibility == View.VISIBLE) {
+            recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
 
-                val lastVisibleItemPosition = layoutManager!!.findLastCompletelyVisibleItemPosition() // 화면에 보이는 마지막 아이템의 position
-                val itemTotalCount = recyclerView.adapter!!.itemCount - 1 // 어댑터에 등록된 아이템의 총 개수 -1
-                Log.d("lsy", "last: ${lastVisibleItemPosition}")
-                Log.d("lsy", "itemTotal = ${itemTotalCount}")
-                // 스크롤이 끝에 도달했는지 확인
-                if (lastVisibleItemPosition == itemTotalCount) {
-                    Log.d("lsy", "스크롤 끝")
+                    val lastVisibleItemPosition =
+                        layoutManager!!.findLastCompletelyVisibleItemPosition() // 화면에 보이는 마지막 아이템의 position
+                    val itemTotalCount =
+                        recyclerView.adapter!!.itemCount - 1 // 어댑터에 등록된 아이템의 총 개수 -1
+//                Log.d("lsy", "last: ${lastVisibleItemPosition}")
+//                Log.d("lsy", "itemTotal = ${itemTotalCount}")
+                    // 스크롤이 끝에 도달했는지 확인
+                    if (lastVisibleItemPosition == itemTotalCount){
+//                        isLoading = true
+                        Log.d("lsy", "스크롤 끝")
+                        pageNo += 1
+                        Log.d("lsy", "pageNO : ${pageNo}, numOfRows: ${numOfRows}")
+                        val boardListCall = boardService.getBoardList(pageNo, numOfRows)
+                        boardListCall.enqueue(object : Callback<BoardListModel> {
+                            override fun onResponse(
+                                call: Call<BoardListModel>,
+                                response: Response<BoardListModel>
+                            ) {
+                                val response = response.body()
+
+                                if(response != null && response.item.isNotEmpty() ) {
+                                    Log.d("lsy", "item 값: ${item}")
+                                    getMoreData(response?.item)
+                                }
+
+                            }
+                            override fun onFailure(call: Call<BoardListModel>, t: Throwable) {
+                                TODO("Not yet implemented")
+                            }
+                        })
+                    }
                 }
-            }
-        })
+            })
+        }
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//
-//        //보통 이곳에서 데이터들을 갱신하는 작업들이 이루어짐
-//        // adapter은 nullable 변수임 따라서 ? 연산자 붙이기
-//        recycler.adapter?.notifyDataSetChanged()
-//
-//        //recycler.adapter!!.notifyDataSetChanged() //무조건 널이 아니다 연산자
-//    }
-//
-//    //옵션 메뉴 만드는 콜백 메소드
-////    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-////        //자바처럼 menuInflater를 get하는 작업필요없이 액티비티에 이미 menuInflater 객체 존재
-////        menuInflater.inflate(R.menu.option, menu)
-////
-////        return super.onCreateOptionsMenu(menu)
-////    }
-//
-//    //옵션 메뉴 아이템 선택하면 자동으로 발동하는 콜백 메소드
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//
-//        when(item.itemId) {
-//            R.id.content -> Toast.makeText(this, "aaa 클릭", Toast.LENGTH_SHORT).show()
-//            R.id.author -> {
-//                Toast.makeText(this, "bbb 클릭", Toast.LENGTH_SHORT).show()
-//            }
-////            R.id. -> Toast.makeText(this, "ccc 클릭", Toast.LENGTH_SHORT).show()
-//        }
-//
-//        return super.onOptionsItemSelected(item)
-//    }
+    private fun getMoreData(data: MutableList<BoardModel>?) {
+        if (data != null) {
+            Log.d("lsy","data의 갯수 : ${data.size}")
+        }
+        // 9
+        binding.boardRecycler.adapter?.notifyItemInserted(item?.size?.minus(1)?: 0)
+//        item?.removeAt(item?.size?.minus(1)?: 0)
+        //9
+//        item?.removeAt(item?.size?.minus(2)?: 0)
 
+        //10
+        val currentSize = item?.size
+        if (currentSize != null) {
+
+            //Log.d("lsy","data 0 조회 : ${data?.get(0)}")
+            //Log.d("lsy","data 9 조회 : ${data?.get(9)}")
+            item?.addAll(data as Collection<BoardModel>)
+        }
+        binding.boardRecycler.adapter?.notifyDataSetChanged()
+    }
 }

@@ -42,6 +42,8 @@ class BoardAdapter(val context: Context, val datas: List<BoardModel>?): Recycler
             Log.d("lsy", "intent: ${intent}")
             context.startActivity(intent)
         }
+
     }
+
 
 }

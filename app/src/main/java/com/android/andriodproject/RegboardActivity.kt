@@ -32,7 +32,7 @@ class RegboardActivity : AppCompatActivity() {
             val author = "nickname002"
             val uid = "user002"
 
-            board = BoardModel(0, title, author, content, Date(), Date(), 0, uid)
+            board = BoardModel(0, uid, title, author, content, Date(), Date(), 0)
             Log.d("lsy", "board data: ${board}")
             val boardService = (applicationContext as MyApplication).boardService
             val boardRegCall = boardService.postBoard(board)

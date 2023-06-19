@@ -19,10 +19,10 @@ interface BoardService {
         @Query("numOfRows") numOfRows: Int,
     ): retrofit2.Call<BoardListModel>
 
-//    @GET("board/")
-//    fun getMyBoard(
-//        @Query("author") author: String,
-//    ): retrofit2.Call<BoardListModel>
+    @GET("board/mylist")
+    fun getMyList(
+        @Query("author") author: String,
+    ): retrofit2.Call<BoardListModel>
 
     @POST("board/detail")
     fun postBoard(
