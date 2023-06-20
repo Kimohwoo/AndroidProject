@@ -64,13 +64,11 @@
             android:exported="true"
             android:label="@string/title_activity_google_maps" />
         <activity
-            android:name=".MyPage"
-            android:name="login.MyPage"
+            android:name=".login.MyPage"
             android:exported="true" />
 
         <activity
-            android:name="login.Change"
-            android:name=".Change"
+            android:name=".login.Change"
             android:exported="true" />
         <activity
             android:name=".WeatherActivity"
@@ -81,7 +79,7 @@
             android:exported="true" />
 
         <activity
-            android:name="login.LoginActivity"
+            android:name=".login.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -91,7 +89,7 @@
         </activity>
 
         <activity
-            android:name="login.RegisterActivity"
+            android:name=".login.RegisterActivity"
             android:exported="true" />
 
         <provider

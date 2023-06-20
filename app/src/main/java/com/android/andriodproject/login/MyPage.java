@@ -1,4 +1,4 @@
-package login;
+package com.android.andriodproject.login;
 
 import android.os.Bundle;
 import android.view.View;
@@ -10,7 +10,7 @@ import com.android.andriodproject.databinding.ActivityMyPageBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class zMyPage extends AppCompatActivity {
+public class MyPage extends AppCompatActivity {
 
     private FirebaseUser user;
     private FirebaseAuth userAuth;
@@ -26,8 +26,8 @@ public class zMyPage extends AppCompatActivity {
         userAuth = FirebaseAuth.getInstance();
 
         mBinding = ActivityMyPageBinding.inflate(getLayoutInflater());
-        View view = mBinding.getRoot();
-        setContentView(view);
+//        View view = mBinding.getRoot();
+//        setContentView(view);
 
 
 
@@ -36,22 +36,6 @@ public class zMyPage extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
-
-                if (user != null) {
-                    // Name, email address, and profile photo Url
-                    String email = user.getDisplayName();
-                    String passwd = user.getEmail();
-//                    Uri photoUrl = user.getPhotoUrl();
-
-                    // Check if user's email is verified
-                    boolean emailVerified = user.isEmailVerified();
-
-                    // The user's ID, unique to the Firebase project. Do NOT use this value to
-                    // authenticate with your backend server, if you have one. Use
-                    // FirebaseUser.getIdToken() instead.
-                    String uid = user.getUid();
-                }
-
 
             }
         });

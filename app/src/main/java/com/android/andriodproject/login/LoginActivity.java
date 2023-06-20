@@ -1,4 +1,5 @@
-package login;
+package com.android.andriodproject.login;
+
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,10 +9,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.andriodproject.MainActivity;
 import com.android.andriodproject.R;
 import com.android.andriodproject.databinding.ActivityLoginBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -30,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-//        FirebaseApp.initializeApp(LoginActivity.this);
+        FirebaseApp.initializeApp(LoginActivity.this);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference("petproject");
