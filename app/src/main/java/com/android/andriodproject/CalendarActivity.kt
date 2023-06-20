@@ -8,20 +8,18 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.andriodproject.Model.WalkModel.WalkListModel
 import com.android.andriodproject.Model.WalkModel.WalkModel
-import com.android.andriodproject.databinding.ActivityCalendar2Binding
+import com.android.andriodproject.databinding.ActivityCalendarBinding
 import com.android.andriodproject.databinding.ItemCalendarListBinding
 import com.android.andriodproject.retrofit2.MyApplication
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.net.URLEncoder
 import java.util.Calendar
 
-class CalendarActivity2 : AppCompatActivity() {
+class CalendarActivity : AppCompatActivity() {
 
-    lateinit var binding : ActivityCalendar2Binding
+    lateinit var binding : ActivityCalendarBinding
 
     class MyViewHolder (val binding: ItemCalendarListBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -45,7 +43,7 @@ class CalendarActivity2 : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding= ActivityCalendar2Binding.inflate(layoutInflater)
+        binding= ActivityCalendarBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.changeActivity.setOnClickListener {

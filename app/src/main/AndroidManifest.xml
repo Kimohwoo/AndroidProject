@@ -35,7 +35,7 @@
             android:value="AIzaSyBjfqsqEKIv19AiDOK3d7fX7gP8bAZ3ITE" />
 
         <activity
-            android:name=".CalendarActivity2"
+            android:name=".CalendarActivity"
             android:exported="true" />
         <activity
             android:name=".EditBoardActivity"
