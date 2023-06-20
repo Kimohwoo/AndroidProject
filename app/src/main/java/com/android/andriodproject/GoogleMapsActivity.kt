@@ -19,6 +19,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
 import androidx.core.content.ContextCompat
+import com.android.andriodproject.GoogleMapsActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
 
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -78,7 +79,8 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
     private lateinit var exerciseTimeTextView: TextView
     // 운동 시간 업데이트를 위한 Handler
     private val exerciseHandler = Handler()
-
+    // 파일 경로
+    private var filePath : String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -98,8 +100,8 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         locationRequest = LocationRequest.create().apply {
-            interval = 5000 // 5초마다 위치 업데이트
-            fastestInterval = 5000 // 최소 5초 간격으로 업데이트(고정)
+            interval = 1000 // 5초마다 위치 업데이트
+            fastestInterval = 1000 // 최소 5초 간격으로 업데이트(고정)
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY //(GPS우선으로)
         }
 
@@ -109,6 +111,8 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
                 locationResult.lastLocation?.let { onLocationUpdated(it) }
             }
         }
+
+
 
         // 버튼 초기화
         startButton = findViewById(R.id.startButton)
@@ -150,6 +154,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
 
             // 운동 시작 시간 기록
             startTime = System.currentTimeMillis()
+            Log.d("KSJ123", "운동시작 시간 : $startTime")
 
             // 운동 타이머 시작
             startExerciseTimer()
@@ -165,7 +170,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
             stopButton.isEnabled = true
 
             // 위치 업데이트 중지
-            stopLocationUpdates()
+            pauseLocationUpdates()
 
             // 운동 타이머 정지
             stopExerciseTimer()
@@ -179,23 +184,29 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
         pauseButton.isEnabled = false
         stopButton.isEnabled = false
 
-        // 위치 업데이트 중지
-        stopLocationUpdates()
-
-        // 운동 타이머 정지
         stopExerciseTimer()
 
         // 운동 시간 계산
         exerciseTime = System.currentTimeMillis() - startTime
+        Log.d("KSJ123", "운동시간 : $exerciseTime")
 
-        // 기타 필요한 정지 작업 수행
-        // 예: 데이터 저장, 리셋 등
+        // 위치 업데이트 중지
+        stopLocationUpdates {
+            // 위치 업데이트 중지가 완료된 후 실행될 콜백 함수
+            // 운동 타이머 정지
 
-        val intent = Intent(this, ResultActivity::class.java)
-        intent.putExtra(ResultActivity.FILE_NAME, "$fileName") // 파일 이름을 전달
-        intent.putExtra(ResultActivity.TOTAL_DISTANCE, "$totalDistance") // 누적 이동 거리를 전달
-        intent.putExtra(ResultActivity.EXERCISE_TIME, "$exerciseTime") // 운동 시간을 전달
-        startActivity(intent)
+
+            // 기타 필요한 정지 작업 수행
+            // 예: 데이터 저장, 리셋 등
+
+            val intent = Intent(this, ResultActivity::class.java)
+            intent.putExtra(ResultActivity.FILE_NAME, "$fileName") // 파일 이름을 전달
+            intent.putExtra(ResultActivity.TOTAL_DISTANCE, "$totalDistance") // 누적 이동 거리를 전달
+            intent.putExtra(ResultActivity.EXERCISE_TIME, exerciseTime) // 운동 시간을 전달
+            intent.putExtra(ResultActivity.FILE_PATH, "$filePath") // 파일경로
+            intent.putExtra(ResultActivity.UID, "$uid")
+            startActivity(intent)
+        }
     }
 
     // 운동 타이머 시작
@@ -237,8 +248,15 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
         isTimerRunning = false
     }
 
-    private fun stopLocationUpdates() {
+    private fun pauseLocationUpdates() {
         fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+    }
+
+    private fun stopLocationUpdates(callback: () -> Unit) {
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+            .addOnCompleteListener {
+                callback.invoke()
+            }
     }
 
 
@@ -357,7 +375,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
                 writer.append(fileContents)
             }
 
-            val filePath = file.absolutePath
+            filePath = file.absolutePath
             Log.d("KSJ", "File path: $filePath")
         } catch (e: Exception) {
             e.printStackTrace()
@@ -365,18 +383,15 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
     }
 
     private fun onLocationUpdated(location: Location) {
-        val currentLatitude = location.latitude
-        val currentLongitude = location.longitude
-
-        val currentLatLng = LatLng(currentLatitude, currentLongitude)
-
-
         // 좌표를 랜덤하게 조금씩 이동시키는 코드
         // ☆(중요)새로운 위치를 생성할 때 랜덤한 값을 사용하여 현재 위치를 조금씩 이동시킨다는 점입니다. 이렇게 되면 이동 거리가 계속 0으로 나오는 문제가 발생.
-//        val newLatitude = currentLatitude + (Math.random() - 0.5) * 0.01
-//        val newLongitude = currentLongitude + (Math.random() - 0.5) * 0.01
-//
-//        val currentLatLng = LatLng(newLatitude, newLongitude)
+        //val newLatitude = currentLatitude + (Math.random() - 0.5) * 0.01
+        //val newLongitude = currentLongitude + (Math.random() - 0.5) * 0.01
+        //val currentLatLng = LatLng(newLatitude, newLongitude)
+
+            val currentLatitude = location.latitude
+            val currentLongitude = location.longitude
+            val currentLatLng = LatLng(currentLatitude, currentLongitude)
 
             // 이전 마커 제거
             marker?.remove()
@@ -422,5 +437,6 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
+        const val uid = "uid"
     }
 }
