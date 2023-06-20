@@ -1,4 +1,4 @@
-package com.android.andriodproject.login;
+package login;
 
 import android.os.Bundle;
 import android.view.View;
@@ -55,8 +55,5 @@ public class zMyPage extends AppCompatActivity {
 
             }
         });
-
-
-        return ;
     }
 }

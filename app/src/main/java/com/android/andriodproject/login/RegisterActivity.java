@@ -1,4 +1,4 @@
-package com.android.andriodproject.login;
+package login;
 
 import android.content.Intent;
 import android.os.Bundle;
