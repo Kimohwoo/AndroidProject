@@ -97,6 +97,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
         //툴바
         setSupportActionBar(binding.toolbar)
         toggle = ActionBarDrawerToggle(this, binding.drawer, R.string.drawer_opened, R.string.drawer_closed)
+        binding.drawer.addDrawerListener(toggle)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toggle.syncState()
 
@@ -469,7 +470,6 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        //이벤트가 toggle 버튼에서 제공된거라면..
         if(toggle.onOptionsItemSelected(item)){
             return true
         }

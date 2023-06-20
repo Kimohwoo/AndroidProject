@@ -34,7 +34,6 @@ class BoardActivity : AppCompatActivity() {
     private var item: MutableList<BoardModel>? = null
     private lateinit var myBoardBtn: Button
     private lateinit var allboardBtn: Button
-    private var isLoading = false
     lateinit var toggle: ActionBarDrawerToggle
     val recycler: RecyclerView by lazy {
         binding.boardRecycler
