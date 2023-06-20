@@ -4,9 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.android.andriodproject.Model.WalkModel.WalkListModel
 import com.android.andriodproject.databinding.ActivityCalendarBinding
 import com.android.andriodproject.retrofit2.MyApplication
@@ -16,7 +13,6 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import java.util.stream.Stream
 
 
 class CalendarActivity : AppCompatActivity() {
