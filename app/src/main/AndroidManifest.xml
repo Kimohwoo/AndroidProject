@@ -15,22 +15,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Project"
-        tools:targetApi="31">
+        tools:targetApi="33">
 
         <activity
-            android:name=".MyPage"
+            android:name="login.MyPage"
             android:exported="true" />
 
         <activity
-            android:name=".Change"
+            android:name="login.Change"
             android:exported="true" />
 
         <activity
-            android:name=".MainActivity"
+            android:name="login.MainActivity"
             android:exported="true" />
 
         <activity
-            android:name=".LoginActivity"
+            android:name="login.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,7 +40,7 @@
         </activity>
 
         <activity
-            android:name=".RegisterActivity"
+            android:name="login.RegisterActivity"
             android:exported="true" />
     </application>
 
