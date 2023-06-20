@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/walkFragment">
+    <action
+        android:id="@+id/walkFragment"
+        app:destination="@id/walkFragment"
+        app:launchSingleTop="true" />
+
+<!--    <keep_state_fragment-->
+<!--        android:id="@+id/homeFragment"-->
+<!--        android:name="com.android.andriodproject.HomeFragment"-->
+<!--        android:label="HomeFragment" />-->
+<!--    <keep_state_fragment-->
+<!--        android:id="@+id/mapFragment"-->
+<!--        android:name="com.android.andriodproject.map.MapFragment"-->
+<!--        android:label="MapFragment" >-->
+<!--        <action-->
+<!--            android:id="@+id/action_mapFragment_to_bookMarkFragment"-->
+<!--            app:destination="@id/bookMarkFragment" />-->
+<!--    </keep_state_fragment>-->
+<!--    <keep_state_fragment-->
+<!--        android:id="@+id/postFragment"-->
+<!--        android:name="com.android.andriodproject.post.PostFragment"-->
+<!--        android:label="PostFragment" >-->
+<!--        <action-->
+<!--            android:id="@+id/action_postFragment_to_postUploadFragment"-->
+<!--            app:destination="@id/postUploadFragment" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_postFragment_to_commentFragment"-->
+<!--            app:destination="@id/commentFragment" />-->
+<!--        <argument-->
+<!--            android:name="postIdString"-->
+<!--            app:argType="long"/>-->
+<!--        <action-->
+<!--            android:id="@+id/action_postFragment_to_postLikeFragment"-->
+<!--            app:destination="@id/postLikeFragment" />-->
+<!--    </keep_state_fragment>-->
+<!--    <keep_state_fragment-->
+<!--        android:id="@+id/walkFragment"-->
+<!--        android:name="com.android.andriodproject.WalkFragment"-->
+<!--        android:label="WalkFragment">-->
+<!--        <action-->
+<!--            android:id="@+id/action_walkFragment_to_trackingFragment"-->
+<!--            app:destination="@id/trackingFragment" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_walkFragment_to_detailTrackingFragment"-->
+<!--            app:destination="@id/detailTrackingFragment" />-->
+<!--    </keep_state_fragment>-->
+<!--    <keep_state_fragment-->
+<!--        android:id="@+id/trackingFragment"-->
+<!--        android:name="com.android.andriodproject.WalkFragment"-->
+<!--        android:label="TrackingFragment">-->
+<!--        <action-->
+<!--            android:id="@+id/action_trackingFragment_to_walkFragment"-->
+<!--            app:destination="@id/walkFragment" />-->
+<!--    </keep_state_fragment>-->
+<!--    <keep_state_fragment-->
+<!--        android:id="@+id/detailTrackingFragment"-->
+<!--        android:name="com.android.andriodproject.DetailTrackingFragment"-->
+<!--        android:label="DetailTrackingFragment">-->
+<!--        <action-->
+<!--            android:id="@+id/action_detailTrackingFragment_to_walkFragment"-->
+<!--            app:destination="@id/walkFragment" />-->
+<!--        <argument-->
+<!--            android:name="tracking"-->
+<!--            app:argType="com.android.andriodproject.Tracking" />-->
+<!--    </keep_state_fragment>-->
+<!--    <keep_state_fragment-->
+<!--        android:id="@+id/albumFragment"-->
+<!--        android:name="com.android.andriodproject.home.Fragment.AnalysisFragment"-->
+<!--        android:label="fragment_album"-->
+<!--        tools:layout="@layout/fragment_analysis" >-->
+<!--        <action-->
+<!--            android:id="@+id/action_albumFragment_to_resultFragment"-->
+<!--            app:destination="@id/resultFragment" />-->
+<!--    </keep_state_fragment>-->
+<!--    <keep_state_fragment-->
+<!--        android:id="@+id/bookMarkFragment"-->
+<!--        android:name="com.android.andriodproject.home.Fragment.LikePlaceFragment"-->
+<!--        android:label="fragment_book_mark"-->
+<!--        tools:layout="@layout/fragment_likeplace" />-->
+<!--    <keep_state_fragment-->
+<!--        android:id="@+id/postUploadFragment"-->
+<!--        android:name="com.android.andriodproject.post.PostUploadFragment"-->
+<!--        android:label="fragment_post_upload"-->
+<!--        tools:layout="@layout/fragment_post_upload" >-->
+<!--        <action-->
+<!--            android:id="@+id/action_postUploadFragment_to_postFragment"-->
+<!--            app:destination="@id/postFragment" />-->
+<!--    </keep_state_fragment>-->
+<!--    <fragment-->
+<!--        android:id="@+id/commentFragment"-->
+<!--        android:name="com.android.andriodproject.post.Comment.CommentFragment"-->
+<!--        android:label="fragment_comment"-->
+<!--        tools:layout="@layout/fragment_comment" >-->
+<!--        <action-->
+<!--            android:id="@+id/action_commentFragment_to_postFragment"-->
+<!--            app:destination="@id/postFragment" />-->
+<!--        <argument-->
+<!--            android:name="postId"-->
+<!--            app:argType="long"/>-->
+<!--    </fragment>-->
+<!--    <keep_state_fragment-->
+<!--        android:id="@+id/postLikeFragment"-->
+<!--        android:name="com.android.andriodproject.post.PostLikeFragment"-->
+<!--        android:label="fragment_post_like"-->
+<!--        tools:layout="@layout/fragment_post_like" >-->
+<!--        <action-->
+<!--            android:id="@+id/action_postLikeFragment_to_postFragment"-->
+<!--            app:destination="@id/postFragment" />-->
+<!--        <action-->
+<!--            android:id="@+id/action_postLikeFragment_to_commentFragment"-->
+<!--            app:destination="@id/commentFragment" />-->
+<!--    </keep_state_fragment>-->
+<!--    <keep_state_fragment-->
+<!--        android:id="@+id/resultFragment"-->
+<!--        android:name="com.android.andriodproject.home.Fragment.ResultFragment"-->
+<!--        android:label="fragment_result"-->
+<!--        tools:layout="@layout/fragment_result" >-->
+<!--        <action-->
+<!--            android:id="@+id/action_resultFragment_to_albumFragment"-->
+<!--            app:destination="@id/albumFragment" />-->
+<!--        <argument-->
+<!--            android:name="selectNum"-->
+<!--            app:argType="integer" />-->
+<!--    </keep_state_fragment>-->
+</navigation>
