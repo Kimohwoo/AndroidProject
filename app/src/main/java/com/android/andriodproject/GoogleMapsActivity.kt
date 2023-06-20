@@ -12,10 +12,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.Gravity
+import android.view.MenuItem
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
 import androidx.core.content.ContextCompat
@@ -81,7 +83,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
     private val exerciseHandler = Handler()
     // 파일 경로
     private var filePath : String? = null
-
+    lateinit var toggle: ActionBarDrawerToggle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,6 +93,32 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
 
         binding = ActivityGoogleMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        //툴바
+        setSupportActionBar(binding.toolbar)
+        toggle = ActionBarDrawerToggle(this, binding.drawer, R.string.drawer_opened, R.string.drawer_closed)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toggle.syncState()
+
+        binding.mainDrawerView.setNavigationItemSelectedListener {
+                menuItem ->
+            when(menuItem.itemId){
+                R.id.excerciseBtn -> {
+                    val intent = Intent(applicationContext, GoogleMapsActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.weatherBtn -> {
+                    startActivity(Intent(applicationContext, WeatherActivity::class.java))
+                    true
+                }
+                R.id.boardBtn -> {
+                    startActivity(Intent(applicationContext, BoardActivity::class.java))
+                    true
+                }
+                else -> false
+            }
+        }
 
         // (자동 생성된 코드) SupportMapFragment를 호출(비동기적)하여 지도가 준비되면 알림을 받습니다.
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
@@ -439,4 +467,13 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
         const val uid = "uid"
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        //이벤트가 toggle 버튼에서 제공된거라면..
+        if(toggle.onOptionsItemSelected(item)){
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 }

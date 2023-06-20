@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -34,7 +35,7 @@ class BoardActivity : AppCompatActivity() {
     private lateinit var myBoardBtn: Button
     private lateinit var allboardBtn: Button
     private var isLoading = false
-
+    lateinit var toggle: ActionBarDrawerToggle
     val recycler: RecyclerView by lazy {
         binding.boardRecycler
     }
@@ -52,6 +53,32 @@ class BoardActivity : AppCompatActivity() {
         allboardBtn.visibility = View.INVISIBLE
 
         val author = "nickname002"
+
+        //툴바
+        setSupportActionBar(binding.toolbar)
+        toggle = ActionBarDrawerToggle(this, binding.drawer, R.string.drawer_opened, R.string.drawer_closed)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toggle.syncState()
+
+        binding.mainDrawerView.setNavigationItemSelectedListener {
+                menuItem ->
+            when(menuItem.itemId){
+                R.id.excerciseBtn -> {
+                    val intent = Intent(applicationContext, GoogleMapsActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.weatherBtn -> {
+                    startActivity(Intent(applicationContext, WeatherActivity::class.java))
+                    true
+                }
+                R.id.boardBtn -> {
+                    startActivity(Intent(applicationContext, BoardActivity::class.java))
+                    true
+                }
+                else -> false
+            }
+        }
 
         //내 글 보기
         binding.myBoardBtn.setOnClickListener {
@@ -176,4 +203,13 @@ class BoardActivity : AppCompatActivity() {
         }
         binding.boardRecycler.adapter?.notifyDataSetChanged()
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        //이벤트가 toggle 버튼에서 제공된거라면..
+        if(toggle.onOptionsItemSelected(item)){
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 }

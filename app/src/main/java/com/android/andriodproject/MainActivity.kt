@@ -53,9 +53,6 @@ class MainActivity : AppCompatActivity() {
 
         //툴바
         setSupportActionBar(binding.toolbar)
-
-        //ActionBarDrawerToggle 버튼 적용, 왼쪽 서랍처럼 열리는 메뉴
-        // 꾸미는 작업은 네비게이션 뷰에서 작업.
         toggle = ActionBarDrawerToggle(this, binding.drawer, R.string.drawer_opened, R.string.drawer_closed)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toggle.syncState()

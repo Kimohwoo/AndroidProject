@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
+import androidx.appcompat.app.ActionBarDrawerToggle
 import com.android.andriodproject.Model.WalkModel.WalkListModel
 import com.android.andriodproject.databinding.ActivityCalendarBinding
 import com.android.andriodproject.retrofit2.MyApplication
@@ -16,12 +18,38 @@ import java.util.Locale
 
 
 class CalendarActivity : AppCompatActivity() {
-
+    lateinit var toggle: ActionBarDrawerToggle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val binding= ActivityCalendarBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        //툴바
+        setSupportActionBar(binding.toolbar)
+        toggle = ActionBarDrawerToggle(this, binding.drawer, R.string.drawer_opened, R.string.drawer_closed)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toggle.syncState()
+
+        binding.mainDrawerView.setNavigationItemSelectedListener {
+                menuItem ->
+            when(menuItem.itemId){
+                R.id.excerciseBtn -> {
+                    val intent = Intent(applicationContext, GoogleMapsActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.weatherBtn -> {
+                    startActivity(Intent(applicationContext, WeatherActivity::class.java))
+                    true
+                }
+                R.id.boardBtn -> {
+                    startActivity(Intent(applicationContext, BoardActivity::class.java))
+                    true
+                }
+                else -> false
+            }
+        }
 
         binding.changeActivity.setOnClickListener {
             startActivity(Intent(this, GoogleMapsActivity::class.java))
@@ -58,6 +86,12 @@ class CalendarActivity : AppCompatActivity() {
         )
 
     }
-
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        //이벤트가 toggle 버튼에서 제공된거라면..
+        if(toggle.onOptionsItemSelected(item)){
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
 }
