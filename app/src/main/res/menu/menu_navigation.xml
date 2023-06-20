@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/excerciseBtn"
+        android:icon="@drawable/ic_exercise"
+        android:title="산책가자!"/>
+    <item
+        android:id="@+id/weatherBtn"
+        android:icon="@drawable/baseline_wb_sunny_24"
+        android:title="오늘의 날씨는?"/>
+    <item
+        android:id="@+id/boardBtn"
+        android:icon="@drawable/baseline_chat_24"
+        android:title="게시판"/>
+    <item
+        android:icon="@drawable/baseline_home_24"
+        android:title="홈"/>
+</menu>

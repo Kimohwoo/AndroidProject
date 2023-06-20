@@ -2,14 +2,16 @@ package com.android.andriodproject
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import com.android.andriodproject.databinding.ActivityMainBinding
 import com.android.andriodproject.login.LoginActivity
-import com.android.andriodproject.login.MyPage
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 
@@ -27,10 +29,11 @@ class MainActivity : AppCompatActivity() {
     private val CAMERA_PERMISSION_REQUEST_CODE = 1001
     private val CAMERA_USAGE_REQUEST_CODE = 1002
     private val CAMERA_STORAGE_REQUEST_CODE = 1003
+    lateinit var toggle: ActionBarDrawerToggle
 
 
     companion object {
-        const val uid = "abcdefg"
+        const val uid = "user001"
         const val nickname = "Samkim"
         const val dogname = "똘똘이"
     }
@@ -45,43 +48,82 @@ class MainActivity : AppCompatActivity() {
         user = FirebaseAuth.getInstance().currentUser
 
         mMainBinding = ActivityMainBinding.inflate(layoutInflater)
-        val view: View = mMainBinding!!.getRoot()
-        setContentView(view)
+//        val view: View = mMainBinding!!.getRoot()
+//        setContentView(view)
 
+        //툴바
+        setSupportActionBar(binding.toolbar)
 
+        //ActionBarDrawerToggle 버튼 적용, 왼쪽 서랍처럼 열리는 메뉴
+        // 꾸미는 작업은 네비게이션 뷰에서 작업.
+        toggle = ActionBarDrawerToggle(this, binding.drawer, R.string.drawer_opened, R.string.drawer_closed)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toggle.syncState()
 
-        mMainBinding!!.btnLogout.setOnClickListener { // 로그아웃
-            mFirebaseAuth!!.signOut()
-            val intent = Intent(this@MainActivity, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-
-
-        mMainBinding!!.btnMypage.setOnClickListener {
-            val user = FirebaseAuth.getInstance().currentUser
-            if (user != null) {
-
-                /*String name = user.getDisplayName();*/
-                val email = user.email
-                /*Uri photoUrl = user.getPhotoUrl();*/
-
-
-                // The user's ID, unique to the Firebase project. Do NOT use this value to
-                // authenticate with your backend server, if you have one. Use
-                // FirebaseUser.getIdToken() instead.
-                val uid = user.uid
-                val intent = Intent(this@MainActivity, MyPage::class.java)
-                intent.putExtra("uid", uid)
-                startActivity(intent)
-            } else {
-                val intent = Intent(this@MainActivity, LoginActivity::class.java)
-                startActivity(intent)
+        binding.mainDrawerView.setNavigationItemSelectedListener {
+                menuItem ->
+            when(menuItem.itemId){
+                R.id.excerciseBtn -> {
+                    val intent = Intent(applicationContext, GoogleMapsActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.weatherBtn -> {
+                    startActivity(Intent(applicationContext, WeatherActivity::class.java))
+                    true
+                }
+                R.id.boardBtn -> {
+                    startActivity(Intent(applicationContext, BoardActivity::class.java))
+                    true
+                }
+                else -> false
             }
         }
 
+//        mMainBinding!!.btnLogout.setOnClickListener { // 로그아웃
+//            mFirebaseAuth!!.signOut()
+//            val intent = Intent(this@MainActivity, LoginActivity::class.java)
+//            startActivity(intent)
+//            finish()
+//        }
+//
+//
+//        mMainBinding!!.btnMypage.setOnClickListener {
+//            val user = FirebaseAuth.getInstance().currentUser
+//            if (user != null) {
+//
+//                /*String name = user.getDisplayName();*/
+//                val email = user.email
+//                /*Uri photoUrl = user.getPhotoUrl();*/
+//
+//
+//                // The user's ID, unique to the Firebase project. Do NOT use this value to
+//                // authenticate with your backend server, if you have one. Use
+//                // FirebaseUser.getIdToken() instead.
+//                val uid = user.uid
+//                val intent = Intent(this@MainActivity, MyPage::class.java)
+//                intent.putExtra("uid", uid)
+//                startActivity(intent)
+//            } else {
+//                val intent = Intent(this@MainActivity, LoginActivity::class.java)
+//                startActivity(intent)
+//            }
+//        }
+
         binding.addBtn.setOnClickListener {
             onAddButtonClicked()
+        }
+
+        binding.weatherBtn.setOnClickListener{
+            val intent = Intent(this, WeatherActivity::class.java)
+            intent.putExtra(GoogleMapsActivity.uid, "$uid")
+            startActivity(intent)
+        }
+
+        binding.boardBtn.setOnClickListener{
+            val intent = Intent(this, BoardActivity::class.java)
+            intent.putExtra(GoogleMapsActivity.uid, "$uid")
+            startActivity(intent)
         }
 
         binding.cameraBtn.setOnClickListener {
@@ -159,8 +201,6 @@ class MainActivity : AppCompatActivity() {
 //            }
 //        }
 //    }
-
-
     private fun onAddButtonClicked() {
         setVisibility(clicked)
         setAnimation(clicked)
@@ -172,16 +212,24 @@ class MainActivity : AppCompatActivity() {
             binding.cameraBtn.visibility = View.GONE
             binding.galleryBtn.visibility = View.GONE
             binding.exerciseBtn.visibility = View.GONE
+            binding.boardBtn.visibility = View.GONE
+            binding.weatherBtn.visibility = View.GONE
             binding.cameraBtn.isEnabled = true
             binding.galleryBtn.isEnabled = true
             binding.exerciseBtn.isEnabled = true
+            binding.boardBtn.isEnabled = true
+            binding.weatherBtn.isEnabled = true
         } else {
             binding.cameraBtn.isEnabled = false
             binding.galleryBtn.isEnabled = false
             binding.exerciseBtn.isEnabled = false
+            binding.boardBtn.isEnabled = false
+            binding.weatherBtn.isEnabled = false
             binding.cameraBtn.visibility = View.VISIBLE
             binding.galleryBtn.visibility = View.VISIBLE
             binding.exerciseBtn.visibility = View.VISIBLE
+            binding.boardBtn.visibility = View.VISIBLE
+            binding.weatherBtn.visibility = View.VISIBLE
         }
     }
 
@@ -190,12 +238,24 @@ class MainActivity : AppCompatActivity() {
             binding.cameraBtn.startAnimation(fromBottom)
             binding.galleryBtn.startAnimation(fromBottom)
             binding.exerciseBtn.startAnimation(fromBottom)
+            binding.boardBtn.startAnimation(fromBottom)
+            binding.weatherBtn.startAnimation(fromBottom)
             binding.addBtn.startAnimation(rotateOpen)
         } else {
             binding.cameraBtn.startAnimation(toBottom)
             binding.galleryBtn.startAnimation(toBottom)
             binding.exerciseBtn.startAnimation(toBottom)
+            binding.boardBtn.startAnimation(toBottom)
+            binding.weatherBtn.startAnimation(toBottom)
             binding.addBtn.startAnimation(rotateClose)
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        //이벤트가 toggle 버튼에서 제공된거라면..
+        if(toggle.onOptionsItemSelected(item)){
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
