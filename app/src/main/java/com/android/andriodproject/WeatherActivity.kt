@@ -104,7 +104,7 @@ class WeatherActivity : AppCompatActivity() {
                 1.0
             )
             Log.d("lsy", "xyToSido: ${xyToSido(nx, ny)}")
-            Log.d("lsy", "Air Url: " + airListCall.request().url().toString())
+//            Log.d("lsy", "Air Url: " + airListCall.request().url().toString())
             airListCall.enqueue(object : Callback<AirListModel> {
                 override fun onResponse(
                     call: Call<AirListModel>,
@@ -135,7 +135,7 @@ class WeatherActivity : AppCompatActivity() {
                     Log.d("lsy", "Air result 값 확인 : ${airResult}")
 
                     //weatherService
-                    Log.d("lsy", "Weather url: " + weatherListCall.request().url().toString())
+//                    Log.d("lsy", "Weather url: " + weatherListCall.request().url().toString())
                     weatherListCall.enqueue(object : Callback<WeatherListModel> {
                         override fun onResponse(
                             call: Call<WeatherListModel>,

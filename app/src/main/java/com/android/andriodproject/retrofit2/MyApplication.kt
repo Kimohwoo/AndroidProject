@@ -9,6 +9,7 @@ class MyApplication: Application() {
 
     var weatherService: WeatherService
     var airPollutionService: AirPollutionService
+    var walkService: WalkService
     val weatherRetrofit: Retrofit
         get() = Retrofit.Builder()
             .baseUrl("https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/")
@@ -22,9 +23,18 @@ class MyApplication: Application() {
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
 
+    val walkRetrofit: Retrofit
+        get() = Retrofit.Builder()
+            .baseUrl("http://10.100.105.168:8083/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+
+
     init {
         weatherService = weatherRetrofit.create(WeatherService::class.java)
         airPollutionService = airRetrofit.create(AirPollutionService::class.java)
+        walkService = walkRetrofit.create(WalkService::class.java)
     }
 
 }
