@@ -5,7 +5,9 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.test2_login.databinding.ActivityMyPageBinding;
+import com.android.andriodproject.R;
+import com.android.andriodproject.databinding.ActivityMyPageBinding;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
