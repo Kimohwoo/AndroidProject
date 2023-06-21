@@ -2,12 +2,13 @@ package com.android.andriodproject
 
 import android.graphics.Color
 import android.os.Bundle
+import android.os.UserManager
 import android.util.Log
 import android.util.TypedValue
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.android.andriodproject.MainActivity.Companion.uid
 import com.android.andriodproject.Model.MapData.ExerciseDTO
+import com.android.andriodproject.Model.UserModel
 import com.android.andriodproject.databinding.ActivityResultBinding
 import com.android.andriodproject.retrofit2.ExerciseData
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -32,15 +33,13 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
     lateinit var binding: ActivityResultBinding
     private lateinit var mMap: GoogleMap
 
-
-
     companion object {
         const val FILE_NAME = "filename"
         const val TOTAL_DISTANCE = "totalDistance"
         const val EXERCISE_TIME = "exerciseTime"
         const val FILE_PATH = "filePath"
         const val CALORIE = "calorie"
-        const val UID = "uid"
+//        const val UID = "uid"
         const val EXERCISE_ID = ""
     }
 
@@ -68,8 +67,7 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
 //        val filename = "2306120643.txt"
 //        val file = File(filesDir, filename)
 
-
-        val intent = intent
+//        val intent = intent
         val fileName = intent.getStringExtra(FILE_NAME)
         val totalDistance = intent.getStringExtra(TOTAL_DISTANCE)?.toDoubleOrNull()?.toInt()
         val filePath = intent.getStringExtra(FILE_PATH)
@@ -170,6 +168,7 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
                 .build()
 
             val apiService = retrofit.create(ExerciseData::class.java)
+            val uid = intent.getStringExtra("uid") as String
 
             val request = ExerciseDTO(
                 uid = uid,
@@ -209,7 +208,7 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
         val intent = intent
-        val uid = intent.getStringExtra(UID)
+        val uid = intent.getStringExtra("uid")
         val exerciseId = intent.getStringExtra(EXERCISE_ID)
         val fileName = intent.getStringExtra(FILE_NAME)
         val totalDistance = intent.getStringExtra(TOTAL_DISTANCE)?.toDoubleOrNull()?.toInt()
@@ -234,7 +233,7 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
             "ksj12",
             "총거리 : $totalDistance m, 파일이름 : $fileName, 파일경로 : $filePath, 운동시간 : $exerciseTime"
         )
-        Log.d("ksj12", "$uid, $exerciseId")
+        Log.d("ksj12", "uid, excersizeId : $uid, $exerciseId")
 
         val file = if (!fileName.isNullOrEmpty()) {
             File(filesDir, fileName)

@@ -15,8 +15,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-
-
     <application
         android:name=".retrofit2.MyApplication"
         android:allowBackup="true"
@@ -29,14 +27,14 @@
         android:theme="@style/Theme.Project"
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
+        <activity
+            android:name=".EditUserActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBjfqsqEKIv19AiDOK3d7fX7gP8bAZ3ITE" />
 
-        <activity
-            android:name=".CalendarActivity"
-            android:exported="true" />
         <activity
             android:name=".EditBoardActivity"
             android:exported="true"
@@ -70,6 +68,9 @@
             android:exported="true" />
         <activity
             android:name=".MainActivity"
+            android:exported="true" />
+        <activity
+            android:name=".CalendarActivity"
             android:exported="true" />
         <activity
             android:name=".login.LoginActivity"

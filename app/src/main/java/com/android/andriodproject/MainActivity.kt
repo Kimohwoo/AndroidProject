@@ -2,7 +2,7 @@ package com.android.andriodproject
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
@@ -10,6 +10,7 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import com.android.andriodproject.Model.UserModel
 import com.android.andriodproject.databinding.ActivityMainBinding
 import com.android.andriodproject.login.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -31,14 +32,6 @@ class MainActivity : AppCompatActivity() {
     private val CAMERA_STORAGE_REQUEST_CODE = 1003
     lateinit var toggle: ActionBarDrawerToggle
 
-
-    companion object {
-        const val uid = "user001"
-        const val nickname = "Samkim"
-        const val dogname = "똘똘이"
-    }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -46,16 +39,12 @@ class MainActivity : AppCompatActivity() {
 
         mFirebaseAuth = FirebaseAuth.getInstance()
         user = FirebaseAuth.getInstance().currentUser
-
-        mMainBinding = ActivityMainBinding.inflate(layoutInflater)
-//        val view: View = mMainBinding!!.getRoot()
-//        setContentView(view)
+        val user2 = intent.getSerializableExtra("user") as UserModel
+        Log.d("lsy", "intent 확인 ${user2}")
+        Log.d("lsy", "fire인증값 : ${user?.uid}")
 
         //툴바
         setSupportActionBar(binding.toolbar)
-
-        //ActionBarDrawerToggle 버튼 적용, 왼쪽 서랍처럼 열리는 메뉴
-        // 꾸미는 작업은 네비게이션 뷰에서 작업.
         toggle = ActionBarDrawerToggle(this, binding.drawer, R.string.drawer_opened, R.string.drawer_closed)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toggle.syncState()
@@ -65,29 +54,40 @@ class MainActivity : AppCompatActivity() {
             when(menuItem.itemId){
                 R.id.excerciseBtn -> {
                     val intent = Intent(applicationContext, GoogleMapsActivity::class.java)
+                    intent.putExtra("uid", "${user2.uId}")
+                    Log.d("lsy", "user: ${user2.uId}")
                     startActivity(intent)
                     true
                 }
                 R.id.weatherBtn -> {
                     startActivity(Intent(applicationContext, WeatherActivity::class.java))
+                    intent.putExtra("user", user2)
                     true
                 }
                 R.id.boardBtn -> {
                     startActivity(Intent(applicationContext, BoardActivity::class.java))
+                    intent.putExtra("user", user2)
+                    true
+                }
+                R.id.btn_logout -> {
+//                    mFirebaseAuth!!.signOut()
+                    val intent = Intent(this@MainActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                R.id.editBtn -> {
+                    val intent = Intent(this@MainActivity, EditUserActivity::class.java)
+                    intent.putExtra("user", user2)
+                    startActivity(intent)
+                    finish()
                     true
                 }
                 else -> false
             }
         }
 
-//        mMainBinding!!.btnLogout.setOnClickListener { // 로그아웃
-//            mFirebaseAuth!!.signOut()
-//            val intent = Intent(this@MainActivity, LoginActivity::class.java)
-//            startActivity(intent)
-//            finish()
-//        }
-//
-//
+
 //        mMainBinding!!.btnMypage.setOnClickListener {
 //            val user = FirebaseAuth.getInstance().currentUser
 //            if (user != null) {
@@ -115,14 +115,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.weatherBtn.setOnClickListener{
-            val intent = Intent(this, WeatherActivity::class.java)
-            intent.putExtra(GoogleMapsActivity.uid, "$uid")
+            val intent = Intent(this@MainActivity, WeatherActivity::class.java)
+            intent.putExtra("user", user2)
             startActivity(intent)
         }
 
         binding.boardBtn.setOnClickListener{
-            val intent = Intent(this, BoardActivity::class.java)
-            intent.putExtra(GoogleMapsActivity.uid, "$uid")
+            val intent = Intent(this@MainActivity, BoardActivity::class.java)
+            intent.putExtra("user", user2)
             startActivity(intent)
         }
 
@@ -142,7 +142,8 @@ class MainActivity : AppCompatActivity() {
         binding.exerciseBtn.setOnClickListener {
             Toast.makeText(this, "플로팅3", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, GoogleMapsActivity::class.java)
-            intent.putExtra(GoogleMapsActivity.uid, "$uid")
+            intent.putExtra("uid", "${user2.uId}")
+            Log.d("lsy", "user: ${user2.uId}")
             startActivity(intent)
         }
     }

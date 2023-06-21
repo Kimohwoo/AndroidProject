@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import com.android.andriodproject.Model.BoardModel
+import com.android.andriodproject.Model.UserModel
 import com.android.andriodproject.databinding.ActivityRegboardBinding
 import com.android.andriodproject.retrofit2.MyApplication
 import retrofit2.Call
@@ -21,6 +22,8 @@ class RegboardActivity : AppCompatActivity() {
         binding = ActivityRegboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val user = intent.getSerializableExtra("user") as UserModel
+
         binding.back.setOnClickListener {
             onBackPressed()
         }
@@ -29,10 +32,8 @@ class RegboardActivity : AppCompatActivity() {
         binding.regButton.setOnClickListener {
             val title = binding.title.text.toString()
             val content = binding.content.text.toString()
-            val author = "nickname002"
-            val uid = "user002"
 
-            board = BoardModel(0, uid, title, author, content, Date(), Date(), 0)
+            board = BoardModel(0, user.uId, title, user.nickName, content, Date(), Date(), 0)
             Log.d("lsy", "board data: ${board}")
             val boardService = (applicationContext as MyApplication).boardService
             val boardRegCall = boardService.postBoard(board)

@@ -12,14 +12,14 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.Gravity
+import android.view.MenuItem
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
 import androidx.core.content.ContextCompat
-import com.android.andriodproject.GoogleMapsActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
 
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -81,7 +81,8 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
     private val exerciseHandler = Handler()
     // 파일 경로
     private var filePath : String? = null
-
+    lateinit var toggle: ActionBarDrawerToggle
+    private var uid = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,6 +92,35 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
 
         binding = ActivityGoogleMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        uid = intent.getStringExtra("uid") as String
+
+        //툴바
+        setSupportActionBar(binding.toolbar)
+        toggle = ActionBarDrawerToggle(this, binding.drawer, R.string.drawer_opened, R.string.drawer_closed)
+        binding.drawer.addDrawerListener(toggle)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toggle.syncState()
+
+        binding.mainDrawerView.setNavigationItemSelectedListener {
+                menuItem ->
+            when(menuItem.itemId){
+                R.id.excerciseBtn -> {
+                    val intent = Intent(applicationContext, GoogleMapsActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.weatherBtn -> {
+                    startActivity(Intent(applicationContext, WeatherActivity::class.java))
+                    true
+                }
+                R.id.boardBtn -> {
+                    startActivity(Intent(applicationContext, BoardActivity::class.java))
+                    true
+                }
+                else -> false
+            }
+        }
 
         // (자동 생성된 코드) SupportMapFragment를 호출(비동기적)하여 지도가 준비되면 알림을 받습니다.
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
@@ -200,11 +230,14 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
             // 예: 데이터 저장, 리셋 등
 
             val intent = Intent(this, ResultActivity::class.java)
+            Log.d("lsy", "uid: ${uid}")
             intent.putExtra(ResultActivity.FILE_NAME, "$fileName") // 파일 이름을 전달
             intent.putExtra(ResultActivity.TOTAL_DISTANCE, "$totalDistance") // 누적 이동 거리를 전달
             intent.putExtra(ResultActivity.EXERCISE_TIME, exerciseTime) // 운동 시간을 전달
             intent.putExtra(ResultActivity.FILE_PATH, "$filePath") // 파일경로
-            intent.putExtra(ResultActivity.UID, "$uid")
+//            intent.putExtra(ResultActivity.UID, "$uid")
+            intent.putExtra("uid", uid)
+            Log.d("lsy", "uid: ${uid}")
             startActivity(intent)
         }
     }
@@ -437,6 +470,14 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
-        const val uid = "uid"
+//        const val userId = "uid"
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(toggle.onOptionsItemSelected(item)){
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 }

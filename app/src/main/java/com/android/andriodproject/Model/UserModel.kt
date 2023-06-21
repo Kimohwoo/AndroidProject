@@ -6,20 +6,11 @@ import java.util.Date
 
 data class UserModel(
     @SerializedName("uid")
-    var uid:String,
-    @SerializedName("title")
-    var title:String,
-    @SerializedName("author")
-    var author:String,
-    @SerializedName("content")
-    var content:String,
-    @SerializedName("regdate")
-    var regdate: Date,
-    @SerializedName("updateDay")
-    var updateDay: Date,
-    @SerializedName("imgId")
-    var imgId:Int,
-//    @SerializedName("uid")
-//    var uid:String,
-//    )
+    var uId:String,
+    @SerializedName("nickName")
+    var nickName:String,
+    @SerializedName("dogname")
+    var dogName: String,
+    @SerializedName("dogProfile")
+    var dogProfile: String,
 ):Serializable

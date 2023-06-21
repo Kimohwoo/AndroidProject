@@ -35,7 +35,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         mRegister = ActivityRegisterBinding.inflate(getLayoutInflater());
 
-        setContentView(mRegister.getRoot());
+
 
 
         mRegister.btnJoin.setOnClickListener(new View.OnClickListener()

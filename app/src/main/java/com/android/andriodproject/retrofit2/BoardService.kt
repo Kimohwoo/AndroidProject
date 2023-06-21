@@ -21,7 +21,7 @@ interface BoardService {
 
     @GET("board/mylist")
     fun getMyList(
-        @Query("author") author: String,
+        @Query("uid") uid: String,
     ): retrofit2.Call<BoardListModel>
 
     @POST("board/detail")
