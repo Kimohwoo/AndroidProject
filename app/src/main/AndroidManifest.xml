@@ -68,9 +68,6 @@
             android:exported="true" />
 
         <activity
-            android:name=".login.Change"
-            android:exported="true" />
-        <activity
             android:name=".WeatherActivity"
             android:exported="true" />
 

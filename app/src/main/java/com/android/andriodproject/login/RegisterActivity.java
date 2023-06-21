@@ -23,64 +23,66 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;           // 파이어베이스 인증
     private DatabaseReference mDatabaseReference; // 실시간 데이터 베이스
 
-    private ActivityRegisterBinding mRegister;
+    private ActivityRegisterBinding mBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference("petproject");
 
-        mRegister = ActivityRegisterBinding.inflate(getLayoutInflater());
 
-        findViewById(R.id.btn_pwd_check);
-        findViewById(R.id.btn_join);
-        findViewById(R.id.btn_cancel);
-
+        mBinding = ActivityRegisterBinding.inflate(getLayoutInflater());
+        View view = mBinding.getRoot();
+        setContentView(view);
+//        mBinding.getRoot().findViewById(R.id.btn_pwd_check).setOnClickListener(onClickListener);
+//        mBinding.getRoot().findViewById(R.id.btn_join).setOnClickListener(onClickListener);
+//        mBinding.getRoot().findViewById(R.id.btn_cancel).setOnClickListener(onClickListener);
+        mBinding.getRoot().setOnClickListener(onClickListener);
 
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener()
     {
         @Override
-        public void onClick(View v)
+        public void onClick(View view)
         {
-            if(v.getId() == R.id.btn_pwd_check)
+            if(view.getId() == R.id.btn_pwd_check)
             {
                 checkPwd();
             }
 
-            else if(v.getId() == R.id.btn_join)
+            else if(view.getId() == R.id.btn_join)
             {
                 startRegister();
             }
 
-            else if(v.getId() == R.id.btn_cancel)
+            else if(view.getId() == R.id.btn_cancel)
             {
                 moveLogin();
             }
         }
     };
 
+
         private void startRegister()
         {
             // 회원가입 처리시작
-            String strEmail = mRegister.joinEmail.getText().toString();
-            String strPwd = mRegister.joinPwd.getText().toString();
-            String strPwdCheck = mRegister.btnPwdCheck.getText().toString();
+            String strEmail = mBinding.joinEmail.getText().toString();
+            String strPwd = mBinding.joinPwd.getText().toString();
+            String strPwdCheck = mBinding.btnPwdCheck.getText().toString();
 
-            if(strEmail.length()>0 && strEmail.length()>0)
+            if(strEmail.length()>0 && strEmail.length()>0 && strPwdCheck.length()>0)
             {
-                if (strEmail.length()>0 && strPwdCheck.length()>0)
-                {
                     mFirebaseAuth.createUserWithEmailAndPassword(strEmail, strPwd).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>()
                     {
                         @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
+                        public void onComplete(@NonNull Task<AuthResult> task)
+                        {
+                            if (task.isSuccessful())
+                            {
                                 FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
                                 UserAccount account = new UserAccount();
                                 account.setIdToken(firebaseUser.getUid());
@@ -91,16 +93,19 @@ public class RegisterActivity extends AppCompatActivity {
                                 mDatabaseReference.child("UserAccount").child(firebaseUser.getUid()).setValue(account);
 
                                 Toast.makeText(RegisterActivity.this, "회원가입에 성공하셨습니다.", Toast.LENGTH_SHORT).show();
-                            } else {
-                                if (task.getException() != null) {
-                                    Toast.makeText(RegisterActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
-                                }
                             }
+                            else
+                                {
+                                    if (task.getException() != null)
+                                    {
+                                        Toast.makeText(RegisterActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
 
                         }
 
                     });
-                }
+
             }
             else
                 {
@@ -110,8 +115,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         private void checkPwd()
         {
-            String strPwd = mRegister.joinPwd.getText().toString();
-            String strPwdCheck = mRegister.btnPwdCheck.getText().toString();
+            String strPwd = mBinding.joinPwd.getText().toString();
+            String strPwdCheck = mBinding.btnPwdCheck.getText().toString();
 
             if(strPwd.equals(strPwdCheck))
                 {
@@ -134,5 +139,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         finish();
     }
+
+
 
 }

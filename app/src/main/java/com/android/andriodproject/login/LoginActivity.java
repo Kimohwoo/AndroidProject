@@ -19,14 +19,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.core.view.Change;
 
 public class LoginActivity extends AppCompatActivity
 {
     private FirebaseAuth mFirebaseAuth;           // 파이어베이스 인증
-    private DatabaseReference mDatabaseReference; // 실시간 데이터 베이스
 
     private ActivityLoginBinding mBinding;
-
 
 
     @Override
@@ -38,16 +37,15 @@ public class LoginActivity extends AppCompatActivity
         FirebaseApp.initializeApp(LoginActivity.this);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference("petproject");
-
 
         mBinding = ActivityLoginBinding.inflate(getLayoutInflater());
         View view = mBinding.getRoot();
         setContentView(view);
 
-        findViewById(R.id.btn_login);
-        findViewById(R.id.join_sign);
-        findViewById(R.id.find_pwd);
+        mBinding.getRoot().findViewById(R.id.btn_login).setOnClickListener(onClickListener);
+        mBinding.getRoot().findViewById(R.id.join_sign).setOnClickListener(onClickListener);
+        mBinding.getRoot().findViewById(R.id.find_pwd).setOnClickListener(onClickListener);
+
 
 
     }
@@ -55,24 +53,27 @@ public class LoginActivity extends AppCompatActivity
         View.OnClickListener onClickListener = new View.OnClickListener()
         {
             @Override
-            public void onClick(View v)
+            public void onClick(View view)
             {
-                if(v.getId() == R.id.btn_login)
+                if(view.getId() == R.id.btn_login)
                 {
                     login();
                 }
 
-                else if(v.getId() == R.id.join_sign)
+                else if(view.getId() == R.id.join_sign)
                 {
                     startLogin();
                 }
 
-                else if(v.getId() == R.id.find_pwd)
+                else if(view.getId() == R.id.find_pwd)
                 {
                     startFindID();
                 }
             }
         };
+
+
+
 
 
         private void login ()
@@ -111,7 +112,7 @@ public class LoginActivity extends AppCompatActivity
             private void startFindID()
             {
                 // 아이디 찾기 화면 이동
-                Intent intent = new Intent(LoginActivity.this, Change.class);
+                Intent intent = new Intent(LoginActivity.this, FindPass.class);
                 startActivity(intent);
 
             }
