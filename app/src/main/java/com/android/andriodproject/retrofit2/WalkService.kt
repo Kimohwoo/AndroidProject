@@ -11,11 +11,11 @@ interface WalkService {
     @GET("api/exercise/findAll")
     fun searchAllData(
         @Query("uid") uid: String,
-    ): Call<WalkListModel>
+    ): Call<List<WalkModel>>
 
-    @GET("api/walk/findByDate")
+    @GET("api/exercise/findByDate")
     fun searchData(
         @Query("uid") uid: String,
         @Query("dayNum") dayNum: String,
-    ): Call<WalkModel>
+    ): Call<List<WalkModel>>
 }

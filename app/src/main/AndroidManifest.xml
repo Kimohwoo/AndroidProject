@@ -27,14 +27,16 @@
         android:theme="@style/Theme.Project"
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
-        <activity
-            android:name=".EditUserActivity"
-            android:exported="false" />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBjfqsqEKIv19AiDOK3d7fX7gP8bAZ3ITE" />
 
+        <activity
+            android:name=".EditUserActivity"
+            android:exported="false" />
+        <activity
+            android:name=".login.RegisterActivity"
+            android:exported="false" />
         <activity
             android:name=".EditBoardActivity"
             android:exported="true"
@@ -81,9 +83,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".login.RegisterActivity"
-            android:exported="true" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
