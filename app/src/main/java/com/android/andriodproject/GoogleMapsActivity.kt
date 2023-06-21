@@ -82,7 +82,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
     // 파일 경로
     private var filePath : String? = null
     lateinit var toggle: ActionBarDrawerToggle
-    private var uid = intent.getStringExtra("uid")
+    private var uid = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,6 +92,8 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
 
         binding = ActivityGoogleMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        uid = intent.getStringExtra("uid") as String
 
         //툴바
         setSupportActionBar(binding.toolbar)
@@ -233,7 +235,8 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
             intent.putExtra(ResultActivity.TOTAL_DISTANCE, "$totalDistance") // 누적 이동 거리를 전달
             intent.putExtra(ResultActivity.EXERCISE_TIME, exerciseTime) // 운동 시간을 전달
             intent.putExtra(ResultActivity.FILE_PATH, "$filePath") // 파일경로
-            intent.putExtra(ResultActivity.UID, "$uid")
+//            intent.putExtra(ResultActivity.UID, "$uid")
+            intent.putExtra("uid", uid)
             Log.d("lsy", "uid: ${uid}")
             startActivity(intent)
         }

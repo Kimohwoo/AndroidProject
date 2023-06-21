@@ -39,7 +39,7 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
         const val EXERCISE_TIME = "exerciseTime"
         const val FILE_PATH = "filePath"
         const val CALORIE = "calorie"
-        const val UID = "uid"
+//        const val UID = "uid"
         const val EXERCISE_ID = ""
     }
 
@@ -67,8 +67,7 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
 //        val filename = "2306120643.txt"
 //        val file = File(filesDir, filename)
 
-
-        val intent = intent
+//        val intent = intent
         val fileName = intent.getStringExtra(FILE_NAME)
         val totalDistance = intent.getStringExtra(TOTAL_DISTANCE)?.toDoubleOrNull()?.toInt()
         val filePath = intent.getStringExtra(FILE_PATH)
@@ -169,10 +168,10 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
                 .build()
 
             val apiService = retrofit.create(ExerciseData::class.java)
-            val user = intent.getSerializableExtra("user") as UserModel
+            val uid = intent.getStringExtra("uid") as String
 
             val request = ExerciseDTO(
-                uid = user.uId,
+                uid = uid,
                 fileName = fileName,
                 filePath = filePath,
                 exerciseTime = formattedExerciseTime,
@@ -209,7 +208,7 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
         val intent = intent
-        val uid = intent.getStringExtra(UID)
+        val uid = intent.getStringExtra("uid")
         val exerciseId = intent.getStringExtra(EXERCISE_ID)
         val fileName = intent.getStringExtra(FILE_NAME)
         val totalDistance = intent.getStringExtra(TOTAL_DISTANCE)?.toDoubleOrNull()?.toInt()
@@ -234,7 +233,7 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
             "ksj12",
             "총거리 : $totalDistance m, 파일이름 : $fileName, 파일경로 : $filePath, 운동시간 : $exerciseTime"
         )
-        Log.d("ksj12", "$uid, $exerciseId")
+        Log.d("ksj12", "uid, excersizeId : $uid, $exerciseId")
 
         val file = if (!fileName.isNullOrEmpty()) {
             File(filesDir, fileName)

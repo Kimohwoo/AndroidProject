@@ -86,8 +86,8 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
-//
-//
+
+
 //        mMainBinding!!.btnMypage.setOnClickListener {
 //            val user = FirebaseAuth.getInstance().currentUser
 //            if (user != null) {
