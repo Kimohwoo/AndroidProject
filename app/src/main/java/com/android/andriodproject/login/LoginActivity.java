@@ -26,8 +26,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding mBinding;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
                     {
                         if(task.isSuccessful()){
                             // 성공 시점
+
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();
