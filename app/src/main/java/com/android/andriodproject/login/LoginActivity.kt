@@ -56,11 +56,11 @@ class LoginActivity : AppCompatActivity() {
                                 call: Call<UserModel>,
                                 response: Response<UserModel>
                             ) {
-                                val userDTO = response.body()
-                                Log.d("lsy", "로그인 유저: ${userDTO}")
-                                if(userDTO != null){
+                                val user = response.body()
+                                Log.d("lsy", "로그인 유저: ${user}")
+                                if(user != null){
                                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                                    intent.putExtra("user", userDTO)
+                                    intent.putExtra("user", user)
                                     startActivity(intent)
                                     finish()
                                 } else {
@@ -70,10 +70,13 @@ class LoginActivity : AppCompatActivity() {
 
                             override fun onFailure(call: Call<UserModel>, t: Throwable) {
                                 call.cancel()
+                                Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_SHORT).show()
                                 Log.d("lsy", "failure 호출")
                             }
 
                         })
+                    } else {
+                        Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_SHORT).show()
                     }
                 }
             } else {

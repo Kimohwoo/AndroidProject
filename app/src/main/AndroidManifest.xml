@@ -8,15 +8,12 @@
         android:required="false" />
 
     <uses-permission android:name="android.permission.CAMERA" />
-
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".retrofit2.MyApplication"
@@ -30,6 +27,9 @@
         android:theme="@style/Theme.Project"
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
+        <activity
+            android:name=".EditUserActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -38,11 +38,11 @@
         <activity
             android:name=".EditBoardActivity"
             android:exported="true"
-            android:parentActivityName=".BoardActivity"/>
+            android:parentActivityName=".BoardActivity" />
         <activity
             android:name=".RegboardActivity"
             android:exported="true"
-            android:parentActivityName=".BoardActivity"/>
+            android:parentActivityName=".BoardActivity" />
         <activity
             android:name=".DetailActivity"
             android:exported="true"
@@ -60,21 +60,18 @@
         <activity
             android:name=".login.MyPage"
             android:exported="true" />
-
         <activity
             android:name=".login.Change"
             android:exported="true" />
         <activity
             android:name=".WeatherActivity"
             android:exported="true" />
-
         <activity
             android:name=".MainActivity"
             android:exported="true" />
         <activity
             android:name=".CalendarActivity"
-            android:exported="true"/>
-
+            android:exported="true" />
         <activity
             android:name=".login.LoginActivity"
             android:exported="true">
@@ -84,7 +81,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".login.RegisterActivity"
             android:exported="true" />

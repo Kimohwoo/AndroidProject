@@ -51,6 +51,8 @@ class RegisterActivity : AppCompatActivity() {
                         val user = UserModel(account.idToken, "", "", "")
                         val userService = (applicationContext as MyApplication).userService
                         val userCall = userService.regUser(user)
+                        Log.d("lsy", "Login uId: ${user.uId}")
+                        Log.d("lsy", "Login Url: ${userCall.request().url().toString()}")
                         userCall.enqueue(object : Callback<UserModel>{
                             override fun onResponse(
                                 call: Call<UserModel>,
@@ -77,6 +79,9 @@ class RegisterActivity : AppCompatActivity() {
                             }
 
                         })
+                    } else {
+                        Toast.makeText(this@RegisterActivity, "회원가입에 실패하셨습니다.", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
         }

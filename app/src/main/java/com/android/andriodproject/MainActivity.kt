@@ -2,6 +2,7 @@ package com.android.andriodproject
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
@@ -23,9 +24,9 @@ class MainActivity : AppCompatActivity() {
     private val fromBottom: Animation by lazy { AnimationUtils.loadAnimation(this, R.anim.from_bottom_anim) }
     private val toBottom: Animation by lazy { AnimationUtils.loadAnimation(this, R.anim.to_bottom_anim) }
     private var clicked = false
-//    private var mFirebaseAuth: FirebaseAuth? = null
-//    private var user: FirebaseUser? = null
-//    private var mMainBinding: ActivityMainBinding? = null
+    private var mFirebaseAuth: FirebaseAuth? = null
+    private var user: FirebaseUser? = null
+    private var mMainBinding: ActivityMainBinding? = null
     private val CAMERA_PERMISSION_REQUEST_CODE = 1001
     private val CAMERA_USAGE_REQUEST_CODE = 1002
     private val CAMERA_STORAGE_REQUEST_CODE = 1003
@@ -44,13 +45,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        mFirebaseAuth = FirebaseAuth.getInstance()
-//        user = FirebaseAuth.getInstance().currentUser
+        mFirebaseAuth = FirebaseAuth.getInstance()
+        user = FirebaseAuth.getInstance().currentUser
         val user2 = intent.getSerializableExtra("user") as UserModel
-
-//        mMainBinding = ActivityMainBinding.inflate(layoutInflater)
-//        val view: View = mMainBinding!!.getRoot()
-//        setContentView(view)
+        Log.d("lsy", "intent 확인 ${user2}")
+        Log.d("lsy", "fire인증값 : ${user?.uid}")
 
         //툴바
         setSupportActionBar(binding.toolbar)
@@ -80,6 +79,13 @@ class MainActivity : AppCompatActivity() {
                 R.id.btn_logout -> {
 //                    mFirebaseAuth!!.signOut()
                     val intent = Intent(this@MainActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                R.id.editBtn -> {
+                    val intent = Intent(this@MainActivity, EditUserActivity::class.java)
+                    intent.putExtra("user", user2)
                     startActivity(intent)
                     finish()
                     true
@@ -116,13 +122,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.weatherBtn.setOnClickListener{
-            val intent = Intent(this, WeatherActivity::class.java)
+            val intent = Intent(this@MainActivity, WeatherActivity::class.java)
             intent.putExtra("user", user2)
             startActivity(intent)
         }
 
         binding.boardBtn.setOnClickListener{
-            val intent = Intent(this, BoardActivity::class.java)
+            val intent = Intent(this@MainActivity, BoardActivity::class.java)
             intent.putExtra("user", user2)
             startActivity(intent)
         }

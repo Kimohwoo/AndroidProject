@@ -29,7 +29,6 @@ import retrofit2.Response
 
 class BoardActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBoardBinding
-    private var user: UserModel = intent.getSerializableExtra("user") as UserModel
     private var pageNo = 1
     private var numOfRows = 10
     private lateinit var boardService: BoardService
@@ -53,32 +52,36 @@ class BoardActivity : AppCompatActivity() {
         allboardBtn = binding.allBoardBtn
         allboardBtn.visibility = View.INVISIBLE
 
-        //툴바
-//        setSupportActionBar(binding.toolbar)
-//        toggle = ActionBarDrawerToggle(this, binding.drawer, R.string.drawer_opened, R.string.drawer_closed)
-//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-//        toggle.syncState()
-//
-//        binding.mainDrawerView.setNavigationItemSelectedListener {
-//                menuItem ->
-//            when(menuItem.itemId){
-//                R.id.excerciseBtn -> {
-//                    val intent = Intent(applicationContext, GoogleMapsActivity::class.java)
-//                    startActivity(intent)
-//                    true
-//                }
-//                R.id.weatherBtn -> {
-//                    startActivity(Intent(applicationContext, WeatherActivity::class.java))
-//                    true
-//                }
-//                R.id.boardBtn -> {
-//                    startActivity(Intent(applicationContext, BoardActivity::class.java))
-//                    true
-//                }
-//                else -> false
-//            }
-//        }
+        val user = intent.getSerializableExtra("user") as UserModel
 
+
+        //툴바
+        setSupportActionBar(binding.toolbar)
+        toggle = ActionBarDrawerToggle(this, binding.drawer, R.string.drawer_opened, R.string.drawer_closed)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toggle.syncState()
+
+        binding.mainDrawerView.setNavigationItemSelectedListener {
+                menuItem ->
+            when(menuItem.itemId){
+                R.id.excerciseBtn -> {
+                    val intent = Intent(applicationContext, GoogleMapsActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.weatherBtn -> {
+                    startActivity(Intent(applicationContext, WeatherActivity::class.java))
+                    true
+                }
+                R.id.boardBtn -> {
+                    startActivity(Intent(applicationContext, BoardActivity::class.java))
+                    true
+                }
+                else -> false
+            }
+        }
+
+//        Log.d("lsy", "user: ${user}")
         //내 글 보기
         binding.myBoardBtn.setOnClickListener {
             val boardListCall = boardService.getMyList(user.uId)
@@ -90,9 +93,13 @@ class BoardActivity : AppCompatActivity() {
                 ) {
                     val boardList = response.body()
                     val myItem = boardList?.item
-                    Log.d("lsy", "myItem 값: ${myItem}")
-                    recycler.adapter =
-                        BoardAdapter(this@BoardActivity, myItem)
+                    if(myItem != null) {
+                        Log.d("lsy", "myItem 값: ${myItem}")
+                        recycler.adapter =
+                            BoardAdapter(this@BoardActivity, myItem)
+                    } else {
+                        Toast.makeText(this@BoardActivity, "작성한 게시글이 없습니다", Toast.LENGTH_SHORT).show()
+                    }
                 }
 
                 override fun onFailure(call: Call<BoardListModel>, t: Throwable) {
@@ -117,10 +124,17 @@ class BoardActivity : AppCompatActivity() {
 
         //regButton
         binding.regButton.setOnClickListener {
-            val intent = Intent(this, RegboardActivity::class.java)
-            startActivity(intent)
+            if(user.nickName != null && user.nickName != "") {
+                intent = Intent(this, RegboardActivity::class.java)
+                intent.putExtra("user", user)
+                startActivity(intent)
+            } else {
+                Toast.makeText(this@BoardActivity, "닉네임이 없습니다!", Toast.LENGTH_SHORT).show()
+                intent = Intent(this@BoardActivity, EditUserActivity::class.java)
+                intent.putExtra("user", user)
+                startActivity(intent)
+            }
         }
-
         //전체글
         val boardListCall = boardService.getBoardList(pageNo, numOfRows)
         Log.d("lsy", "boardList url: " + boardListCall.request().url().toString())

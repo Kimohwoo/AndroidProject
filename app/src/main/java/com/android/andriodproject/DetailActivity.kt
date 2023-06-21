@@ -3,6 +3,7 @@ package com.android.andriodproject
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.UserManager
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -10,6 +11,7 @@ import android.widget.ImageView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import com.android.andriodproject.Model.BoardListModel
 import com.android.andriodproject.Model.BoardModel
+import com.android.andriodproject.Model.UserModel
 import com.android.andriodproject.databinding.ActivityDetailBinding
 import com.android.andriodproject.retrofit2.MyApplication
 import com.bumptech.glide.Glide
@@ -53,6 +55,7 @@ class DetailActivity : AppCompatActivity() {
 
         //나한테 넘어온 인텐트 객체가 가져온 Extra 데이터 받기
         var board: BoardModel = intent.getSerializableExtra("board") as BoardModel
+        val user = intent.getSerializableExtra("user") as UserModel
         Log.d("lsy", "board: ${board}")
         binding.title.text = board.title
         binding.content.text = board.content

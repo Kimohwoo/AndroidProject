@@ -9,7 +9,7 @@ data class UserModel(
     var uId:String,
     @SerializedName("nickName")
     var nickName:String,
-    @SerializedName("dogName")
+    @SerializedName("dogname")
     var dogName: String,
     @SerializedName("dogProfile")
     var dogProfile: String,
