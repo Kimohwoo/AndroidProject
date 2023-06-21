@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.andriodproject.Model.BoardListModel
 import com.android.andriodproject.Model.BoardModel
+import com.android.andriodproject.Model.UserModel
 import com.android.andriodproject.databinding.ActivityBoardBinding
 import com.android.andriodproject.databinding.ItemBoardBinding
 import com.android.andriodproject.retrofit2.BoardAdapter
@@ -28,6 +29,7 @@ import retrofit2.Response
 
 class BoardActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBoardBinding
+    private var user: UserModel = intent.getSerializableExtra("user") as UserModel
     private var pageNo = 1
     private var numOfRows = 10
     private lateinit var boardService: BoardService
@@ -51,37 +53,35 @@ class BoardActivity : AppCompatActivity() {
         allboardBtn = binding.allBoardBtn
         allboardBtn.visibility = View.INVISIBLE
 
-        val author = "nickname002"
-
         //툴바
-        setSupportActionBar(binding.toolbar)
-        toggle = ActionBarDrawerToggle(this, binding.drawer, R.string.drawer_opened, R.string.drawer_closed)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toggle.syncState()
-
-        binding.mainDrawerView.setNavigationItemSelectedListener {
-                menuItem ->
-            when(menuItem.itemId){
-                R.id.excerciseBtn -> {
-                    val intent = Intent(applicationContext, GoogleMapsActivity::class.java)
-                    startActivity(intent)
-                    true
-                }
-                R.id.weatherBtn -> {
-                    startActivity(Intent(applicationContext, WeatherActivity::class.java))
-                    true
-                }
-                R.id.boardBtn -> {
-                    startActivity(Intent(applicationContext, BoardActivity::class.java))
-                    true
-                }
-                else -> false
-            }
-        }
+//        setSupportActionBar(binding.toolbar)
+//        toggle = ActionBarDrawerToggle(this, binding.drawer, R.string.drawer_opened, R.string.drawer_closed)
+//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+//        toggle.syncState()
+//
+//        binding.mainDrawerView.setNavigationItemSelectedListener {
+//                menuItem ->
+//            when(menuItem.itemId){
+//                R.id.excerciseBtn -> {
+//                    val intent = Intent(applicationContext, GoogleMapsActivity::class.java)
+//                    startActivity(intent)
+//                    true
+//                }
+//                R.id.weatherBtn -> {
+//                    startActivity(Intent(applicationContext, WeatherActivity::class.java))
+//                    true
+//                }
+//                R.id.boardBtn -> {
+//                    startActivity(Intent(applicationContext, BoardActivity::class.java))
+//                    true
+//                }
+//                else -> false
+//            }
+//        }
 
         //내 글 보기
         binding.myBoardBtn.setOnClickListener {
-            val boardListCall = boardService.getMyList(author)
+            val boardListCall = boardService.getMyList(user.uId)
             Log.d("lsy", "boardList url: " + boardListCall.request().url().toString())
             boardListCall.enqueue(object : Callback<BoardListModel> {
                 override fun onResponse(

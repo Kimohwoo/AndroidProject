@@ -2,12 +2,13 @@ package com.android.andriodproject
 
 import android.graphics.Color
 import android.os.Bundle
+import android.os.UserManager
 import android.util.Log
 import android.util.TypedValue
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.android.andriodproject.MainActivity.Companion.uid
 import com.android.andriodproject.Model.MapData.ExerciseDTO
+import com.android.andriodproject.Model.UserModel
 import com.android.andriodproject.databinding.ActivityResultBinding
 import com.android.andriodproject.retrofit2.ExerciseData
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -31,8 +32,6 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
 
     lateinit var binding: ActivityResultBinding
     private lateinit var mMap: GoogleMap
-
-
 
     companion object {
         const val FILE_NAME = "filename"
@@ -170,9 +169,10 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
                 .build()
 
             val apiService = retrofit.create(ExerciseData::class.java)
+            val user = intent.getSerializableExtra("user") as UserModel
 
             val request = ExerciseDTO(
-                uid = uid,
+                uid = user.uId,
                 fileName = fileName,
                 filePath = filePath,
                 exerciseTime = formattedExerciseTime,

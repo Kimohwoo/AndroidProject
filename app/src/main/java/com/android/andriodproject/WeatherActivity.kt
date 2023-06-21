@@ -57,8 +57,6 @@ class WeatherActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = GridLayoutManager(this, 2)
 //        binding.recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 
-
-
         //화면 고정
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
@@ -138,7 +136,6 @@ class WeatherActivity : AppCompatActivity() {
                     Log.d("lsy", "Air result 값 확인 : ${airResult}")
 
                     //weatherService
-//                    Log.d("lsy", "Weather url: " + weatherListCall.request().url().toString())
                     weatherListCall.enqueue(object : Callback<WeatherListModel> {
                         override fun onResponse(
                             call: Call<WeatherListModel>,
