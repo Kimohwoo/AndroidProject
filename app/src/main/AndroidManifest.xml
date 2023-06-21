@@ -35,9 +35,6 @@
             android:name=".EditUserActivity"
             android:exported="false" />
         <activity
-            android:name=".login.RegisterActivity"
-            android:exported="false" />
-        <activity
             android:name=".EditBoardActivity"
             android:exported="true"
             android:parentActivityName=".BoardActivity" />
@@ -45,6 +42,10 @@
             android:name=".RegboardActivity"
             android:exported="true"
             android:parentActivityName=".BoardActivity" />
+        <activity
+            android:name=".login.RegisterActivity"
+            android:exported="true"
+            />
         <activity
             android:name=".DetailActivity"
             android:exported="true"

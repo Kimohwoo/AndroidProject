@@ -1,42 +1,42 @@
 {
   "project_info": {
-    "project_number": "564492778043",
-    "firebase_url": "https://project-e9df3-default-rtdb.firebaseio.com",
-    "project_id": "project-e9df3",
-    "storage_bucket": "project-e9df3.appspot.com"
+    "project_number": "797286794843",
+    "firebase_url": "https://androidproject-c4fb3-default-rtdb.firebaseio.com",
+    "project_id": "androidproject-c4fb3",
+    "storage_bucket": "androidproject-c4fb3.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:564492778043:android:489f651306198fd665fa1e",
+        "mobilesdk_app_id": "1:797286794843:android:42b6378169678d71e2617e",
         "android_client_info": {
-          "package_name": "com.android.androidproject"
+          "package_name": "com.android.andriodproject"
         }
       },
       "oauth_client": [
         {
-          "client_id": "564492778043-a7t2qts86lp66494pjf5du3o9o67ni56.apps.googleusercontent.com",
+          "client_id": "797286794843-3fv818vhspd9lb2480ju5f5k74gnobjl.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.android.androidproject",
-            "certificate_hash": "aac7c4e857e5e3fb7e36052745d9ff5db4b6d9b6"
+            "package_name": "com.android.andriodproject",
+            "certificate_hash": "db63ba81a2fe632772eeb037ce5cf183cc87a6bb"
           }
         },
         {
-          "client_id": "564492778043-m91vb174dca1itd64h0dtda2136bk8cl.apps.googleusercontent.com",
+          "client_id": "797286794843-stl6864v295mr7bf4outd9tgsnk6ks0d.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDrkq0k6B7ry-Mq6a0FXvwOFHQBHFOIxQ8"
+          "current_key": "AIzaSyCRtLMHYO9hsN6cBKDtuWyXp4wW1QBLSLc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "564492778043-m91vb174dca1itd64h0dtda2136bk8cl.apps.googleusercontent.com",
+              "client_id": "797286794843-stl6864v295mr7bf4outd9tgsnk6ks0d.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

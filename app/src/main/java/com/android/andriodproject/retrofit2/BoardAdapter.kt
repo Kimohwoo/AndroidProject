@@ -1,19 +1,15 @@
 package com.android.andriodproject.retrofit2
 
-import androidx.core.util.Pair
 import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.android.andriodproject.BoardActivity
 import com.android.andriodproject.DetailActivity
 import com.android.andriodproject.Model.BoardModel
 import com.android.andriodproject.Model.UserModel
 import com.android.andriodproject.databinding.ItemBoardBinding
-import com.bumptech.glide.Glide
 
 class BoardViewHolder(val binding: ItemBoardBinding): RecyclerView.ViewHolder(binding.root){
 
