@@ -1,3 +1,8 @@
+import android.os.Build
+import androidx.annotation.RequiresApi
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+
 class LatXLngY {
     var lat = 0.0
     var lng = 0.0
@@ -9,12 +14,12 @@ object Converter {
     val TO_GRID = 0
 //    val TO_GPS = 1
 
-    fun xyToSido(nx: Int, ny: Int): String{
-        if((nx in 93..101) && (ny in 73..79)){
+    fun xyToSido(nx: Int, ny: Int): String {
+        if ((nx in 93..101) && (ny in 73..79)) {
             return "부산"
-        } else if((nx in 57..63) && (ny in 124..129)){
+        } else if ((nx in 57..63) && (ny in 124..129)) {
             return "서울"
-        } else if((nx in 53..73) && (ny in 113..140)){
+        } else if ((nx in 53..73) && (ny in 113..140)) {
             return "경기도"
         } else {
             return "부산"
@@ -88,6 +93,24 @@ object Converter {
         return rs
     }
 
+    fun calculateSpeed(distance: String, exerciseTime: String): Double? {
+        val distance = distance.toDoubleOrNull()
+        val timeComponents = exerciseTime.split(":")
 
+        if (timeComponents.size != 3) {
+            // exerciseTime이 올바른 형식이 아닐 경우 null 반환
+            return null
+        }
 
+        val hours = timeComponents[0].toDoubleOrNull()
+        val minutes = timeComponents[1].toDoubleOrNull()
+        val seconds = timeComponents[2].toDoubleOrNull()
+
+        if (distance != null && hours != null && minutes != null && seconds != null && (hours != 0.0 || minutes != 0.0 || seconds != 0.0)) {
+            val totalHours = hours + minutes / 60 + seconds / 3600
+            return distance / totalHours
+        }
+
+        return null
+    }
 }

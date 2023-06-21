@@ -20,6 +20,8 @@ import java.util.Calendar
 class CalendarActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityCalendarBinding
+    lateinit var walkListCall: Call<List<WalkModel>>
+    lateinit var dayWalkListCall: Call<List<WalkModel>>
 
     class MyViewHolder (val binding: ItemCalendarListBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -35,10 +37,22 @@ class CalendarActivity : AppCompatActivity() {
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             val binding=(holder as MyViewHolder).binding
             val walk=datas?.get(position)
-            binding.trackingDistance.text= walk?.distance
+
+            val speed = Converter.calculateSpeed(walk?.distance.toString(),
+                walk?.exerciseTime.toString()
+            )
+            val formattedSpeed = speed?.let { String.format("%.2f", it) }
+
+            binding.trackingDate.text= walk?.exerciseId.toString()
+            binding.trackingDistance.text= "${walk?.distance} km"
+            binding.trackingTime.text=walk?.exerciseTime
+            binding.trackingCalories.text="${walk?.calorie} kcal/h"
+            binding.trackingAvgSpeed.text = "${formattedSpeed} km/h"
         }
 
     }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,14 +60,13 @@ class CalendarActivity : AppCompatActivity() {
         binding= ActivityCalendarBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.changeActivity.setOnClickListener {
-            startActivity(Intent(this, GoogleMapsActivity::class.java))
-        }
-
-        binding.calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
-            val calendar = Calendar.getInstance()
-            binding.selectDate.text = String.format("%d년 %d월 %d일", year, month+1, dayOfMonth)
-        }
+        val calendar = Calendar.getInstance()
+        val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
+        val month = calendar.get(Calendar.MONTH) + 1
+        val year = calendar.get(Calendar.YEAR) % 100
+        var dayNum = String.format("%02d%02d%02d", year, month, dayOfMonth)
+//        val uid = intent.getStringExtra("uid") as String
+        val uid = "user001"
 
         binding.calendarRecycle.layoutManager = LinearLayoutManager(this)
 
@@ -72,7 +85,7 @@ class CalendarActivity : AppCompatActivity() {
                 ) {
                     val walkList = response.body()
                     Log.d("nsh","walkList(response.body())의 값: ${walkList}")
-                    binding.calendarRecycle.adapter =CalendarAdapter(walkList)
+
                 }
 
                 override fun onFailure(call: Call<List<WalkModel>>, t: Throwable) {
@@ -81,5 +94,31 @@ class CalendarActivity : AppCompatActivity() {
             }
         )
 
+        binding.changeActivity.setOnClickListener {
+            startActivity(Intent(this, GoogleMapsActivity::class.java))
+        }
+
+        binding.calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
+            binding.selectDate.text = String.format("%d년 %d월 %d일", year, month+1, dayOfMonth)
+            val updatedDayNum = String.format("%02d%02d%02d", year % 100, month + 1, dayOfMonth)
+
+            dayWalkListCall = customWalkApi.searchData(uid, updatedDayNum)
+            Log.d("nsh", "url:" + dayWalkListCall.request().url().toString())
+
+            dayWalkListCall.enqueue(object : Callback<List<WalkModel>> {
+                override fun onResponse(
+                    call: Call<List<WalkModel>>,
+                    response: Response<List<WalkModel>>
+                ) {
+                    val updatedDayWalkList = response.body()
+                    Log.d("nsh", "updatedDayWalkList(response.body())의 값: $updatedDayWalkList")
+                    binding.calendarRecycle.adapter = CalendarActivity.CalendarAdapter(updatedDayWalkList)
+                }
+
+                override fun onFailure(call: Call<List<WalkModel>>, t: Throwable) {
+                    Log.d("nsh", "실패")
+                }
+            })
+        }
     }
 }

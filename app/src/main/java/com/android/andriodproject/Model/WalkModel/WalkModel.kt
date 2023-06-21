@@ -1,7 +1,7 @@
 package com.android.andriodproject.Model.WalkModel
 
 data class WalkModel(
-    var ExerciseId: Long,
+    var exerciseId: Long,
     var img: String?,
     var uid: String?,
     var fileName: String?,
