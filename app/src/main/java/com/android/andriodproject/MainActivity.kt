@@ -32,14 +32,6 @@ class MainActivity : AppCompatActivity() {
     private val CAMERA_STORAGE_REQUEST_CODE = 1003
     lateinit var toggle: ActionBarDrawerToggle
 
-
-    companion object {
-        const val uid = "user001"
-        const val nickname = "Samkim"
-        const val dogname = "똘똘이"
-    }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -62,7 +54,8 @@ class MainActivity : AppCompatActivity() {
             when(menuItem.itemId){
                 R.id.excerciseBtn -> {
                     val intent = Intent(applicationContext, GoogleMapsActivity::class.java)
-                    intent.putExtra("user", user2)
+                    intent.putExtra("uid", "${user2.uId}")
+                    Log.d("lsy", "user: ${user2.uId}")
                     startActivity(intent)
                     true
                 }
@@ -149,7 +142,8 @@ class MainActivity : AppCompatActivity() {
         binding.exerciseBtn.setOnClickListener {
             Toast.makeText(this, "플로팅3", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, GoogleMapsActivity::class.java)
-            intent.putExtra(GoogleMapsActivity.uid, "${user2.uId}")
+            intent.putExtra("uid", "${user2.uId}")
+            Log.d("lsy", "user: ${user2.uId}")
             startActivity(intent)
         }
     }

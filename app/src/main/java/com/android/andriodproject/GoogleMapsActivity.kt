@@ -16,12 +16,10 @@ import android.view.MenuItem
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
 import androidx.core.content.ContextCompat
-import com.android.andriodproject.GoogleMapsActivity.Companion.LOCATION_PERMISSION_REQUEST_CODE
 
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -84,6 +82,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
     // 파일 경로
     private var filePath : String? = null
     lateinit var toggle: ActionBarDrawerToggle
+    private var uid = intent.getStringExtra("uid")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -229,11 +228,13 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
             // 예: 데이터 저장, 리셋 등
 
             val intent = Intent(this, ResultActivity::class.java)
+            Log.d("lsy", "uid: ${uid}")
             intent.putExtra(ResultActivity.FILE_NAME, "$fileName") // 파일 이름을 전달
             intent.putExtra(ResultActivity.TOTAL_DISTANCE, "$totalDistance") // 누적 이동 거리를 전달
             intent.putExtra(ResultActivity.EXERCISE_TIME, exerciseTime) // 운동 시간을 전달
             intent.putExtra(ResultActivity.FILE_PATH, "$filePath") // 파일경로
             intent.putExtra(ResultActivity.UID, "$uid")
+            Log.d("lsy", "uid: ${uid}")
             startActivity(intent)
         }
     }
@@ -466,7 +467,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
-        const val uid = "uid"
+//        const val userId = "uid"
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
