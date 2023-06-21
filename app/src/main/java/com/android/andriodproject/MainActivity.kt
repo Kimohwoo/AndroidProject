@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
             binding.dogName.text = user2.dogName
         }
 
+
         //툴바
         setSupportActionBar(binding.toolbar)
         toggle = ActionBarDrawerToggle(this, binding.drawer, R.string.drawer_opened, R.string.drawer_closed)
