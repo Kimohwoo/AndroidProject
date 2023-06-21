@@ -67,7 +67,7 @@ class DetailActivity : AppCompatActivity() {
 
         Log.d("lsy", "author: ${board.author}")
 
-        if(board.author == "nickname002"){
+        if(board.author == user.nickName){
             binding.updateBtn.visibility = View.VISIBLE
             binding.deleteBtn.visibility = View.VISIBLE
         }

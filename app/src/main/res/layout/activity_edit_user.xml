@@ -21,7 +21,7 @@
         android:id="@+id/dogName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Dogname"
+        android:hint="강아지 이름"
         android:padding="16dp"
         app:layout_constraintBottom_toTopOf="@+id/saveBtn"
         app:layout_constraintTop_toBottomOf="@+id/nickName"

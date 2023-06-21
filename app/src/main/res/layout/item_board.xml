@@ -15,7 +15,7 @@
 
         <ImageView
             android:id="@+id/imgId"
-            android:src="@drawable/amu_bubble_mask"
+            android:src="@drawable/dog"
             android:scaleType="centerCrop"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

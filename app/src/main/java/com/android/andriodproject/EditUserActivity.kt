@@ -31,6 +31,7 @@ class EditUserActivity : AppCompatActivity() {
             val userService = (applicationContext as MyApplication).userService
             val userCall = userService.updateUser(user)
             Log.d("lsy", "Login uId: ${user.uId}")
+            Log.d("lsy", "dogName: ${user.dogName}")
             Log.d("lsy", "Login Url: ${userCall.request().url().toString()}")
             userCall.enqueue(object : Callback<UserModel> {
                 override fun onResponse(

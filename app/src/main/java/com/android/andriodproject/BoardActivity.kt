@@ -53,7 +53,7 @@ class BoardActivity : AppCompatActivity() {
         allboardBtn.visibility = View.INVISIBLE
 
         val user = intent.getSerializableExtra("user") as UserModel
-
+        Log.d("lsy", "user: ${user}")
 
         //툴바
         setSupportActionBar(binding.toolbar)
@@ -81,7 +81,6 @@ class BoardActivity : AppCompatActivity() {
             }
         }
 
-//        Log.d("lsy", "user: ${user}")
         //내 글 보기
         binding.myBoardBtn.setOnClickListener {
             val boardListCall = boardService.getMyList(user.uId)
@@ -96,7 +95,7 @@ class BoardActivity : AppCompatActivity() {
                     if(myItem != null) {
                         Log.d("lsy", "myItem 값: ${myItem}")
                         recycler.adapter =
-                            BoardAdapter(this@BoardActivity, myItem)
+                            BoardAdapter(this@BoardActivity, myItem, user)
                     } else {
                         Toast.makeText(this@BoardActivity, "작성한 게시글이 없습니다", Toast.LENGTH_SHORT).show()
                     }
@@ -115,7 +114,7 @@ class BoardActivity : AppCompatActivity() {
 
         binding.allBoardBtn.setOnClickListener {
             recycler.adapter =
-                BoardAdapter(this@BoardActivity, item)
+                BoardAdapter(this@BoardActivity, item, user)
             myBoardBtn.isEnabled = true
             myBoardBtn.visibility = View.VISIBLE
             allboardBtn.isEnabled = false
@@ -147,7 +146,7 @@ class BoardActivity : AppCompatActivity() {
                 item = boardList?.item
                 Log.d("lsy", "사이즈 : ${item?.size}, data값: ${item}")
                 recycler.adapter =
-                    BoardAdapter(this@BoardActivity, item)
+                    BoardAdapter(this@BoardActivity, item, user)
             }
             override fun onFailure(call: Call<BoardListModel>, t: Throwable) {
                 Log.d("lsy", "Failure 호출")

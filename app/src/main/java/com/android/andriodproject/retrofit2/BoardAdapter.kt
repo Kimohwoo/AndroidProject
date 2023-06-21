@@ -11,13 +11,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.andriodproject.BoardActivity
 import com.android.andriodproject.DetailActivity
 import com.android.andriodproject.Model.BoardModel
+import com.android.andriodproject.Model.UserModel
 import com.android.andriodproject.databinding.ItemBoardBinding
 import com.bumptech.glide.Glide
 
 class BoardViewHolder(val binding: ItemBoardBinding): RecyclerView.ViewHolder(binding.root){
 
 }
-class BoardAdapter(val context: Context, val datas: List<BoardModel>?): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class BoardAdapter(val context: Context, val datas: List<BoardModel>?, val user: UserModel): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemCount(): Int {
         return datas?.size ?: 0
@@ -34,11 +35,12 @@ class BoardAdapter(val context: Context, val datas: List<BoardModel>?): Recycler
 
         binding.title.text = board?.title
         binding.author.text = board?.author
-        Glide.with(context).load(board?.imgId).into(binding.imgId)
+//        Glide.with(context).load(board?.imgId).into(binding.imgId)
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context, DetailActivity::class.java)
             intent.putExtra("board", board)
+            intent.putExtra("user", user)
             Log.d("lsy", "intent: ${intent}")
             context.startActivity(intent)
         }

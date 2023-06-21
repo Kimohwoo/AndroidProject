@@ -24,9 +24,9 @@ class MainActivity : AppCompatActivity() {
     private val fromBottom: Animation by lazy { AnimationUtils.loadAnimation(this, R.anim.from_bottom_anim) }
     private val toBottom: Animation by lazy { AnimationUtils.loadAnimation(this, R.anim.to_bottom_anim) }
     private var clicked = false
-    private var mFirebaseAuth: FirebaseAuth? = null
-    private var user: FirebaseUser? = null
-    private var mMainBinding: ActivityMainBinding? = null
+//    private var mFirebaseAuth: FirebaseAuth? = null
+//    private var user: FirebaseUser? = null
+//    private var mMainBinding: ActivityMainBinding? = null
     private val CAMERA_PERMISSION_REQUEST_CODE = 1001
     private val CAMERA_USAGE_REQUEST_CODE = 1002
     private val CAMERA_STORAGE_REQUEST_CODE = 1003
@@ -37,11 +37,17 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        mFirebaseAuth = FirebaseAuth.getInstance()
-        user = FirebaseAuth.getInstance().currentUser
+//        mFirebaseAuth = FirebaseAuth.getInstance()
+//        user = FirebaseAuth.getInstance().currentUser
         val user2 = intent.getSerializableExtra("user") as UserModel
         Log.d("lsy", "intent 확인 ${user2}")
-        Log.d("lsy", "fire인증값 : ${user?.uid}")
+//        Log.d("lsy", "fire인증값 : ${user?.uid}")
+
+        if(user2.nickName != null) {
+            binding.nickName.text = user2.nickName + "님 안녕하세요"
+        } else if(user2.dogName != null){
+            binding.dogName.text = user2.dogName
+        }
 
         //툴바
         setSupportActionBar(binding.toolbar)
@@ -60,24 +66,33 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.weatherBtn -> {
-                    startActivity(Intent(applicationContext, WeatherActivity::class.java))
+                    intent = Intent(this@MainActivity, WeatherActivity::class.java)
                     intent.putExtra("user", user2)
+                    startActivity(intent)
                     true
                 }
                 R.id.boardBtn -> {
-                    startActivity(Intent(applicationContext, BoardActivity::class.java))
+                    intent = Intent(this@MainActivity, BoardActivity::class.java)
                     intent.putExtra("user", user2)
+                    startActivity(intent)
                     true
                 }
                 R.id.btn_logout -> {
 //                    mFirebaseAuth!!.signOut()
-                    val intent = Intent(this@MainActivity, LoginActivity::class.java)
+                    intent = Intent(this@MainActivity, LoginActivity::class.java)
                     startActivity(intent)
                     finish()
                     true
                 }
                 R.id.editBtn -> {
-                    val intent = Intent(this@MainActivity, EditUserActivity::class.java)
+                    intent = Intent(this@MainActivity, EditUserActivity::class.java)
+                    intent.putExtra("user", user2)
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                R.id.calendarBtn -> {
+                    intent = Intent(this@MainActivity, CalendarActivity::class.java)
                     intent.putExtra("user", user2)
                     startActivity(intent)
                     finish()
