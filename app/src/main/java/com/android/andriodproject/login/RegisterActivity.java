@@ -26,7 +26,8 @@ public class RegisterActivity extends AppCompatActivity {
     private ActivityRegisterBinding mRegister;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
@@ -35,53 +36,103 @@ public class RegisterActivity extends AppCompatActivity {
 
         mRegister = ActivityRegisterBinding.inflate(getLayoutInflater());
 
-
-
-
-        mRegister.btnJoin.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v) {
-                // 회원가입 처리시작
-                String strEmail = mRegister.joinEmail.getText().toString();
-                String strPwd = mRegister.joinPwd.getText().toString();
-
-                mFirebaseAuth.createUserWithEmailAndPassword(strEmail, strPwd).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task)
-                    {
-                        if(task.isSuccessful()){
-                            FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
-                            UserAccount account = new UserAccount();
-                            account.setIdToken(firebaseUser.getUid());
-                            account.setEmailId(firebaseUser.getEmail());
-                            account.setPassword(strPwd);
-
-                            // setValue : database에 insert 하는 방식
-                            mDatabaseReference.child("UserAccount").child(firebaseUser.getUid()).setValue(account);
-
-                            Toast.makeText(RegisterActivity.this, "회원가입에 성공하셨습니다.", Toast.LENGTH_SHORT).show();
-                        }else {
-                            Toast.makeText(RegisterActivity.this, "회원가입에 실패하셨습니다.", Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                });
-            }
-        });
-
-        mRegister.btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                //로그인 화면으로 이동
-                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                startActivity(intent);
-
-                finish();
-            }
-        });
+        findViewById(R.id.btn_pwd_check);
+        findViewById(R.id.btn_join);
+        findViewById(R.id.btn_cancel);
 
 
     }
+
+    View.OnClickListener onClickListener = new View.OnClickListener()
+    {
+        @Override
+        public void onClick(View v)
+        {
+            if(v.getId() == R.id.btn_pwd_check)
+            {
+                checkPwd();
+            }
+
+            else if(v.getId() == R.id.btn_join)
+            {
+                startRegister();
+            }
+
+            else if(v.getId() == R.id.btn_cancel)
+            {
+                moveLogin();
+            }
+        }
+    };
+
+        private void startRegister()
+        {
+            // 회원가입 처리시작
+            String strEmail = mRegister.joinEmail.getText().toString();
+            String strPwd = mRegister.joinPwd.getText().toString();
+            String strPwdCheck = mRegister.btnPwdCheck.getText().toString();
+
+            if(strEmail.length()>0 && strEmail.length()>0)
+            {
+                if (strEmail.length()>0 && strPwdCheck.length()>0)
+                {
+                    mFirebaseAuth.createUserWithEmailAndPassword(strEmail, strPwd).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>()
+                    {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
+                                UserAccount account = new UserAccount();
+                                account.setIdToken(firebaseUser.getUid());
+                                account.setEmailId(firebaseUser.getEmail());
+                                account.setPassword(strPwd);
+
+                                // setValue : database에 insert 하는 방식
+                                mDatabaseReference.child("UserAccount").child(firebaseUser.getUid()).setValue(account);
+
+                                Toast.makeText(RegisterActivity.this, "회원가입에 성공하셨습니다.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                if (task.getException() != null) {
+                                    Toast.makeText(RegisterActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                        }
+
+                    });
+                }
+            }
+            else
+                {
+                    Toast.makeText(RegisterActivity.this, "회원가입에 실패하셨습니다.", Toast.LENGTH_SHORT).show();
+                }
+        }
+
+        private void checkPwd()
+        {
+            String strPwd = mRegister.joinPwd.getText().toString();
+            String strPwdCheck = mRegister.btnPwdCheck.getText().toString();
+
+            if(strPwd.equals(strPwdCheck))
+                {
+                    Toast.makeText(RegisterActivity.this, "비밀번호가 일치합니다.", Toast.LENGTH_SHORT).show();
+                }
+            else
+            {
+                Toast.makeText(RegisterActivity.this, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+
+
+
+    private void moveLogin()
+    {
+        //로그인 화면으로 이동
+        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+        startActivity(intent);
+
+        finish();
+    }
+
 }

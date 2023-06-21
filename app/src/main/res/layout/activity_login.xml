@@ -69,6 +69,7 @@
         android:paddingRight="10dp"
         android:background="@drawable/btn_yellow"
         >
+
         <TextView
             android:id="@+id/join_sign"
             android:layout_width="match_parent"
