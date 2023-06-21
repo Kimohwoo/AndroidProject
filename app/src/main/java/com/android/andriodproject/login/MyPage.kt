@@ -1,43 +1,26 @@
-package com.android.andriodproject.login;
+package com.android.andriodproject.login
 
-import android.os.Bundle;
-import android.view.View;
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import com.android.andriodproject.R
+import com.android.andriodproject.databinding.ActivityMyPageBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.android.andriodproject.R;
-import com.android.andriodproject.databinding.ActivityMyPageBinding;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-public class MyPage extends AppCompatActivity {
-
-    private FirebaseUser user;
-    private FirebaseAuth userAuth;
-    private ActivityMyPageBinding mBinding;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        userAuth = FirebaseAuth.getInstance();
-
-        mBinding = ActivityMyPageBinding.inflate(getLayoutInflater());
-//        View view = mBinding.getRoot();
+class MyPage : AppCompatActivity() {
+    private var user: FirebaseUser? = null
+    private var userAuth: FirebaseAuth? = null
+    private var mBinding: ActivityMyPageBinding? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_login)
+        user = FirebaseAuth.getInstance().currentUser
+        userAuth = FirebaseAuth.getInstance()
+        mBinding = ActivityMyPageBinding.inflate(
+            layoutInflater
+        )
+        //        View view = mBinding.getRoot();
 //        setContentView(view);
-
-
-
-
-        mBinding.btnPrivCheck.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-
-            }
-        });
+        mBinding!!.btnPrivCheck.setOnClickListener { }
     }
 }

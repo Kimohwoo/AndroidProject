@@ -44,6 +44,27 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    signingConfigs {
+        debug {
+            try {
+                def debugKeystore = System.getenv("HOME") + "/.android/debug.keystore"
+                def debugKeystorePassword = "android"
+                def debugKeystoreAlias = "androiddebugkey"
+                def debugKeystoreAliasPassword = "android"
+
+                def process = Runtime.getRuntime().exec('keytool -exportcert -alias ' + debugKeystoreAlias + ' -keystore ' + debugKeystore + ' -storepass ' + debugKeystorePassword + ' -keypass ' + debugKeystoreAliasPassword + ' | openssl sha1 -binary | openssl base64')
+                process.inputStream.eachLine { line ->
+                    if (line.contains(':')) {
+                        def shaLine = line.split(':')[1].trim()
+                        println("SHA-1: " + shaLine)
+                    }
+                }
+            } catch (Exception e) {
+                println("Error generating SHA-1: " + e.message)
+            }
+        }
+    }
 }
 
 dependencies {
@@ -84,6 +105,8 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
     implementation 'androidx.lifecycle:lifecycle-service:2.4.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
+    implementation 'com.google.firebase:firebase-storage-ktx:20.2.1'
+    implementation 'com.google.firebase:firebase-storage:20.1.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
@@ -98,7 +121,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-database-ktx:20.2.2'
 
     // Import the BoM for the Firebase platform
-    implementation platform('com.google.firebase:firebase-bom:32.1.0')
+    implementation platform('com.google.firebase:firebase-bom:32.1.1')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 
     // Add the dependency for the Realtime Database library
     // When using the BoM, you don't specify versions in Firebase library dependencies

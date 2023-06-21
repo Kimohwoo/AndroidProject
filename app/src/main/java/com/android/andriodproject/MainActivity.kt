@@ -1,19 +1,34 @@
 package com.android.andriodproject
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import com.android.andriodproject.databinding.ActivityMainBinding
 import com.android.andriodproject.login.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.storage.FirebaseStorage
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 class MainActivity : AppCompatActivity() {
@@ -26,10 +41,12 @@ class MainActivity : AppCompatActivity() {
     private var mFirebaseAuth: FirebaseAuth? = null
     private var user: FirebaseUser? = null
     private var mMainBinding: ActivityMainBinding? = null
-    private val CAMERA_PERMISSION_REQUEST_CODE = 1001
-    private val CAMERA_USAGE_REQUEST_CODE = 1002
-    private val CAMERA_STORAGE_REQUEST_CODE = 1003
     lateinit var toggle: ActionBarDrawerToggle
+
+
+
+    private var cameraLauncher: ActivityResultLauncher<Uri>? = null
+    private val storageReference = FirebaseStorage.getInstance().reference
 
 
     companion object {
@@ -50,6 +67,13 @@ class MainActivity : AppCompatActivity() {
         mMainBinding = ActivityMainBinding.inflate(layoutInflater)
 //        val view: View = mMainBinding!!.getRoot()
 //        setContentView(view)
+
+        //카메라
+        cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { isPictureTaken ->
+            if (isPictureTaken) {
+                handleCameraResult()
+            }
+        }
 
         //툴바
         setSupportActionBar(binding.toolbar)
@@ -107,6 +131,9 @@ class MainActivity : AppCompatActivity() {
 //            }
 //        }
 
+
+
+        //플로팅버튼
         binding.addBtn.setOnClickListener {
             onAddButtonClicked()
         }
@@ -125,11 +152,8 @@ class MainActivity : AppCompatActivity() {
 
         binding.cameraBtn.setOnClickListener {
             Toast.makeText(this, "플로팅1", Toast.LENGTH_SHORT).show()
-//            if(cameraPermission() && cameraStoragePermission()){
-//                openCamera()
-//            }else{
-//                requestPermissions()
-//            }
+            checkCameraPermissionAndOpenCamera()
+
         }
 
 
@@ -141,6 +165,65 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, GoogleMapsActivity::class.java)
             intent.putExtra(GoogleMapsActivity.uid, "$uid")
             startActivity(intent)
+        }
+    }
+
+
+    private fun checkCameraPermissionAndOpenCamera() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            launchCamera()
+        } else {
+            // Request camera permission
+            requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+        }
+    }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (isGranted) {
+                // Permission is granted
+                launchCamera()
+            } else {
+                // Permission is denied
+                Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    private fun launchCamera() {
+        val photoUri = createImageUri()
+        cameraLauncher?.launch(photoUri)
+    }
+
+    private fun createImageUri(): Uri {
+        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        Log.d("ksj", "$storageDir")
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val fileName = "IMG_$timeStamp.jpg"
+        val file = File(storageDir, fileName)
+        return FileProvider.getUriForFile(this, "$packageName.provider", file)
+    }
+
+    private fun handleCameraResult() {
+        val storageRef = storageReference.child("profile_images").child("$uid.jpg")
+        val imageUri = createImageUri()
+        val uploadTask = storageRef.putFile(imageUri)
+
+        uploadTask.continueWithTask { task ->
+            if (!task.isSuccessful) {
+                task.exception?.let {
+                    throw it
+                }
+            }
+            storageRef.downloadUrl
+        }.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val downloadUri = task.result
+                // Update profile picture with downloadUri
+                // ...
+                Toast.makeText(this, "Profile picture updated", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Failed to upload profile picture", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

@@ -26,55 +26,62 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/layout">
-
-    <fragment
-        android:id="@+id/map"
-        class="com.google.android.gms.maps.SupportMapFragment"
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="635dp" />
-    <TextView
-        android:id="@+id/exerciseTimeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="00:00:00"
-        android:layout_marginTop="1500px"
-        android:layout_marginLeft="400px"
-        android:gravity="center"
-        android:textSize="30sp"
-        />
+        android:layout_height="match_parent"
+        android:id="@+id/layout">
 
-    <Button
-        android:id="@+id/startButton"
-        android:layout_width="wrap_content"
-        android:layout_height="82dp"
-        android:layout_marginLeft="100px"
-        android:layout_marginTop="1800px"
-        android:background="@drawable/walk_ic_free_icon_font_play"
-        android:text="START" />
+        <fragment
+            android:id="@+id/map"
+            class="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="635dp" />
+        <TextView
+            android:id="@+id/exerciseTimeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00:00"
+            android:layout_marginTop="1500px"
+            android:layout_marginLeft="400px"
+            android:gravity="center"
+            android:textSize="30sp"
+            />
 
-    <Button
-        android:id="@+id/pauseButton"
-        android:layout_width="wrap_content"
-        android:layout_height="82dp"
-        android:layout_marginLeft="420px"
-        android:layout_marginTop="1800px"
-        android:background="@drawable/walk_ic_free_icon_font_pause"
-        android:enabled="false"
-        android:text="PAUSE" />
+        <Button
+            android:id="@+id/startButton"
+            android:layout_width="wrap_content"
+            android:layout_height="82dp"
+            android:layout_marginLeft="100px"
+            android:layout_marginTop="1800px"
+            android:background="@drawable/walk_ic_free_icon_font_play"
+            android:text="START" />
 
-    <Button
-        android:id="@+id/stopButton"
+        <Button
+            android:id="@+id/pauseButton"
+            android:layout_width="wrap_content"
+            android:layout_height="82dp"
+            android:layout_marginLeft="420px"
+            android:layout_marginTop="1800px"
+            android:background="@drawable/walk_ic_free_icon_font_pause"
+            android:enabled="false"
+            android:text="PAUSE" />
+
+        <Button
+            android:id="@+id/stopButton"
+            android:layout_width="wrap_content"
+            android:layout_height="82dp"
+            android:layout_marginTop="1800px"
+            android:layout_marginLeft="750px"
+            android:text="STOP"
+            android:background="@drawable/walk_ic_free_icon_font_stop"
+            android:enabled="false"
+            />
+    </FrameLayout>
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/main_drawer_view"
         android:layout_width="wrap_content"
-        android:layout_height="82dp"
-        android:layout_marginTop="1800px"
-        android:layout_marginLeft="750px"
-        android:text="STOP"
-        android:background="@drawable/walk_ic_free_icon_font_stop"
-        android:enabled="false"
-        />
-</FrameLayout>
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/navigation_header"
+        app:menu="@menu/menu_navigation" />
 </androidx.drawerlayout.widget.DrawerLayout>

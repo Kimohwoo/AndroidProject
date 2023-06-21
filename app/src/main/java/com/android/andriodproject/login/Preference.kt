@@ -1,7 +1,3 @@
-package com.android.andriodproject.login;
+package com.android.andriodproject.login
 
-public class Preference {
-
-
-
-}
+class Preference 

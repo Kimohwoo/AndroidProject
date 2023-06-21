@@ -1,33 +1,10 @@
-package com.android.andriodproject.login;
-public class UserAccount
-{
-    private String idToken; //Firebase Uid(고유 정보)
-    private String emailId; // 이메일 아이디
-    private String password; // 비밀번호
+package com.android.andriodproject.login
 
-    public UserAccount(){}
-
-    public void setIdToken(String idToken) {
-        this.idToken = idToken;
-    }
-
-    public String getIdToken() {
-        return idToken;
-    }
-
-    public void setEmailId(String emailId) {
-        this.emailId = emailId;
-    }
-
-    public String getEmailId() {
-        return emailId;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPassword() {
-        return password;
-    }
+class UserAccount {
+    var idToken //Firebase Uid(고유 정보)
+            : String? = null
+    var emailId // 이메일 아이디
+            : String? = null
+    var password // 비밀번호
+            : String? = null
 }
