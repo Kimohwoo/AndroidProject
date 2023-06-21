@@ -3,6 +3,7 @@ package com.android.andriodproject.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -37,10 +38,10 @@ public class RegisterActivity extends AppCompatActivity {
         mBinding = ActivityRegisterBinding.inflate(getLayoutInflater());
         View view = mBinding.getRoot();
         setContentView(view);
-//        mBinding.getRoot().findViewById(R.id.btn_pwd_check).setOnClickListener(onClickListener);
-//        mBinding.getRoot().findViewById(R.id.btn_join).setOnClickListener(onClickListener);
-//        mBinding.getRoot().findViewById(R.id.btn_cancel).setOnClickListener(onClickListener);
-        mBinding.getRoot().setOnClickListener(onClickListener);
+
+        mBinding.btnPwdCheck.setOnClickListener(onClickListener);
+        mBinding.btnJoin.setOnClickListener(onClickListener);
+        mBinding.btnCancel.setOnClickListener(onClickListener);
 
     }
 
@@ -49,6 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
         @Override
         public void onClick(View view)
         {
+            
             if(view.getId() == R.id.btn_pwd_check)
             {
                 checkPwd();
@@ -72,9 +74,9 @@ public class RegisterActivity extends AppCompatActivity {
             // 회원가입 처리시작
             String strEmail = mBinding.joinEmail.getText().toString();
             String strPwd = mBinding.joinPwd.getText().toString();
-            String strPwdCheck = mBinding.btnPwdCheck.getText().toString();
+            String checkJoinPwd = mBinding.checkJoinPwd.getText().toString();
 
-            if(strEmail.length()>0 && strEmail.length()>0 && strPwdCheck.length()>0)
+            if(strEmail.length()>0 && strEmail.length()>0 && checkJoinPwd.length()>0)
             {
                     mFirebaseAuth.createUserWithEmailAndPassword(strEmail, strPwd).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>()
                     {
@@ -116,15 +118,22 @@ public class RegisterActivity extends AppCompatActivity {
         private void checkPwd()
         {
             String strPwd = mBinding.joinPwd.getText().toString();
-            String strPwdCheck = mBinding.btnPwdCheck.getText().toString();
+            String checkJoinPwd = mBinding.checkJoinPwd.getText().toString();
 
-            if(strPwd.equals(strPwdCheck))
-                {
-                    Toast.makeText(RegisterActivity.this, "비밀번호가 일치합니다.", Toast.LENGTH_SHORT).show();
-                }
-            else
+            if(strPwd.length()>0 && checkJoinPwd.length()>0)
             {
-                Toast.makeText(RegisterActivity.this, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
+                if(strPwd.equals(checkJoinPwd))
+                    {
+
+                        Toast.makeText(RegisterActivity.this, "비밀번호가 일치합니다.", Toast.LENGTH_SHORT).show();
+                    }
+                else if(strPwd != checkJoinPwd)
+                {
+
+                    Toast.makeText(RegisterActivity.this, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
+                }
+            }else {
+                Toast.makeText(RegisterActivity.this, "비밀번호를 다시 확인해 주세요", Toast.LENGTH_SHORT).show();
             }
         }
 
