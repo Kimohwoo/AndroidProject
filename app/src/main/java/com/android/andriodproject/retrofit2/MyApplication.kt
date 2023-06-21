@@ -28,21 +28,21 @@ class MyApplication: Application() {
 
     val boardRetrofit: Retrofit
         get() = Retrofit.Builder()
-//            .baseUrl("http://192.168.200.101:8083/")
-            .baseUrl("http://10.100.105.153:8083/")
+            .baseUrl("http://192.168.200.102:8083/")
+//            .baseUrl("http://10.100.105.153:8083/")
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
     val walkRetrofit: Retrofit
         get() = Retrofit.Builder()
-            .baseUrl("http://10.100.105.153:8083/")
-//            .baseUrl("http://192.168.200.102:8083/")
+//            .baseUrl("http://10.100.105.153:8083/")
+            .baseUrl("http://192.168.200.102:8083/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     val userRetrofit: Retrofit
         get() = Retrofit.Builder()
-            .baseUrl("http://10.100.105.153:8083/")
-//            .baseUrl("http://192.168.200.102:8083/")
+//            .baseUrl("http://10.100.105.153:8083/")
+            .baseUrl("http://192.168.200.102:8083/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

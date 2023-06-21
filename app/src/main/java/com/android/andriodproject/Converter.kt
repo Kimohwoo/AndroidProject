@@ -21,6 +21,10 @@ object Converter {
             return "서울"
         } else if ((nx in 53..73) && (ny in 113..140)) {
             return "경기도"
+        } else if ((nx in 66..69) && (ny in 98..103)) {
+            return "대전"
+        } else if ((nx in 86..91) && (ny in 86..92)) {
+            return "대구"
         } else {
             return "부산"
         }

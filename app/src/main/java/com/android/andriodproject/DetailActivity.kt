@@ -13,6 +13,7 @@ import com.android.andriodproject.Model.BoardListModel
 import com.android.andriodproject.Model.BoardModel
 import com.android.andriodproject.Model.UserModel
 import com.android.andriodproject.databinding.ActivityDetailBinding
+import com.android.andriodproject.login.LoginActivity
 import com.android.andriodproject.retrofit2.MyApplication
 import com.bumptech.glide.Glide
 import retrofit2.Call
@@ -27,6 +28,9 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        var board: BoardModel = intent.getSerializableExtra("board") as BoardModel
+        val user = intent.getSerializableExtra("user") as UserModel
+
         //툴바
         setSupportActionBar(binding.toolbar)
         toggle = ActionBarDrawerToggle(this, binding.drawer, R.string.drawer_opened, R.string.drawer_closed)
@@ -38,15 +42,42 @@ class DetailActivity : AppCompatActivity() {
             when(menuItem.itemId){
                 R.id.excerciseBtn -> {
                     val intent = Intent(applicationContext, GoogleMapsActivity::class.java)
+                    intent.putExtra("uid", "${user.uId}")
+                    Log.d("lsy", "user: ${user.uId}")
                     startActivity(intent)
                     true
                 }
                 R.id.weatherBtn -> {
-                    startActivity(Intent(applicationContext, WeatherActivity::class.java))
+                    intent = Intent(this@DetailActivity, WeatherActivity::class.java)
+                    intent.putExtra("user", user)
+                    startActivity(intent)
                     true
                 }
                 R.id.boardBtn -> {
-                    startActivity(Intent(applicationContext, BoardActivity::class.java))
+                    intent = Intent(this@DetailActivity, BoardActivity::class.java)
+                    intent.putExtra("user", user)
+                    startActivity(intent)
+                    true
+                }
+                R.id.btn_logout -> {
+//                    mFirebaseAuth!!.signOut()
+                    intent = Intent(this@DetailActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                R.id.editBtn -> {
+                    intent = Intent(this@DetailActivity, EditUserActivity::class.java)
+                    intent.putExtra("user", user)
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                R.id.home -> {
+                    intent = Intent(this@DetailActivity, MainActivity::class.java)
+                    intent.putExtra("user", user)
+                    startActivity(intent)
+                    finish()
                     true
                 }
                 else -> false
@@ -54,8 +85,6 @@ class DetailActivity : AppCompatActivity() {
         }
 
         //나한테 넘어온 인텐트 객체가 가져온 Extra 데이터 받기
-        var board: BoardModel = intent.getSerializableExtra("board") as BoardModel
-        val user = intent.getSerializableExtra("user") as UserModel
         Log.d("lsy", "board: ${board}")
         binding.title.text = board.title
         binding.content.text = board.content

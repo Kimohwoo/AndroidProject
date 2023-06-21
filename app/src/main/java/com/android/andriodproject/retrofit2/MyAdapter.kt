@@ -29,11 +29,30 @@ class MyAdapter(val context: Context, val datas: List<WeatherModel>?): RecyclerV
         val weather = datas?.get(position)
 
         when(weather?.category) {
-            "SKY" -> binding.sky.text = "SKY: " + weather?.fcstValue
-            "POP" -> binding.rainfall.text = "강수: " + weather?.fcstValue
-            "TMP" -> binding.tmp2.text = "온도: " + weather?.fcstValue
-            "PCP" -> binding.rainfall.text = "PCP: " + weather?.fcstValue
-            "PTY" -> binding.rainfall.text = "PTY: " + weather?.fcstValue
+            "SKY" -> {
+                when(weather?.fcstValue){
+                    "1" -> binding.sky.text = "맑음"
+                    "3" -> binding.sky.text = "구름많음"
+                    "4" -> binding.sky.text = "흐림"
+                }
+            }
+            "POP" -> binding.rainfall.text = "강수확률: " + weather?.fcstValue + "%"
+            "TMP" -> binding.tmp2.text = "기온: " + weather?.fcstValue
+            "PCP" -> {
+                when(weather?.fcstValue){
+                    "강수없음" -> binding.pcp.text = weather?.fcstValue
+                    else -> binding.pcp.text = "강수량: " + weather?.fcstValue + "mm"
+                }
+            }
+            "PTY" -> {
+                when(weather?.fcstValue){
+                    "0" -> binding.pty.text = "화창한 날씨"
+                    "1" -> binding.pty.text = "비"
+                    "2" -> binding.pty.text = "비 또는 눈"
+                    "3" -> binding.pty.text = "눈"
+                    "4" -> binding.pty.text = "소나기"
+                }
+            }
         }
     }
 

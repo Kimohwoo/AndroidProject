@@ -19,6 +19,7 @@ import com.android.andriodproject.Model.BoardModel
 import com.android.andriodproject.Model.UserModel
 import com.android.andriodproject.databinding.ActivityBoardBinding
 import com.android.andriodproject.databinding.ItemBoardBinding
+import com.android.andriodproject.login.LoginActivity
 import com.android.andriodproject.retrofit2.BoardAdapter
 import com.android.andriodproject.retrofit2.BoardService
 import com.android.andriodproject.retrofit2.MyApplication
@@ -66,15 +67,42 @@ class BoardActivity : AppCompatActivity() {
             when(menuItem.itemId){
                 R.id.excerciseBtn -> {
                     val intent = Intent(applicationContext, GoogleMapsActivity::class.java)
+                    intent.putExtra("uid", "${user.uId}")
+                    Log.d("lsy", "user: ${user.uId}")
                     startActivity(intent)
                     true
                 }
                 R.id.weatherBtn -> {
-                    startActivity(Intent(applicationContext, WeatherActivity::class.java))
+                    intent = Intent(this@BoardActivity, WeatherActivity::class.java)
+                    intent.putExtra("user", user)
+                    startActivity(intent)
                     true
                 }
                 R.id.boardBtn -> {
-                    startActivity(Intent(applicationContext, BoardActivity::class.java))
+                    intent = Intent(this@BoardActivity, BoardActivity::class.java)
+                    intent.putExtra("user", user)
+                    startActivity(intent)
+                    true
+                }
+                R.id.btn_logout -> {
+//                    mFirebaseAuth!!.signOut()
+                    intent = Intent(this@BoardActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                R.id.editBtn -> {
+                    intent = Intent(this@BoardActivity, EditUserActivity::class.java)
+                    intent.putExtra("user", user)
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                R.id.home -> {
+                    intent = Intent(this@BoardActivity, MainActivity::class.java)
+                    intent.putExtra("user", user)
+                    startActivity(intent)
+                    finish()
                     true
                 }
                 else -> false
@@ -134,7 +162,7 @@ class BoardActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
-        //전체글
+        //전체글0
         val boardListCall = boardService.getBoardList(pageNo, numOfRows)
         Log.d("lsy", "boardList url: " + boardListCall.request().url().toString())
         var call = boardListCall.enqueue(object : Callback<BoardListModel> {
@@ -163,8 +191,6 @@ class BoardActivity : AppCompatActivity() {
                         layoutManager!!.findLastCompletelyVisibleItemPosition() // 화면에 보이는 마지막 아이템의 position
                     val itemTotalCount =
                         recyclerView.adapter!!.itemCount - 1 // 어댑터에 등록된 아이템의 총 개수 -1
-//                Log.d("lsy", "last: ${lastVisibleItemPosition}")
-//                Log.d("lsy", "itemTotal = ${itemTotalCount}")
                     // 스크롤이 끝에 도달했는지 확인
                     if (lastVisibleItemPosition == itemTotalCount){
 //                        isLoading = true
