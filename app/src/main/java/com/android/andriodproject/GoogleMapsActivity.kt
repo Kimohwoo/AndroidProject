@@ -20,6 +20,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback
 import androidx.core.content.ContextCompat
+import com.android.andriodproject.Model.UserModel
 
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -31,6 +32,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.android.andriodproject.PermissionUtils.PermissionDeniedDialog.Companion.newInstance
 import com.android.andriodproject.PermissionUtils.isPermissionGranted
 import com.android.andriodproject.databinding.ActivityGoogleMapsBinding
+import com.android.andriodproject.login.LoginActivity
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
@@ -94,6 +96,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
         setContentView(binding.root)
 
         uid = intent.getStringExtra("uid") as String
+        val user = intent.getSerializableExtra("user") as UserModel
 
         //툴바
         setSupportActionBar(binding.toolbar)
@@ -107,15 +110,42 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
             when(menuItem.itemId){
                 R.id.excerciseBtn -> {
                     val intent = Intent(applicationContext, GoogleMapsActivity::class.java)
+                    intent.putExtra("uid", "${user.uId}")
+                    Log.d("lsy", "user: ${user.uId}")
                     startActivity(intent)
                     true
                 }
                 R.id.weatherBtn -> {
-                    startActivity(Intent(applicationContext, WeatherActivity::class.java))
+                    intent = Intent(this@GoogleMapsActivity, WeatherActivity::class.java)
+                    intent.putExtra("user", user)
+                    startActivity(intent)
                     true
                 }
                 R.id.boardBtn -> {
-                    startActivity(Intent(applicationContext, BoardActivity::class.java))
+                    intent = Intent(this@GoogleMapsActivity, BoardActivity::class.java)
+                    intent.putExtra("user", user)
+                    startActivity(intent)
+                    true
+                }
+                R.id.btn_logout -> {
+//                    mFirebaseAuth!!.signOut()
+                    intent = Intent(this@GoogleMapsActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                R.id.editBtn -> {
+                    intent = Intent(this@GoogleMapsActivity, EditUserActivity::class.java)
+                    intent.putExtra("user", user)
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                R.id.home -> {
+                    intent = Intent(this@GoogleMapsActivity, MainActivity::class.java)
+                    intent.putExtra("user", user)
+                    startActivity(intent)
+                    finish()
                     true
                 }
                 else -> false

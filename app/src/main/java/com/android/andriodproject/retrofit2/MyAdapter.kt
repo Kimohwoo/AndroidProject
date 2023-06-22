@@ -70,7 +70,7 @@ class AirAdapter(val context: Context, val datas: List<AirPollutionModel>): Recy
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val binding = (holder as MyViewHolder).binding
         val airPollution = datas?.get(position)
-        val time = getTime("hh00")
+//        val time = getTime("hh00")
 
 
     }
