@@ -222,21 +222,9 @@ class BoardActivity : AppCompatActivity() {
     }
 
     private fun getMoreData(data: MutableList<BoardModel>?) {
-        if (data != null) {
-            Log.d("lsy","data의 갯수 : ${data.size}")
-        }
-        // 9
         binding.boardRecycler.adapter?.notifyItemInserted(item?.size?.minus(1)?: 0)
-//        item?.removeAt(item?.size?.minus(1)?: 0)
-        //9
-//        item?.removeAt(item?.size?.minus(2)?: 0)
-
-        //10
         val currentSize = item?.size
         if (currentSize != null) {
-
-            //Log.d("lsy","data 0 조회 : ${data?.get(0)}")
-            //Log.d("lsy","data 9 조회 : ${data?.get(9)}")
             item?.addAll(data as Collection<BoardModel>)
         }
         binding.boardRecycler.adapter?.notifyDataSetChanged()

@@ -31,7 +31,6 @@ class BoardAdapter(val context: Context, val datas: List<BoardModel>?, val user:
 
         binding.title.text = board?.title
         binding.author.text = board?.author
-//        Glide.with(context).load(board?.imgId).into(binding.imgId)
 
         holder.itemView.setOnClickListener {
             val intent = Intent(context, DetailActivity::class.java)

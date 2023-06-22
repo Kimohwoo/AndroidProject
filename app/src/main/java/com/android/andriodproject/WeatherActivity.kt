@@ -132,9 +132,6 @@ class WeatherActivity : AppCompatActivity() {
                         "4" -> -10
                         else -> 0
                     }
-
-                    Log.d("lsy", "Air result 값 확인 : ${airResult}")
-
                     //weatherService
                     weatherListCall.enqueue(object : Callback<WeatherListModel> {
                         override fun onResponse(

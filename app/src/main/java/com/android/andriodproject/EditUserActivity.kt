@@ -30,9 +30,6 @@ class EditUserActivity : AppCompatActivity() {
             val user = UserModel(user.uId, binding.nickName.text.toString(), binding.dogName.text.toString(), user.dogProfile)
             val userService = (applicationContext as MyApplication).userService
             val userCall = userService.updateUser(user)
-            Log.d("lsy", "Login uId: ${user.uId}")
-            Log.d("lsy", "dogName: ${user.dogName}")
-            Log.d("lsy", "Login Url: ${userCall.request().url().toString()}")
             userCall.enqueue(object : Callback<UserModel> {
                 override fun onResponse(
                     call: Call<UserModel>,
@@ -52,7 +49,6 @@ class EditUserActivity : AppCompatActivity() {
 
                 override fun onFailure(call: Call<UserModel>, t: Throwable) {
                     call.cancel()
-                    Toast.makeText(this@EditUserActivity, "로그인 실패", Toast.LENGTH_SHORT).show()
                     Log.d("lsy", "failure 호출")
                 }
 
