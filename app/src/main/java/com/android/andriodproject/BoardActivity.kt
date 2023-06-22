@@ -23,6 +23,9 @@ import com.android.andriodproject.login.LoginActivity
 import com.android.andriodproject.retrofit2.BoardAdapter
 import com.android.andriodproject.retrofit2.BoardService
 import com.android.andriodproject.retrofit2.MyApplication
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -40,6 +43,7 @@ class BoardActivity : AppCompatActivity() {
     val recycler: RecyclerView by lazy {
         binding.boardRecycler
     }
+    private var mFirebaseAuth: FirebaseAuth? = Firebase.auth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBoardBinding.inflate(layoutInflater)
@@ -68,6 +72,7 @@ class BoardActivity : AppCompatActivity() {
                 R.id.excerciseBtn -> {
                     val intent = Intent(applicationContext, GoogleMapsActivity::class.java)
                     intent.putExtra("uid", "${user.uId}")
+                    intent.putExtra("user", user)
                     Log.d("lsy", "user: ${user.uId}")
                     startActivity(intent)
                     true
@@ -85,7 +90,7 @@ class BoardActivity : AppCompatActivity() {
                     true
                 }
                 R.id.btn_logout -> {
-//                    mFirebaseAuth!!.signOut()
+                    mFirebaseAuth!!.signOut()
                     intent = Intent(this@BoardActivity, LoginActivity::class.java)
                     startActivity(intent)
                     finish()

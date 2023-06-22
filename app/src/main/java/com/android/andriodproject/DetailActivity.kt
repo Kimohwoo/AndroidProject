@@ -16,6 +16,7 @@ import com.android.andriodproject.databinding.ActivityDetailBinding
 import com.android.andriodproject.login.LoginActivity
 import com.android.andriodproject.retrofit2.MyApplication
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,6 +24,7 @@ import retrofit2.Response
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
     lateinit var toggle: ActionBarDrawerToggle
+    private var mFirebaseAuth: FirebaseAuth? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater)
@@ -41,8 +43,9 @@ class DetailActivity : AppCompatActivity() {
                 menuItem ->
             when(menuItem.itemId){
                 R.id.excerciseBtn -> {
-                    val intent = Intent(applicationContext, GoogleMapsActivity::class.java)
+                    intent = Intent(applicationContext, GoogleMapsActivity::class.java)
                     intent.putExtra("uid", "${user.uId}")
+                    intent.putExtra("user", user)
                     Log.d("lsy", "user: ${user.uId}")
                     startActivity(intent)
                     true
@@ -60,7 +63,7 @@ class DetailActivity : AppCompatActivity() {
                     true
                 }
                 R.id.btn_logout -> {
-//                    mFirebaseAuth!!.signOut()
+                    mFirebaseAuth!!.signOut()
                     intent = Intent(this@DetailActivity, LoginActivity::class.java)
                     startActivity(intent)
                     finish()
@@ -91,10 +94,10 @@ class DetailActivity : AppCompatActivity() {
 
         binding.back.setOnClickListener {
             intent = Intent(this@DetailActivity, BoardActivity::class.java)
+            intent.putExtra("user", user)
+            intent.putExtra("board", board)
             startActivity(intent)
         }
-
-        Log.d("lsy", "author: ${board.author}")
 
         if(board.author == user.nickName){
             binding.updateBtn.visibility = View.VISIBLE
@@ -110,6 +113,8 @@ class DetailActivity : AppCompatActivity() {
                     Log.d("lsy", "response: ${response}")
                     if(response == 1L) {
                         intent = Intent(this@DetailActivity, BoardActivity::class.java)
+                        intent.putExtra("user", user)
+                        intent.putExtra("board", board)
                         startActivity(intent)
                     }
                 }
@@ -124,6 +129,7 @@ class DetailActivity : AppCompatActivity() {
         binding.updateBtn.setOnClickListener {
             intent = Intent(this@DetailActivity, EditBoardActivity::class.java)
             intent.putExtra("board", board)
+            intent.putExtra("user", user)
             startActivity(intent)
         }
 

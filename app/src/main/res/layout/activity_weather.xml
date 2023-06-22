@@ -63,16 +63,11 @@
               android:textSize="15sp"
               />
         </androidx.cardview.widget.CardView>
-
-       <!-- <androidx.appcompat.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@android:color/transparent"
-            android:backgroundTint="@android:color/transparent"
-            app:layout_collapseMode="pin">
-
-        </androidx.appcompat.widget.Toolbar>-->
+            app:layout_collapseMode="pin"/>
       </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -84,4 +79,11 @@
           />
 
   </androidx.coordinatorlayout.widget.CoordinatorLayout>
+  <com.google.android.material.navigation.NavigationView
+      android:id="@+id/main_drawer_view"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_gravity="start"
+      app:headerLayout="@layout/navigation_header"
+      app:menu="@menu/menu_navigation" />
 </androidx.drawerlayout.widget.DrawerLayout>

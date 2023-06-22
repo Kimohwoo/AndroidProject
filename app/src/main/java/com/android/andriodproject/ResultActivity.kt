@@ -67,7 +67,7 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
 //        val filename = "2306120643.txt"
 //        val file = File(filesDir, filename)
 
-//        val intent = intent
+        val intent = intent
         val fileName = intent.getStringExtra(FILE_NAME)
         val totalDistance = intent.getStringExtra(TOTAL_DISTANCE)?.toDoubleOrNull()?.toInt()
         val filePath = intent.getStringExtra(FILE_PATH)

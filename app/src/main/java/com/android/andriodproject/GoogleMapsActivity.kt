@@ -36,6 +36,9 @@ import com.android.andriodproject.login.LoginActivity
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import java.io.File
 import java.io.FileWriter
 import java.text.SimpleDateFormat
@@ -85,6 +88,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
     private var filePath : String? = null
     lateinit var toggle: ActionBarDrawerToggle
     private var uid = ""
+    private var mFirebaseAuth: FirebaseAuth? = Firebase.auth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -128,7 +132,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
                     true
                 }
                 R.id.btn_logout -> {
-//                    mFirebaseAuth!!.signOut()
+                    mFirebaseAuth!!.signOut()
                     intent = Intent(this@GoogleMapsActivity, LoginActivity::class.java)
                     startActivity(intent)
                     finish()

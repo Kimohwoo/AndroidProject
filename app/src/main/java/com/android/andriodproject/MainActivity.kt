@@ -15,6 +15,8 @@ import com.android.andriodproject.databinding.ActivityMainBinding
 import com.android.andriodproject.login.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 
 class MainActivity : AppCompatActivity() {
@@ -24,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     private val fromBottom: Animation by lazy { AnimationUtils.loadAnimation(this, R.anim.from_bottom_anim) }
     private val toBottom: Animation by lazy { AnimationUtils.loadAnimation(this, R.anim.to_bottom_anim) }
     private var clicked = false
-//    private var mFirebaseAuth: FirebaseAuth? = null
+    private var mFirebaseAuth: FirebaseAuth? = Firebase.auth
 //    private var user: FirebaseUser? = null
 //    private var mMainBinding: ActivityMainBinding? = null
     private val CAMERA_PERMISSION_REQUEST_CODE = 1001
@@ -63,6 +65,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.excerciseBtn -> {
                     val intent = Intent(applicationContext, GoogleMapsActivity::class.java)
                     intent.putExtra("uid", "${user2.uId}")
+                    intent.putExtra("user", user2)
                     Log.d("lsy", "user: ${user2.uId}")
                     startActivity(intent)
                     true
@@ -80,7 +83,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.btn_logout -> {
-//                    mFirebaseAuth!!.signOut()
+                    mFirebaseAuth!!.signOut()
                     intent = Intent(this@MainActivity, LoginActivity::class.java)
                     startActivity(intent)
                     finish()

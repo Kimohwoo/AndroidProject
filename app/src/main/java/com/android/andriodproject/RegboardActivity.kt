@@ -49,6 +49,7 @@ class RegboardActivity : AppCompatActivity() {
                         1 -> {
                             intent = Intent(this@RegboardActivity, BoardActivity::class.java)
                             intent.putExtra("board", board)
+                            intent.putExtra("user", user)
                             startActivity(intent)
                         }
                         0 -> {

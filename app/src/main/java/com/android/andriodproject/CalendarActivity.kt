@@ -16,6 +16,9 @@ import com.android.andriodproject.databinding.ActivityCalendarBinding
 import com.android.andriodproject.databinding.ItemCalendarListBinding
 import com.android.andriodproject.login.LoginActivity
 import com.android.andriodproject.retrofit2.MyApplication
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,6 +30,7 @@ class CalendarActivity : AppCompatActivity() {
     lateinit var walkListCall: Call<List<WalkModel>>
     lateinit var dayWalkListCall: Call<List<WalkModel>>
     lateinit var toggle: ActionBarDrawerToggle
+    private var mFirebaseAuth: FirebaseAuth? = Firebase.auth
 
     class MyViewHolder (val binding: ItemCalendarListBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -93,6 +97,7 @@ class CalendarActivity : AppCompatActivity() {
                 R.id.excerciseBtn -> {
                     val intent = Intent(applicationContext, GoogleMapsActivity::class.java)
                     intent.putExtra("uid", "${user.uId}")
+                    intent.putExtra("user", user)
                     Log.d("lsy", "user: ${user.uId}")
                     startActivity(intent)
                     true
@@ -110,7 +115,7 @@ class CalendarActivity : AppCompatActivity() {
                     true
                 }
                 R.id.btn_logout -> {
-//                    mFirebaseAuth!!.signOut()
+                    mFirebaseAuth!!.signOut()
                     intent = Intent(this@CalendarActivity, LoginActivity::class.java)
                     startActivity(intent)
                     finish()

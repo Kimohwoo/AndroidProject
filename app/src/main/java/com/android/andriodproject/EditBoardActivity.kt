@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import com.android.andriodproject.Model.BoardModel
+import com.android.andriodproject.Model.UserModel
 import com.android.andriodproject.databinding.ActivityEditBoardBinding
 import com.android.andriodproject.retrofit2.MyApplication
 import retrofit2.Call
@@ -23,6 +24,7 @@ class EditBoardActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         board = intent.getSerializableExtra("board") as BoardModel
+        val user = intent.getSerializableExtra("user") as UserModel
 
         binding.title.setText(board.title)
         binding.content.setText(board.content)
@@ -46,6 +48,7 @@ class EditBoardActivity : AppCompatActivity() {
                     if(response != -1L) {
                         intent = Intent(this@EditBoardActivity, DetailActivity::class.java)
                         intent.putExtra("board", board)
+                        intent.putExtra("user", user)
                         startActivity(intent)
                         Toast.makeText(this@EditBoardActivity, "게시물 수정", Toast.LENGTH_LONG).show()
                     } else {

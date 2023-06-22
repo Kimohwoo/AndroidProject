@@ -5,6 +5,7 @@ import Converter.TO_GRID
 import Converter.xyToSido
 import WeatherModel
 import android.content.Context
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.location.Location
@@ -12,18 +13,25 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import com.android.andriodproject.Model.AirListModel.AirListModel
 import com.android.andriodproject.Model.AirListModel.AirPollutionModel
+import com.android.andriodproject.Model.UserModel
 import com.android.andriodproject.Model.WeatherModel.WeatherListModel
 import com.android.andriodproject.databinding.ActivityWeatherBinding
+import com.android.andriodproject.login.LoginActivity
 import com.android.andriodproject.retrofit2.AirAdapter
 import com.android.andriodproject.retrofit2.MyAdapter
 import com.android.andriodproject.retrofit2.MyApplication
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -44,7 +52,8 @@ class WeatherActivity : AppCompatActivity() {
     private var pcp = 0f
     private var apiTime = ""
     private var name = ""
-
+    lateinit var toggle: ActionBarDrawerToggle
+    private var mFirebaseAuth: FirebaseAuth? = Firebase.auth
     override fun onCreate(savedInstanceState: Bundle?) {
         val serviceKey = "cXgLGxZlC+V/06+8LDomc9m8TAR6VHymyLNbeFGuwGCIJcUfxAkVDHaPa3HQx5HeT0kWSkyFnh0JdmOV8rTiRg=="
         val resultType = "JSON"
@@ -52,10 +61,66 @@ class WeatherActivity : AppCompatActivity() {
         binding = ActivityWeatherBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val user = intent.getSerializableExtra("user") as UserModel
+
         //뷰 작업
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.recyclerView.layoutManager = GridLayoutManager(this, 2)
 //        binding.recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+
+        setSupportActionBar(binding.toolbar)
+        toggle = ActionBarDrawerToggle(this, binding.drawer, R.string.drawer_opened, R.string.drawer_closed)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toggle.syncState()
+
+        binding.mainDrawerView.setNavigationItemSelectedListener {
+                menuItem ->
+            when(menuItem.itemId){
+                R.id.excerciseBtn -> {
+                    val intent = Intent(applicationContext, GoogleMapsActivity::class.java)
+                    intent.putExtra("uid", "${user.uId}")
+                    intent.putExtra("user", user)
+                    Log.d("lsy", "user: ${user.uId}")
+                    startActivity(intent)
+                    true
+                }
+                R.id.weatherBtn -> {
+                    intent = Intent(this@WeatherActivity, WeatherActivity::class.java)
+                    intent.putExtra("user", user)
+                    startActivity(intent)
+                    true
+                }
+                R.id.boardBtn -> {
+                    intent = Intent(this@WeatherActivity, BoardActivity::class.java)
+                    intent.putExtra("user", user)
+                    startActivity(intent)
+                    true
+                }
+                R.id.btn_logout -> {
+                    mFirebaseAuth!!.signOut()
+                    intent = Intent(this@WeatherActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                R.id.editBtn -> {
+                    intent = Intent(this@WeatherActivity, EditUserActivity::class.java)
+                    intent.putExtra("user", user)
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                R.id.home -> {
+                    intent = Intent(this@WeatherActivity, MainActivity::class.java)
+                    intent.putExtra("user", user)
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                else -> false
+            }
+        }
+
 
         //화면 고정
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -92,6 +157,8 @@ class WeatherActivity : AppCompatActivity() {
 
             val airPollutionService = (applicationContext as MyApplication).airPollutionService
             val airListCall = airPollutionService.getAirPollution(serviceKey,1,100,name,resultType,1.0)
+            Log.d("lsy", "weather: ${weatherListCall.request().url().toString()}")
+            Log.d("lsy", "air: ${airListCall.request().url().toString()}")
             airListCall.enqueue(object : Callback<AirListModel> {
                 override fun onResponse(
                     call: Call<AirListModel>,
@@ -308,5 +375,10 @@ class WeatherActivity : AppCompatActivity() {
             }
         }
     }
-
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(toggle.onOptionsItemSelected(item)){
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }
