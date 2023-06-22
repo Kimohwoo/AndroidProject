@@ -64,8 +64,6 @@ class WeatherActivity : AppCompatActivity() {
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         requestLocationPermissions()
         startLocationUpdates()
-        Log.d("lsy", "latitude: ${latitude}, longitude: ${longitude}")
-
         thread {
             Thread.sleep(4500)
             //위도 경도 -> x, y
@@ -91,17 +89,7 @@ class WeatherActivity : AppCompatActivity() {
                 weatherService.getWeather(serviceKey, 1, 100, resultType, apiDay, apiTime, nx, ny)
 
             val airPollutionService = (applicationContext as MyApplication).airPollutionService
-            val airListCall = airPollutionService.getAirPollution(
-                serviceKey,
-                1,
-                100,
-                name,
-                resultType,
-                1.0
-            )
-
-            Log.d("lsy", "xyToSido: ${xyToSido(nx, ny)}")
-//            Log.d("lsy", "Air Url: " + airListCall.request().url().toString())
+            val airListCall = airPollutionService.getAirPollution(serviceKey,1,100,name,resultType,1.0)
             airListCall.enqueue(object : Callback<AirListModel> {
                 override fun onResponse(
                     call: Call<AirListModel>,
@@ -109,7 +97,6 @@ class WeatherActivity : AppCompatActivity() {
                 ) {
                     val airList = response.body()
                     val item = airList?.response?.body?.items
-                    val time = getTime("yyyy-MM-dd hh:00")
                     val timePick = getTime("hhMM")
 
                     var item2 = arrayListOf<AirPollutionModel>()
@@ -119,8 +106,6 @@ class WeatherActivity : AppCompatActivity() {
                             it.khaiGrade != null
                         } as ArrayList<AirPollutionModel>
                     }
-                    Log.d("lsy", "item의 사이즈 ${item?.size}")
-                    Log.d("lsy", "item2의 사이즈 ${item2.size}")
 
                     binding.recyclerView.adapter =
                         AirAdapter(this@WeatherActivity, item2)
@@ -132,8 +117,6 @@ class WeatherActivity : AppCompatActivity() {
                         "4" -> -10
                         else -> 0
                     }
-
-                    Log.d("lsy", "Air result 값 확인 : ${airResult}")
 
                     //weatherService
                     weatherListCall.enqueue(object : Callback<WeatherListModel> {
@@ -160,12 +143,8 @@ class WeatherActivity : AppCompatActivity() {
                                 } as ArrayList<WeatherModel>
 
                             }
-
-                            Log.d("lsy", "사이즈 : ${item?.size}, weatherList data값: ${item}")
-                            Log.d("lsy", "사이즈 : ${item2.size},weatherList data2값: ${item2}")
                             binding.recyclerView.adapter =
                                 MyAdapter(this@WeatherActivity, item2)
-
                             //날씨 점수
                             weatherForeach(item2, apiTime, timePick)
 

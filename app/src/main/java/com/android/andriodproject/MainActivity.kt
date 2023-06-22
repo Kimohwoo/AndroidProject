@@ -45,7 +45,8 @@ class MainActivity : AppCompatActivity() {
 
         if(user2.nickName != null) {
             binding.nickName.text = user2.nickName + "님 안녕하세요"
-        } else if(user2.dogName != null){
+        }
+        if(user2.dogName != null){
             binding.dogName.text = user2.dogName
         }
 
@@ -103,29 +104,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
-//        mMainBinding!!.btnMypage.setOnClickListener {
-//            val user = FirebaseAuth.getInstance().currentUser
-//            if (user != null) {
-//
-//                /*String name = user.getDisplayName();*/
-//                val email = user.email
-//                /*Uri photoUrl = user.getPhotoUrl();*/
-//
-//
-//                // The user's ID, unique to the Firebase project. Do NOT use this value to
-//                // authenticate with your backend server, if you have one. Use
-//                // FirebaseUser.getIdToken() instead.
-//                val uid = user.uid
-//                val intent = Intent(this@MainActivity, MyPage::class.java)
-//                intent.putExtra("uid", uid)
-//                startActivity(intent)
-//            } else {
-//                val intent = Intent(this@MainActivity, LoginActivity::class.java)
-//                startActivity(intent)
-//            }
-//        }
-
         binding.addBtn.setOnClickListener {
             onAddButtonClicked()
         }
@@ -143,20 +121,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.cameraBtn.setOnClickListener {
-            Toast.makeText(this, "플로팅1", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "카메라", Toast.LENGTH_SHORT).show()
 //            if(cameraPermission() && cameraStoragePermission()){
 //                openCamera()
 //            }else{
 //                requestPermissions()
 //            }
         }
-
-
         binding.galleryBtn.setOnClickListener {
-            Toast.makeText(this, "플로팅2", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "겔러리", Toast.LENGTH_SHORT).show()
         }
         binding.exerciseBtn.setOnClickListener {
-            Toast.makeText(this, "플로팅3", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "산책가자!", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, GoogleMapsActivity::class.java)
             intent.putExtra("uid", "${user2.uId}")
             Log.d("lsy", "user: ${user2.uId}")
