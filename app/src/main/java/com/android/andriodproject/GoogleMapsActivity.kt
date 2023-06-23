@@ -89,6 +89,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
     lateinit var toggle: ActionBarDrawerToggle
     private var uid = ""
     private var mFirebaseAuth: FirebaseAuth? = Firebase.auth
+    private lateinit var user: UserModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,7 +101,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
         setContentView(binding.root)
 
         uid = intent.getStringExtra("uid") as String
-        val user = intent.getSerializableExtra("user") as UserModel
+        user = intent.getSerializableExtra("user") as UserModel
 
         //툴바
         setSupportActionBar(binding.toolbar)
@@ -265,6 +266,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
 
             val intent = Intent(this, ResultActivity::class.java)
             Log.d("lsy", "uid: ${uid}")
+            intent.putExtra("user", user)
             intent.putExtra(ResultActivity.FILE_NAME, "$fileName") // 파일 이름을 전달
             intent.putExtra(ResultActivity.TOTAL_DISTANCE, "$totalDistance") // 누적 이동 거리를 전달
             intent.putExtra(ResultActivity.EXERCISE_TIME, exerciseTime) // 운동 시간을 전달
@@ -273,6 +275,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
             intent.putExtra("uid", uid)
             Log.d("lsy", "uid: ${uid}")
             startActivity(intent)
+            finish()
         }
     }
 
@@ -464,7 +467,7 @@ class GoogleMapsActivity : AppCompatActivity(), OnMapReadyCallback, OnRequestPer
             marker?.remove()
             // 새로운 위치에 마커 표시
             marker = mMap.addMarker(MarkerOptions().position(currentLatLng).title("현재위치"))
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 18f))
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 16f))
 
 
             val previousLocation = lastLocation?.let { Location(it) }

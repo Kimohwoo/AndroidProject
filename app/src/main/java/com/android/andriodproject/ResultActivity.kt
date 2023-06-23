@@ -32,6 +32,7 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
 
     lateinit var binding: ActivityResultBinding
     private lateinit var mMap: GoogleMap
+    private lateinit var user: UserModel
 
     companion object {
         const val FILE_NAME = "filename"
@@ -47,6 +48,8 @@ class ResultActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         binding = ActivityResultBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        user = intent.getSerializableExtra("user") as UserModel
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map2) as SupportMapFragment
         mapFragment.getMapAsync(this)
